@@ -1,0 +1,1686 @@
+{
+  "provider": "NASA History — Catalogue of Manmade Material on the Moon",
+  "catalogueUrl": "https://www.nasa.gov/wp-content/uploads/static/history/humanartifacts.html",
+  "cataloguePdfUrl": "https://history.nasa.gov/FINAL%20Catalogue%20of%20Manmade%20Material%20on%20the%20Moon.pdf",
+  "retrievedAt": "2026-11-14",
+  "coordinateConvention": "east_positive",
+  "coordinateSystem": "planetocentric",
+  "note": "Coordinates are transcribed from the NASA catalogue. Where the catalogue gives no coordinate, the record is marked unknown_location; no coordinate is inferred. Impact and landing coordinates describe a site, not the current physical extent of the object.",
+  "objects": [
+    {
+      "id": "lunar:apollo-11-lm-descent-stage",
+      "slug": "apollo-11-lm-descent-stage",
+      "name": "Apollo 11 — Lunar Module Eagle Descent Stage",
+      "category": "lunar_surface",
+      "type": "descent_stage",
+      "mission": "Apollo 11",
+      "agency": "NASA",
+      "country": "United States",
+      "launchDate": "1969-07-16",
+      "status": "mission_completed",
+      "confidence": "verified",
+      "location": {
+        "body": "moon",
+        "latitude": 0.67408,
+        "longitude": 23.47297,
+        "elevationM": null,
+        "accuracy": "verified",
+        "status": "verified_located",
+        "description": "Tranquility Base, Mare Tranquillitatis",
+        "sourceCoordinates": "0.67408° N, 23.47297° E",
+        "longitudeConvention": "east_positive",
+        "coordinateSystem": "planetocentric"
+      },
+      "description": "The descent stage of Lunar Module Eagle, which carried Neil Armstrong and Buzz Aldrin to Tranquility Base. It served as the launch platform for the ascent stage and remains on the lunar surface.",
+      "history": "Eagle landed in Mare Tranquillitatis on 20 July 1969. Armstrong and Aldrin spent about 21.5 hours on the surface before the ascent stage lifted off on 21 July, leaving the descent stage behind.",
+      "significance": "Site of the first crewed Moon landing and a protected historical site under NASA's lunar heritage guidance.",
+      "massKg": null,
+      "dimensions": null,
+      "image": null,
+      "sources": [
+        {"provider": "NASA History — Human Artifacts on the Moon", "url": "https://www.nasa.gov/wp-content/uploads/static/history/humanartifacts.html", "recordId": "apollo-11-lm-descent-stage", "retrievedAt": "2026-11-14"},
+        {"provider": "NASA — Apollo 11 mission", "url": "https://science.nasa.gov/mission/apollo-11/", "recordId": "apollo-11", "retrievedAt": "2026-11-14"}
+      ],
+      "events": [
+        {"date": "1969-07-16", "type": "launch", "description": "Launched from Kennedy Space Center on Saturn V SA-506."},
+        {"date": "1969-07-20", "type": "landing", "description": "Lunar Module Eagle landed at Tranquility Base."},
+        {"date": "1969-07-21", "type": "mission_completion", "description": "Ascent stage lifted off; descent stage remained on the surface."}
+      ],
+      "tags": ["apollo", "crewed", "historical-site"]
+    },
+    {
+      "id": "lunar:apollo-11-easep",
+      "slug": "apollo-11-easep",
+      "name": "Apollo 11 — EASEP (Passive Seismometer and Retroreflector)",
+      "category": "lunar_surface",
+      "type": "instrument",
+      "mission": "Apollo 11",
+      "agency": "NASA",
+      "country": "United States",
+      "launchDate": "1969-07-16",
+      "status": "mission_completed",
+      "confidence": "approximate",
+      "location": {
+        "body": "moon",
+        "latitude": 0.67408,
+        "longitude": 23.47297,
+        "elevationM": null,
+        "accuracy": "approximate",
+        "status": "verified_located",
+        "description": "Deployed near Lunar Module Eagle at Tranquility Base; individual instrument position is not separately catalogued.",
+        "sourceCoordinates": "Landing site 0.67408° N, 23.47297° E",
+        "longitudeConvention": "east_positive",
+        "coordinateSystem": "planetocentric"
+      },
+      "description": "The Early Apollo Scientific Experiments Package (EASEP) was the first lunar surface experiment package. It included a passive seismometer and a laser ranging retroreflector, and was a simplified precursor to the ALSEP packages used on later Apollo missions.",
+      "history": "Deployed during the Apollo 11 EVA on 20 July 1969. The seismometer operated for about three weeks; the retroreflector has supported lunar laser ranging for decades.",
+      "significance": "First geophysical instrument package deployed by humans on another world.",
+      "massKg": null,
+      "dimensions": null,
+      "image": null,
+      "sources": [
+        {"provider": "NASA History — Human Artifacts on the Moon", "url": "https://www.nasa.gov/wp-content/uploads/static/history/humanartifacts.html", "recordId": "apollo-11-easep", "retrievedAt": "2026-11-14"},
+        {"provider": "NASA — Apollo 11 mission", "url": "https://science.nasa.gov/mission/apollo-11/", "recordId": "apollo-11", "retrievedAt": "2026-11-14"}
+      ],
+      "events": [
+        {"date": "1969-07-20", "type": "instrument_activation", "description": "EASEP deployed during the first Apollo 11 surface EVA."}
+      ],
+      "tags": ["apollo", "science", "historical-site"]
+    },
+    {
+      "id": "lunar:apollo-11-lrrr",
+      "slug": "apollo-11-lrrr",
+      "name": "Apollo 11 — Laser Ranging Retroreflector",
+      "category": "lunar_surface",
+      "type": "instrument",
+      "mission": "Apollo 11",
+      "agency": "NASA",
+      "country": "United States",
+      "launchDate": "1969-07-16",
+      "status": "mission_completed",
+      "confidence": "verified",
+      "location": {
+        "body": "moon",
+        "latitude": 0.67337,
+        "longitude": 23.47293,
+        "elevationM": null,
+        "accuracy": "verified",
+        "status": "verified_located",
+        "description": "Tranquility Base, Mare Tranquillitatis",
+        "sourceCoordinates": "0.67337° N, 23.47293° E",
+        "longitudeConvention": "east_positive",
+        "coordinateSystem": "planetocentric"
+      },
+      "description": "A retroreflector array left at Tranquility Base. Ground-based laser ranging stations still use it to measure the Earth–Moon distance.",
+      "history": "Deployed by Armstrong and Aldrin in July 1969. Laser ranging measurements have continued for more than five decades.",
+      "significance": "One of the longest-operating scientific instruments left on the Moon.",
+      "massKg": null,
+      "dimensions": null,
+      "image": null,
+      "sources": [
+        {"provider": "NASA History — Human Artifacts on the Moon", "url": "https://www.nasa.gov/wp-content/uploads/static/history/humanartifacts.html", "recordId": "apollo-11-lrrr", "retrievedAt": "2026-11-14"}
+      ],
+      "events": [
+        {"date": "1969-07-20", "type": "instrument_activation", "description": "Retroreflector deployed during the Apollo 11 EVA."}
+      ],
+      "tags": ["apollo", "science", "laser-ranging"]
+    },
+    {
+      "id": "lunar:apollo-12-lm-descent-stage",
+      "slug": "apollo-12-lm-descent-stage",
+      "name": "Apollo 12 — Lunar Module Intrepid Descent Stage",
+      "category": "lunar_surface",
+      "type": "descent_stage",
+      "mission": "Apollo 12",
+      "agency": "NASA",
+      "country": "United States",
+      "launchDate": "1969-11-14",
+      "status": "mission_completed",
+      "confidence": "verified",
+      "location": {
+        "body": "moon",
+        "latitude": -3.01239,
+        "longitude": -23.42157,
+        "elevationM": null,
+        "accuracy": "verified",
+        "status": "verified_located",
+        "description": "Oceanus Procellarum, near Surveyor 3",
+        "sourceCoordinates": "3.01239° S, 23.42157° W",
+        "longitudeConvention": "east_positive",
+        "coordinateSystem": "planetocentric"
+      },
+      "description": "The descent stage of Lunar Module Intrepid, which landed in Oceanus Procellarum in November 1969. The crew visited the nearby Surveyor 3 spacecraft.",
+      "history": "Landed on 19 November 1969. The descent stage remained after the ascent stage returned the crew to orbit and later impacted the Moon.",
+      "significance": "Demonstrated precision landing and the first crewed visit to a previously landed robotic spacecraft.",
+      "massKg": null,
+      "dimensions": null,
+      "image": null,
+      "sources": [
+        {"provider": "NASA History — Human Artifacts on the Moon", "url": "https://www.nasa.gov/wp-content/uploads/static/history/humanartifacts.html", "recordId": "apollo-12-lm-descent-stage", "retrievedAt": "2026-11-14"},
+        {"provider": "NASA — Apollo 12 mission", "url": "https://science.nasa.gov/mission/apollo-12/", "recordId": "apollo-12", "retrievedAt": "2026-11-14"}
+      ],
+      "events": [
+        {"date": "1969-11-14", "type": "launch", "description": "Launched on Saturn V SA-507."},
+        {"date": "1969-11-19", "type": "landing", "description": "Lunar Module Intrepid landed in Oceanus Procellarum."}
+      ],
+      "tags": ["apollo", "crewed", "historical-site"]
+    },
+    {
+      "id": "lunar:apollo-12-alsep",
+      "slug": "apollo-12-alsep",
+      "name": "Apollo 12 — ALSEP Central Station",
+      "category": "lunar_surface",
+      "type": "instrument",
+      "mission": "Apollo 12",
+      "agency": "NASA",
+      "country": "United States",
+      "launchDate": "1969-11-14",
+      "status": "mission_completed",
+      "confidence": "verified",
+      "location": {
+        "body": "moon",
+        "latitude": -3.00942,
+        "longitude": -23.42458,
+        "elevationM": null,
+        "accuracy": "verified",
+        "status": "verified_located",
+        "description": "Oceanus Procellarum, Apollo 12 landing site",
+        "sourceCoordinates": "3.00942° S, 23.42458° W",
+        "longitudeConvention": "east_positive",
+        "coordinateSystem": "planetocentric"
+      },
+      "description": "Central station of the Apollo Lunar Surface Experiments Package (ALSEP), the geophysical network deployed by the Apollo crews. It collected and relayed data from its experiments until the program ended in 1977.",
+      "history": "Deployed during the Apollo 12 mission in November 1969 and operated as part of the ALSEP network.",
+      "significance": "Part of the first long-lived network of geophysical stations on the Moon.",
+      "massKg": null,
+      "dimensions": null,
+      "image": null,
+      "sources": [
+        {"provider": "NASA History — Human Artifacts on the Moon", "url": "https://www.nasa.gov/wp-content/uploads/static/history/humanartifacts.html", "recordId": "apollo-12-alsep", "retrievedAt": "2026-11-14"}
+      ],
+      "events": [
+        {"date": "1969-11-19", "type": "instrument_activation", "description": "ALSEP deployed during the Apollo 12 surface operations."}
+      ],
+      "tags": ["apollo", "science"]
+    },
+    {
+      "id": "lunar:apollo-14-lm-descent-stage",
+      "slug": "apollo-14-lm-descent-stage",
+      "name": "Apollo 14 — Lunar Module Antares Descent Stage",
+      "category": "lunar_surface",
+      "type": "descent_stage",
+      "mission": "Apollo 14",
+      "agency": "NASA",
+      "country": "United States",
+      "launchDate": "1971-01-31",
+      "status": "mission_completed",
+      "confidence": "verified",
+      "location": {
+        "body": "moon",
+        "latitude": -3.6453,
+        "longitude": -17.47136,
+        "elevationM": null,
+        "accuracy": "verified",
+        "status": "verified_located",
+        "description": "Fra Mauro formation",
+        "sourceCoordinates": "3.64530° S, 17.47136° W",
+        "longitudeConvention": "east_positive",
+        "coordinateSystem": "planetocentric"
+      },
+      "description": "The descent stage of Lunar Module Antares, which landed in the Fra Mauro formation in February 1971. The crew explored the ejecta of the Imbrium impact.",
+      "history": "Landed on 5 February 1971. The descent stage remains at the site after the ascent stage departed.",
+      "significance": "First landing in the lunar highlands, targeting material ejected by the Imbrium basin impact.",
+      "massKg": null,
+      "dimensions": null,
+      "image": null,
+      "sources": [
+        {"provider": "NASA History — Human Artifacts on the Moon", "url": "https://www.nasa.gov/wp-content/uploads/static/history/humanartifacts.html", "recordId": "apollo-14-lm-descent-stage", "retrievedAt": "2026-11-14"},
+        {"provider": "NASA — Apollo 14 mission", "url": "https://science.nasa.gov/mission/apollo-14/", "recordId": "apollo-14", "retrievedAt": "2026-11-14"}
+      ],
+      "events": [
+        {"date": "1971-01-31", "type": "launch", "description": "Launched on Saturn V SA-509."},
+        {"date": "1971-02-05", "type": "landing", "description": "Lunar Module Antares landed in the Fra Mauro formation."}
+      ],
+      "tags": ["apollo", "crewed", "historical-site"]
+    },
+    {
+      "id": "lunar:apollo-14-alsep",
+      "slug": "apollo-14-alsep",
+      "name": "Apollo 14 — ALSEP Central Station",
+      "category": "lunar_surface",
+      "type": "instrument",
+      "mission": "Apollo 14",
+      "agency": "NASA",
+      "country": "United States",
+      "launchDate": "1971-01-31",
+      "status": "mission_completed",
+      "confidence": "verified",
+      "location": {
+        "body": "moon",
+        "latitude": -3.64398,
+        "longitude": -17.47748,
+        "elevationM": null,
+        "accuracy": "verified",
+        "status": "verified_located",
+        "description": "Fra Mauro formation, Apollo 14 landing site",
+        "sourceCoordinates": "3.64398° S, 17.47748° W",
+        "longitudeConvention": "east_positive",
+        "coordinateSystem": "planetocentric"
+      },
+      "description": "ALSEP central station deployed at the Apollo 14 site in the Fra Mauro formation.",
+      "history": "Deployed in February 1971 and operated as part of the ALSEP network.",
+      "significance": "Extended the lunar geophysical network into the highlands.",
+      "massKg": null,
+      "dimensions": null,
+      "image": null,
+      "sources": [
+        {"provider": "NASA History — Human Artifacts on the Moon", "url": "https://www.nasa.gov/wp-content/uploads/static/history/humanartifacts.html", "recordId": "apollo-14-alsep", "retrievedAt": "2026-11-14"}
+      ],
+      "events": [
+        {"date": "1971-02-05", "type": "instrument_activation", "description": "ALSEP deployed during Apollo 14 surface operations."}
+      ],
+      "tags": ["apollo", "science"]
+    },
+    {
+      "id": "lunar:apollo-14-lrrr",
+      "slug": "apollo-14-lrrr",
+      "name": "Apollo 14 — Laser Ranging Retroreflector",
+      "category": "lunar_surface",
+      "type": "instrument",
+      "mission": "Apollo 14",
+      "agency": "NASA",
+      "country": "United States",
+      "launchDate": "1971-01-31",
+      "status": "mission_completed",
+      "confidence": "verified",
+      "location": {
+        "body": "moon",
+        "latitude": -3.64421,
+        "longitude": -17.4788,
+        "elevationM": null,
+        "accuracy": "verified",
+        "status": "verified_located",
+        "description": "Fra Mauro formation, Apollo 14 landing site",
+        "sourceCoordinates": "3.64421° S, 17.47880° W",
+        "longitudeConvention": "east_positive",
+        "coordinateSystem": "planetocentric"
+      },
+      "description": "A retroreflector array left at the Apollo 14 site, used for lunar laser ranging.",
+      "history": "Deployed in February 1971; still used for Earth–Moon distance measurements.",
+      "significance": "Part of the small network of lunar laser ranging stations.",
+      "massKg": null,
+      "dimensions": null,
+      "image": null,
+      "sources": [
+        {"provider": "NASA History — Human Artifacts on the Moon", "url": "https://www.nasa.gov/wp-content/uploads/static/history/humanartifacts.html", "recordId": "apollo-14-lrrr", "retrievedAt": "2026-11-14"}
+      ],
+      "events": [
+        {"date": "1971-02-05", "type": "instrument_activation", "description": "Retroreflector deployed during the Apollo 14 EVA."}
+      ],
+      "tags": ["apollo", "science", "laser-ranging"]
+    },
+    {
+      "id": "lunar:apollo-15-lm-descent-stage",
+      "slug": "apollo-15-lm-descent-stage",
+      "name": "Apollo 15 — Lunar Module Falcon Descent Stage",
+      "category": "lunar_surface",
+      "type": "descent_stage",
+      "mission": "Apollo 15",
+      "agency": "NASA",
+      "country": "United States",
+      "launchDate": "1971-07-26",
+      "status": "mission_completed",
+      "confidence": "verified",
+      "location": {
+        "body": "moon",
+        "latitude": 26.13222,
+        "longitude": 3.63386,
+        "elevationM": null,
+        "accuracy": "verified",
+        "status": "verified_located",
+        "description": "Hadley–Apennine region, near Hadley Rille",
+        "sourceCoordinates": "26.13222° N, 3.63386° E",
+        "longitudeConvention": "east_positive",
+        "coordinateSystem": "planetocentric"
+      },
+      "description": "The descent stage of Lunar Module Falcon, which landed near Hadley Rille in July 1971. Apollo 15 was the first mission to use the Lunar Roving Vehicle.",
+      "history": "Landed on 30 July 1971. The descent stage remained after the ascent stage departed.",
+      "significance": "First extended geological field expedition on the Moon with a surface rover.",
+      "massKg": null,
+      "dimensions": null,
+      "image": null,
+      "sources": [
+        {"provider": "NASA History — Human Artifacts on the Moon", "url": "https://www.nasa.gov/wp-content/uploads/static/history/humanartifacts.html", "recordId": "apollo-15-lm-descent-stage", "retrievedAt": "2026-11-14"},
+        {"provider": "NASA — Apollo 15 mission", "url": "https://science.nasa.gov/mission/apollo-15/", "recordId": "apollo-15", "retrievedAt": "2026-11-14"}
+      ],
+      "events": [
+        {"date": "1971-07-26", "type": "launch", "description": "Launched on Saturn V SA-510."},
+        {"date": "1971-07-30", "type": "landing", "description": "Lunar Module Falcon landed at Hadley–Apennine."}
+      ],
+      "tags": ["apollo", "crewed", "historical-site"]
+    },
+    {
+      "id": "lunar:apollo-15-alsep",
+      "slug": "apollo-15-alsep",
+      "name": "Apollo 15 — ALSEP Central Station",
+      "category": "lunar_surface",
+      "type": "instrument",
+      "mission": "Apollo 15",
+      "agency": "NASA",
+      "country": "United States",
+      "launchDate": "1971-07-26",
+      "status": "mission_completed",
+      "confidence": "verified",
+      "location": {
+        "body": "moon",
+        "latitude": 26.13407,
+        "longitude": 3.62981,
+        "elevationM": null,
+        "accuracy": "verified",
+        "status": "verified_located",
+        "description": "Hadley–Apennine, Apollo 15 landing site",
+        "sourceCoordinates": "26.13407° N, 3.62981° E",
+        "longitudeConvention": "east_positive",
+        "coordinateSystem": "planetocentric"
+      },
+      "description": "ALSEP central station deployed at the Apollo 15 site near Hadley Rille.",
+      "history": "Deployed in July 1971 and operated as part of the ALSEP network.",
+      "significance": "Added heat-flow and seismic measurements at a boundary between the lunar highlands and mare.",
+      "massKg": null,
+      "dimensions": null,
+      "image": null,
+      "sources": [
+        {"provider": "NASA History — Human Artifacts on the Moon", "url": "https://www.nasa.gov/wp-content/uploads/static/history/humanartifacts.html", "recordId": "apollo-15-alsep", "retrievedAt": "2026-11-14"}
+      ],
+      "events": [
+        {"date": "1971-07-30", "type": "instrument_activation", "description": "ALSEP deployed during Apollo 15 surface operations."}
+      ],
+      "tags": ["apollo", "science"]
+    },
+    {
+      "id": "lunar:apollo-15-lrv",
+      "slug": "apollo-15-lrv",
+      "name": "Apollo 15 — Lunar Roving Vehicle",
+      "category": "lunar_surface",
+      "type": "rover",
+      "mission": "Apollo 15",
+      "agency": "NASA",
+      "country": "United States",
+      "launchDate": "1971-07-26",
+      "status": "mission_completed",
+      "confidence": "approximate",
+      "location": {
+        "body": "moon",
+        "latitude": 26.13222,
+        "longitude": 3.63386,
+        "elevationM": null,
+        "accuracy": "approximate",
+        "status": "verified_located",
+        "description": "Hadley–Apennine landing site; the rover's final parked position is within the explored traverse area.",
+        "sourceCoordinates": "Landing site centroid 26.13222° N, 3.63386° E",
+        "longitudeConvention": "east_positive",
+        "coordinateSystem": "planetocentric"
+      },
+      "description": "The first Lunar Roving Vehicle, used by David Scott and James Irwin to extend the Apollo 15 geological traverse.",
+      "history": "Operated during three surface EVAs in July–August 1971. The rover remains in the Hadley–Apennine area.",
+      "significance": "First crewed surface vehicle driven on another world.",
+      "massKg": 210,
+      "dimensions": null,
+      "image": null,
+      "sources": [
+        {"provider": "NASA History — Human Artifacts on the Moon", "url": "https://www.nasa.gov/wp-content/uploads/static/history/humanartifacts.html", "recordId": "apollo-15-lrv", "retrievedAt": "2026-11-14"}
+      ],
+      "events": [
+        {"date": "1971-07-31", "type": "rover_deployment", "description": "First Apollo LRV traverse."}
+      ],
+      "tags": ["apollo", "rover", "historical-site"]
+    },
+    {
+      "id": "lunar:apollo-16-lm-descent-stage",
+      "slug": "apollo-16-lm-descent-stage",
+      "name": "Apollo 16 — Lunar Module Orion Descent Stage",
+      "category": "lunar_surface",
+      "type": "descent_stage",
+      "mission": "Apollo 16",
+      "agency": "NASA",
+      "country": "United States",
+      "launchDate": "1972-04-16",
+      "status": "mission_completed",
+      "confidence": "verified",
+      "location": {
+        "body": "moon",
+        "latitude": -8.97301,
+        "longitude": 15.50019,
+        "elevationM": null,
+        "accuracy": "verified",
+        "status": "verified_located",
+        "description": "Descartes highlands",
+        "sourceCoordinates": "8.97301° S, 15.50019° E",
+        "longitudeConvention": "east_positive",
+        "coordinateSystem": "planetocentric"
+      },
+      "description": "The descent stage of Lunar Module Orion, which landed in the Descartes highlands in April 1972.",
+      "history": "Landed on 21 April 1972. The descent stage remained after the ascent stage returned to orbit.",
+      "significance": "Explored ancient highland terrain in search of volcanic rocks.",
+      "massKg": null,
+      "dimensions": null,
+      "image": null,
+      "sources": [
+        {"provider": "NASA History — Human Artifacts on the Moon", "url": "https://www.nasa.gov/wp-content/uploads/static/history/humanartifacts.html", "recordId": "apollo-16-lm-descent-stage", "retrievedAt": "2026-11-14"},
+        {"provider": "NASA — Apollo 16 mission", "url": "https://science.nasa.gov/mission/apollo-16/", "recordId": "apollo-16", "retrievedAt": "2026-11-14"}
+      ],
+      "events": [
+        {"date": "1972-04-16", "type": "launch", "description": "Launched on Saturn V SA-511."},
+        {"date": "1972-04-21", "type": "landing", "description": "Lunar Module Orion landed in the Descartes highlands."}
+      ],
+      "tags": ["apollo", "crewed", "historical-site"]
+    },
+    {
+      "id": "lunar:apollo-16-alsep",
+      "slug": "apollo-16-alsep",
+      "name": "Apollo 16 — ALSEP Central Station",
+      "category": "lunar_surface",
+      "type": "instrument",
+      "mission": "Apollo 16",
+      "agency": "NASA",
+      "country": "United States",
+      "launchDate": "1972-04-16",
+      "status": "mission_completed",
+      "confidence": "verified",
+      "location": {
+        "body": "moon",
+        "latitude": -8.97537,
+        "longitude": 15.49812,
+        "elevationM": null,
+        "accuracy": "verified",
+        "status": "verified_located",
+        "description": "Descartes highlands, Apollo 16 landing site",
+        "sourceCoordinates": "8.97537° S, 15.49812° E",
+        "longitudeConvention": "east_positive",
+        "coordinateSystem": "planetocentric"
+      },
+      "description": "ALSEP central station deployed at the Apollo 16 site in the Descartes highlands.",
+      "history": "Deployed in April 1972 and operated as part of the ALSEP network.",
+      "significance": "Provided geophysical data from a highland site.",
+      "massKg": null,
+      "dimensions": null,
+      "image": null,
+      "sources": [
+        {"provider": "NASA History — Human Artifacts on the Moon", "url": "https://www.nasa.gov/wp-content/uploads/static/history/humanartifacts.html", "recordId": "apollo-16-alsep", "retrievedAt": "2026-11-14"}
+      ],
+      "events": [
+        {"date": "1972-04-21", "type": "instrument_activation", "description": "ALSEP deployed during Apollo 16 surface operations."}
+      ],
+      "tags": ["apollo", "science"]
+    },
+    {
+      "id": "lunar:apollo-16-lrv",
+      "slug": "apollo-16-lrv",
+      "name": "Apollo 16 — Lunar Roving Vehicle",
+      "category": "lunar_surface",
+      "type": "rover",
+      "mission": "Apollo 16",
+      "agency": "NASA",
+      "country": "United States",
+      "launchDate": "1972-04-16",
+      "status": "mission_completed",
+      "confidence": "approximate",
+      "location": {
+        "body": "moon",
+        "latitude": -8.97301,
+        "longitude": 15.50019,
+        "elevationM": null,
+        "accuracy": "approximate",
+        "status": "verified_located",
+        "description": "Descartes landing site; the rover's final parked position is within the explored traverse area.",
+        "sourceCoordinates": "Landing site centroid 8.97301° S, 15.50019° E",
+        "longitudeConvention": "east_positive",
+        "coordinateSystem": "planetocentric"
+      },
+      "description": "The Lunar Roving Vehicle used during Apollo 16 to explore the Descartes highlands.",
+      "history": "Operated during three surface EVAs in April 1972 and remains in the landing area.",
+      "significance": "Extended the surface traverse capability demonstrated on Apollo 15.",
+      "massKg": 210,
+      "dimensions": null,
+      "image": null,
+      "sources": [
+        {"provider": "NASA History — Human Artifacts on the Moon", "url": "https://www.nasa.gov/wp-content/uploads/static/history/humanartifacts.html", "recordId": "apollo-16-lrv", "retrievedAt": "2026-11-14"}
+      ],
+      "events": [
+        {"date": "1972-04-22", "type": "rover_deployment", "description": "First Apollo 16 LRV traverse."}
+      ],
+      "tags": ["apollo", "rover", "historical-site"]
+    },
+    {
+      "id": "lunar:apollo-16-ascent-stage",
+      "slug": "apollo-16-ascent-stage",
+      "name": "Apollo 16 — Lunar Module Orion Ascent Stage",
+      "category": "lunar_surface",
+      "type": "impact_site",
+      "mission": "Apollo 16",
+      "agency": "NASA",
+      "country": "United States",
+      "launchDate": "1972-04-16",
+      "status": "destroyed",
+      "confidence": "unknown",
+      "location": {
+        "body": "moon",
+        "latitude": null,
+        "longitude": null,
+        "elevationM": null,
+        "accuracy": "unknown",
+        "status": "unknown_location",
+        "description": "The ascent stage was left in lunar orbit and later impacted the Moon; the precise impact location is unknown.",
+        "sourceCoordinates": "UNKNOWN",
+        "longitudeConvention": "unknown",
+        "coordinateSystem": "unknown"
+      },
+      "description": "The ascent stage of Lunar Module Orion was left in lunar orbit after the mission and later impacted the Moon at an unknown location.",
+      "history": "After returning the crew to the command module, the ascent stage remained in lunar orbit. Its later impact site has not been precisely determined.",
+      "significance": "An example of orbital hardware whose final location remains unknown.",
+      "massKg": null,
+      "dimensions": null,
+      "image": null,
+      "sources": [
+        {"provider": "NASA History — Human Artifacts on the Moon", "url": "https://www.nasa.gov/wp-content/uploads/static/history/humanartifacts.html", "recordId": "apollo-16-ascent-stage", "retrievedAt": "2026-11-14"}
+      ],
+      "events": [
+        {"date": "1972-04-24", "type": "mission_completion", "description": "Ascent stage left in lunar orbit after crew transfer."}
+      ],
+      "tags": ["apollo", "unknown-location"]
+    },
+    {
+      "id": "lunar:apollo-17-lm-descent-stage",
+      "slug": "apollo-17-lm-descent-stage",
+      "name": "Apollo 17 — Lunar Module Challenger Descent Stage",
+      "category": "lunar_surface",
+      "type": "descent_stage",
+      "mission": "Apollo 17",
+      "agency": "NASA",
+      "country": "United States",
+      "launchDate": "1972-12-07",
+      "status": "mission_completed",
+      "confidence": "verified",
+      "location": {
+        "body": "moon",
+        "latitude": 20.1908,
+        "longitude": 30.77168,
+        "elevationM": null,
+        "accuracy": "verified",
+        "status": "verified_located",
+        "description": "Taurus–Littrow valley",
+        "sourceCoordinates": "20.19080° N, 30.77168° E",
+        "longitudeConvention": "east_positive",
+        "coordinateSystem": "planetocentric"
+      },
+      "description": "The descent stage of Lunar Module Challenger, which landed in the Taurus–Littrow valley in December 1972 during the last crewed Apollo mission.",
+      "history": "Landed on 11 December 1972. The descent stage remains at the site after the ascent stage departed.",
+      "significance": "Site of the last crewed Moon landing of the Apollo program.",
+      "massKg": null,
+      "dimensions": null,
+      "image": null,
+      "sources": [
+        {"provider": "NASA History — Human Artifacts on the Moon", "url": "https://www.nasa.gov/wp-content/uploads/static/history/humanartifacts.html", "recordId": "apollo-17-lm-descent-stage", "retrievedAt": "2026-11-14"},
+        {"provider": "NASA — Apollo 17 mission", "url": "https://science.nasa.gov/mission/apollo-17/", "recordId": "apollo-17", "retrievedAt": "2026-11-14"}
+      ],
+      "events": [
+        {"date": "1972-12-07", "type": "launch", "description": "Launched on Saturn V SA-512."},
+        {"date": "1972-12-11", "type": "landing", "description": "Lunar Module Challenger landed in Taurus–Littrow."}
+      ],
+      "tags": ["apollo", "crewed", "historical-site"]
+    },
+    {
+      "id": "lunar:apollo-17-alsep",
+      "slug": "apollo-17-alsep",
+      "name": "Apollo 17 — ALSEP Central Station",
+      "category": "lunar_surface",
+      "type": "instrument",
+      "mission": "Apollo 17",
+      "agency": "NASA",
+      "country": "United States",
+      "launchDate": "1972-12-07",
+      "status": "mission_completed",
+      "confidence": "verified",
+      "location": {
+        "body": "moon",
+        "latitude": 20.19209,
+        "longitude": 30.76492,
+        "elevationM": null,
+        "accuracy": "verified",
+        "status": "verified_located",
+        "description": "Taurus–Littrow, Apollo 17 landing site",
+        "sourceCoordinates": "20.19209° N, 30.76492° E",
+        "longitudeConvention": "east_positive",
+        "coordinateSystem": "planetocentric"
+      },
+      "description": "ALSEP central station deployed at the Apollo 17 site in the Taurus–Littrow valley.",
+      "history": "Deployed in December 1972 and operated as part of the ALSEP network.",
+      "significance": "The last ALSEP station deployed by the Apollo program.",
+      "massKg": null,
+      "dimensions": null,
+      "image": null,
+      "sources": [
+        {"provider": "NASA History — Human Artifacts on the Moon", "url": "https://www.nasa.gov/wp-content/uploads/static/history/humanartifacts.html", "recordId": "apollo-17-alsep", "retrievedAt": "2026-11-14"}
+      ],
+      "events": [
+        {"date": "1972-12-11", "type": "instrument_activation", "description": "ALSEP deployed during Apollo 17 surface operations."}
+      ],
+      "tags": ["apollo", "science"]
+    },
+    {
+      "id": "lunar:apollo-17-lrv",
+      "slug": "apollo-17-lrv",
+      "name": "Apollo 17 — Lunar Roving Vehicle",
+      "category": "lunar_surface",
+      "type": "rover",
+      "mission": "Apollo 17",
+      "agency": "NASA",
+      "country": "United States",
+      "launchDate": "1972-12-07",
+      "status": "mission_completed",
+      "confidence": "approximate",
+      "location": {
+        "body": "moon",
+        "latitude": 20.1908,
+        "longitude": 30.77168,
+        "elevationM": null,
+        "accuracy": "approximate",
+        "status": "verified_located",
+        "description": "Taurus–Littrow landing site; the rover's final parked position is within the explored traverse area.",
+        "sourceCoordinates": "Landing site centroid 20.19080° N, 30.77168° E",
+        "longitudeConvention": "east_positive",
+        "coordinateSystem": "planetocentric"
+      },
+      "description": "The Lunar Roving Vehicle used during Apollo 17, the last crewed lunar surface mission.",
+      "history": "Operated during three surface EVAs in December 1972 and remains in the Taurus–Littrow area.",
+      "significance": "The last rover driven by humans on the Moon.",
+      "massKg": 210,
+      "dimensions": null,
+      "image": null,
+      "sources": [
+        {"provider": "NASA History — Human Artifacts on the Moon", "url": "https://www.nasa.gov/wp-content/uploads/static/history/humanartifacts.html", "recordId": "apollo-17-lrv", "retrievedAt": "2026-11-14"}
+      ],
+      "events": [
+        {"date": "1972-12-12", "type": "rover_deployment", "description": "First Apollo 17 LRV traverse."}
+      ],
+      "tags": ["apollo", "rover", "historical-site"]
+    },
+    {
+      "id": "lunar:surveyor-1",
+      "slug": "surveyor-1",
+      "name": "Surveyor 1",
+      "category": "lunar_surface",
+      "type": "lander",
+      "mission": "Surveyor 1",
+      "agency": "NASA",
+      "country": "United States",
+      "launchDate": "1966-05-30",
+      "status": "mission_completed",
+      "confidence": "verified",
+      "location": {
+        "body": "moon",
+        "latitude": -2.474,
+        "longitude": -43.339,
+        "elevationM": null,
+        "accuracy": "verified",
+        "status": "verified_located",
+        "description": "Oceanus Procellarum, Flamsteed P region",
+        "sourceCoordinates": "2.474° S, 43.339° W",
+        "longitudeConvention": "east_positive",
+        "coordinateSystem": "planetocentric"
+      },
+      "description": "Surveyor 1 was the first US spacecraft to make a soft landing on the Moon. It returned images and engineering data from Oceanus Procellarum.",
+      "history": "Launched 30 May 1966 and landed 2 June 1966. The lander operated until January 1967.",
+      "significance": "Demonstrated the soft-landing technology needed for Apollo.",
+      "massKg": null,
+      "dimensions": null,
+      "image": null,
+      "sources": [
+        {"provider": "NASA History — Human Artifacts on the Moon", "url": "https://www.nasa.gov/wp-content/uploads/static/history/humanartifacts.html", "recordId": "surveyor-1", "retrievedAt": "2026-11-14"},
+        {"provider": "NASA — Surveyor 1", "url": "https://science.nasa.gov/mission/surveyor-1/", "recordId": "surveyor-1", "retrievedAt": "2026-11-14"}
+      ],
+      "events": [
+        {"date": "1966-05-30", "type": "launch", "description": "Launched toward the Moon."},
+        {"date": "1966-06-02", "type": "landing", "description": "Soft-landed in Oceanus Procellarum."}
+      ],
+      "tags": ["surveyor", "robotic", "historical-site"]
+    },
+    {
+      "id": "lunar:surveyor-2",
+      "slug": "surveyor-2",
+      "name": "Surveyor 2 — Impact Site",
+      "category": "lunar_surface",
+      "type": "impact_site",
+      "mission": "Surveyor 2",
+      "agency": "NASA",
+      "country": "United States",
+      "launchDate": "1966-09-20",
+      "status": "destroyed",
+      "confidence": "estimated",
+      "location": {
+        "body": "moon",
+        "latitude": 5.5,
+        "longitude": -12,
+        "elevationM": null,
+        "accuracy": "estimated",
+        "status": "verified_located",
+        "description": "Impact site near Copernicus crater; coordinate is an estimated impact location.",
+        "sourceCoordinates": "5.5° N, 12° W",
+        "longitudeConvention": "east_positive",
+        "coordinateSystem": "planetocentric"
+      },
+      "description": "Surveyor 2 failed during its midcourse correction and impacted the Moon. The catalogue records an estimated impact coordinate.",
+      "history": "Launched 20 September 1966. A thruster failure during midcourse correction caused the spacecraft to tumble; it impacted the Moon on 23 September 1966.",
+      "significance": "A documented robotic impact site from the Surveyor program.",
+      "massKg": null,
+      "dimensions": null,
+      "image": null,
+      "sources": [
+        {"provider": "NASA History — Human Artifacts on the Moon", "url": "https://www.nasa.gov/wp-content/uploads/static/history/humanartifacts.html", "recordId": "surveyor-2", "retrievedAt": "2026-11-14"}
+      ],
+      "events": [
+        {"date": "1966-09-20", "type": "launch", "description": "Launched toward the Moon."},
+        {"date": "1966-09-23", "type": "impact", "description": "Impacted the Moon after a midcourse thruster failure."}
+      ],
+      "tags": ["surveyor", "robotic", "impact"]
+    },
+    {
+      "id": "lunar:surveyor-3",
+      "slug": "surveyor-3",
+      "name": "Surveyor 3",
+      "category": "lunar_surface",
+      "type": "lander",
+      "mission": "Surveyor 3",
+      "agency": "NASA",
+      "country": "United States",
+      "launchDate": "1967-04-17",
+      "status": "mission_completed",
+      "confidence": "verified",
+      "location": {
+        "body": "moon",
+        "latitude": -3.015,
+        "longitude": -23.418,
+        "elevationM": null,
+        "accuracy": "verified",
+        "status": "verified_located",
+        "description": "Oceanus Procellarum, near the Apollo 12 landing site",
+        "sourceCoordinates": "3.015° S, 23.418° W",
+        "longitudeConvention": "east_positive",
+        "coordinateSystem": "planetocentric"
+      },
+      "description": "Surveyor 3 landed in Oceanus Procellarum and was later visited by the Apollo 12 crew, who returned parts of the spacecraft to Earth.",
+      "history": "Landed 20 April 1967. Apollo 12 astronauts Charles Conrad and Alan Bean visited the site in November 1969.",
+      "significance": "The only robotic spacecraft on the Moon to be visited by humans.",
+      "massKg": null,
+      "dimensions": null,
+      "image": null,
+      "sources": [
+        {"provider": "NASA History — Human Artifacts on the Moon", "url": "https://www.nasa.gov/wp-content/uploads/static/history/humanartifacts.html", "recordId": "surveyor-3", "retrievedAt": "2026-11-14"},
+        {"provider": "NASA — Surveyor 3", "url": "https://science.nasa.gov/mission/surveyor-3/", "recordId": "surveyor-3", "retrievedAt": "2026-11-14"}
+      ],
+      "events": [
+        {"date": "1967-04-17", "type": "launch", "description": "Launched toward the Moon."},
+        {"date": "1967-04-20", "type": "landing", "description": "Soft-landed in Oceanus Procellarum."},
+        {"date": "1969-11-19", "type": "other", "description": "Visited by the Apollo 12 crew."}
+      ],
+      "tags": ["surveyor", "robotic", "historical-site"]
+    },
+    {
+      "id": "lunar:surveyor-5",
+      "slug": "surveyor-5",
+      "name": "Surveyor 5",
+      "category": "lunar_surface",
+      "type": "lander",
+      "mission": "Surveyor 5",
+      "agency": "NASA",
+      "country": "United States",
+      "launchDate": "1967-09-08",
+      "status": "mission_completed",
+      "confidence": "verified",
+      "location": {
+        "body": "moon",
+        "latitude": 1.461,
+        "longitude": 23.195,
+        "elevationM": null,
+        "accuracy": "verified",
+        "status": "verified_located",
+        "description": "Mare Tranquillitatis",
+        "sourceCoordinates": "1.461° N, 23.195° E",
+        "longitudeConvention": "east_positive",
+        "coordinateSystem": "planetocentric"
+      },
+      "description": "Surveyor 5 landed in Mare Tranquillitatis and analyzed the lunar soil with an alpha-scattering instrument.",
+      "history": "Launched 8 September 1967 and landed 11 September 1967. It operated through December 1967.",
+      "significance": "Provided early chemical analysis of the lunar regolith.",
+      "massKg": null,
+      "dimensions": null,
+      "image": null,
+      "sources": [
+        {"provider": "NASA History — Human Artifacts on the Moon", "url": "https://www.nasa.gov/wp-content/uploads/static/history/humanartifacts.html", "recordId": "surveyor-5", "retrievedAt": "2026-11-14"}
+      ],
+      "events": [
+        {"date": "1967-09-08", "type": "launch", "description": "Launched toward the Moon."},
+        {"date": "1967-09-11", "type": "landing", "description": "Soft-landed in Mare Tranquillitatis."}
+      ],
+      "tags": ["surveyor", "robotic"]
+    },
+    {
+      "id": "lunar:surveyor-6",
+      "slug": "surveyor-6",
+      "name": "Surveyor 6",
+      "category": "lunar_surface",
+      "type": "lander",
+      "mission": "Surveyor 6",
+      "agency": "NASA",
+      "country": "United States",
+      "launchDate": "1967-11-07",
+      "status": "mission_completed",
+      "confidence": "verified",
+      "location": {
+        "body": "moon",
+        "latitude": 0.473,
+        "longitude": -1.427,
+        "elevationM": null,
+        "accuracy": "verified",
+        "status": "verified_located",
+        "description": "Sinus Medii",
+        "sourceCoordinates": "0.473° N, 1.427° W",
+        "longitudeConvention": "east_positive",
+        "coordinateSystem": "planetocentric"
+      },
+      "description": "Surveyor 6 landed in Sinus Medii and later performed the first controlled liftoff from the Moon, hopping a short distance.",
+      "history": "Landed 10 November 1967. On 17 November 1967 its engines were fired briefly for a small hop.",
+      "significance": "First spacecraft to lift off from another celestial body.",
+      "massKg": null,
+      "dimensions": null,
+      "image": null,
+      "sources": [
+        {"provider": "NASA History — Human Artifacts on the Moon", "url": "https://www.nasa.gov/wp-content/uploads/static/history/humanartifacts.html", "recordId": "surveyor-6", "retrievedAt": "2026-11-14"}
+      ],
+      "events": [
+        {"date": "1967-11-07", "type": "launch", "description": "Launched toward the Moon."},
+        {"date": "1967-11-10", "type": "landing", "description": "Soft-landed in Sinus Medii."},
+        {"date": "1967-11-17", "type": "other", "description": "Performed a short controlled hop."}
+      ],
+      "tags": ["surveyor", "robotic"]
+    },
+    {
+      "id": "lunar:surveyor-7",
+      "slug": "surveyor-7",
+      "name": "Surveyor 7",
+      "category": "lunar_surface",
+      "type": "lander",
+      "mission": "Surveyor 7",
+      "agency": "NASA",
+      "country": "United States",
+      "launchDate": "1968-01-07",
+      "status": "mission_completed",
+      "confidence": "verified",
+      "location": {
+        "body": "moon",
+        "latitude": -40.98,
+        "longitude": -11.509,
+        "elevationM": null,
+        "accuracy": "verified",
+        "status": "verified_located",
+        "description": "Near Tycho crater, southern highlands",
+        "sourceCoordinates": "40.980° S, 11.509° W",
+        "longitudeConvention": "east_positive",
+        "coordinateSystem": "planetocentric"
+      },
+      "description": "Surveyor 7 landed near Tycho crater in the southern highlands, the last Surveyor mission.",
+      "history": "Launched 7 January 1968 and landed 10 January 1968. It operated until February 1968.",
+      "significance": "Explored a highland site far from the Apollo landing zones.",
+      "massKg": null,
+      "dimensions": null,
+      "image": null,
+      "sources": [
+        {"provider": "NASA History — Human Artifacts on the Moon", "url": "https://www.nasa.gov/wp-content/uploads/static/history/humanartifacts.html", "recordId": "surveyor-7", "retrievedAt": "2026-11-14"}
+      ],
+      "events": [
+        {"date": "1968-01-07", "type": "launch", "description": "Launched toward the Moon."},
+        {"date": "1968-01-10", "type": "landing", "description": "Soft-landed near Tycho crater."}
+      ],
+      "tags": ["surveyor", "robotic"]
+    },
+    {
+      "id": "lunar:ranger-4",
+      "slug": "ranger-4",
+      "name": "Ranger 4 — Impact Site",
+      "category": "lunar_surface",
+      "type": "impact_site",
+      "mission": "Ranger 4",
+      "agency": "NASA",
+      "country": "United States",
+      "launchDate": "1962-04-23",
+      "status": "destroyed",
+      "confidence": "verified",
+      "location": {
+        "body": "moon",
+        "latitude": -15.5,
+        "longitude": -130.7,
+        "elevationM": null,
+        "accuracy": "verified",
+        "status": "verified_located",
+        "description": "Far side of the Moon",
+        "sourceCoordinates": "15.5° S, 130.7° W",
+        "longitudeConvention": "east_positive",
+        "coordinateSystem": "planetocentric"
+      },
+      "description": "Ranger 4 was intended to image the lunar surface but failed before returning data. It impacted the far side of the Moon.",
+      "history": "Launched 23 April 1962. A failure left the spacecraft without power; it impacted the Moon on 26 April 1962.",
+      "significance": "The first US spacecraft to reach the Moon, though the mission failed.",
+      "massKg": null,
+      "dimensions": null,
+      "image": null,
+      "sources": [
+        {"provider": "NASA History — Human Artifacts on the Moon", "url": "https://www.nasa.gov/wp-content/uploads/static/history/humanartifacts.html", "recordId": "ranger-4", "retrievedAt": "2026-11-14"}
+      ],
+      "events": [
+        {"date": "1962-04-23", "type": "launch", "description": "Launched toward the Moon."},
+        {"date": "1962-04-26", "type": "impact", "description": "Impacted the lunar far side."}
+      ],
+      "tags": ["ranger", "robotic", "impact"]
+    },
+    {
+      "id": "lunar:ranger-7",
+      "slug": "ranger-7",
+      "name": "Ranger 7 — Impact Site",
+      "category": "lunar_surface",
+      "type": "impact_site",
+      "mission": "Ranger 7",
+      "agency": "NASA",
+      "country": "United States",
+      "launchDate": "1964-07-28",
+      "status": "destroyed",
+      "confidence": "verified",
+      "location": {
+        "body": "moon",
+        "latitude": -10.63,
+        "longitude": -20.6,
+        "elevationM": null,
+        "accuracy": "verified",
+        "status": "verified_located",
+        "description": "Mare Cognitum region",
+        "sourceCoordinates": "10.63° S, 20.60° W",
+        "longitudeConvention": "east_positive",
+        "coordinateSystem": "planetocentric"
+      },
+      "description": "Ranger 7 was the first US mission to return close-up images of the Moon, transmitting thousands of frames before impact.",
+      "history": "Launched 28 July 1964 and impacted the Moon on 31 July 1964 after a successful imaging sequence.",
+      "significance": "Demonstrated the feasibility of lunar imaging for Apollo site selection.",
+      "massKg": null,
+      "dimensions": null,
+      "image": null,
+      "sources": [
+        {"provider": "NASA History — Human Artifacts on the Moon", "url": "https://www.nasa.gov/wp-content/uploads/static/history/humanartifacts.html", "recordId": "ranger-7", "retrievedAt": "2026-11-14"}
+      ],
+      "events": [
+        {"date": "1964-07-28", "type": "launch", "description": "Launched toward the Moon."},
+        {"date": "1964-07-31", "type": "impact", "description": "Impacted the Moon after returning close-up images."}
+      ],
+      "tags": ["ranger", "robotic", "impact"]
+    },
+    {
+      "id": "lunar:ranger-8",
+      "slug": "ranger-8",
+      "name": "Ranger 8 — Impact Site",
+      "category": "lunar_surface",
+      "type": "impact_site",
+      "mission": "Ranger 8",
+      "agency": "NASA",
+      "country": "United States",
+      "launchDate": "1965-02-17",
+      "status": "destroyed",
+      "confidence": "verified",
+      "location": {
+        "body": "moon",
+        "latitude": 2.638,
+        "longitude": 24.787,
+        "elevationM": null,
+        "accuracy": "verified",
+        "status": "verified_located",
+        "description": "Mare Tranquillitatis",
+        "sourceCoordinates": "2.638° N, 24.787° E",
+        "longitudeConvention": "east_positive",
+        "coordinateSystem": "planetocentric"
+      },
+      "description": "Ranger 8 returned high-resolution images of the Moon before impacting in Mare Tranquillitatis.",
+      "history": "Launched 17 February 1965 and impacted on 20 February 1965.",
+      "significance": "Provided imagery used in planning the Apollo 11 landing region.",
+      "massKg": null,
+      "dimensions": null,
+      "image": null,
+      "sources": [
+        {"provider": "NASA History — Human Artifacts on the Moon", "url": "https://www.nasa.gov/wp-content/uploads/static/history/humanartifacts.html", "recordId": "ranger-8", "retrievedAt": "2026-11-14"}
+      ],
+      "events": [
+        {"date": "1965-02-17", "type": "launch", "description": "Launched toward the Moon."},
+        {"date": "1965-02-20", "type": "impact", "description": "Impacted in Mare Tranquillitatis."}
+      ],
+      "tags": ["ranger", "robotic", "impact"]
+    },
+    {
+      "id": "lunar:ranger-9",
+      "slug": "ranger-9",
+      "name": "Ranger 9 — Impact Site",
+      "category": "lunar_surface",
+      "type": "impact_site",
+      "mission": "Ranger 9",
+      "agency": "NASA",
+      "country": "United States",
+      "launchDate": "1965-03-21",
+      "status": "destroyed",
+      "confidence": "unknown",
+      "location": {
+        "body": "moon",
+        "latitude": null,
+        "longitude": null,
+        "elevationM": null,
+        "accuracy": "unknown",
+        "status": "unknown_location",
+        "description": "The NASA catalogue lists 112.828° N, which is outside the valid latitude range. This archive does not substitute an unverified coordinate.",
+        "sourceCoordinates": "112.828° N, 2.387° W (invalid latitude in source)",
+        "longitudeConvention": "east_positive",
+        "coordinateSystem": "unknown"
+      },
+      "description": "Ranger 9 returned close-up images of Alphonsus crater before impact, the final mission of the Ranger program.",
+      "history": "Launched 21 March 1965 and impacted on 24 March 1965. The catalogue coordinate contains an out-of-range latitude, so the precise site is treated as unknown.",
+      "significance": "The first mission to return images of a lunar crater at close range; also an example of source-data validation.",
+      "massKg": null,
+      "dimensions": null,
+      "image": null,
+      "sources": [
+        {"provider": "NASA History — Human Artifacts on the Moon", "url": "https://www.nasa.gov/wp-content/uploads/static/history/humanartifacts.html", "recordId": "ranger-9", "retrievedAt": "2026-11-14"}
+      ],
+      "events": [
+        {"date": "1965-03-21", "type": "launch", "description": "Launched toward the Moon."},
+        {"date": "1965-03-24", "type": "impact", "description": "Impacted after imaging Alphonsus crater."}
+      ],
+      "tags": ["ranger", "robotic", "unknown-location"]
+    },
+    {
+      "id": "lunar:luna-2",
+      "slug": "luna-2",
+      "name": "Luna 2 — Impact Site",
+      "category": "lunar_surface",
+      "type": "impact_site",
+      "mission": "Luna 2",
+      "agency": "Soviet Union",
+      "country": "Soviet Union",
+      "launchDate": "1959-09-12",
+      "status": "destroyed",
+      "confidence": "approximate",
+      "location": {
+        "body": "moon",
+        "latitude": 29.1,
+        "longitude": 0,
+        "elevationM": null,
+        "accuracy": "approximate",
+        "status": "verified_located",
+        "description": "Mare Imbrium / Autolycus region; impact coordinate is approximate",
+        "sourceCoordinates": "29.1° N, 0° E",
+        "longitudeConvention": "east_positive",
+        "coordinateSystem": "planetocentric"
+      },
+      "description": "Luna 2 was the first human-made object to reach the surface of the Moon.",
+      "history": "Launched 12 September 1959 and impacted the Moon on 14 September 1959.",
+      "significance": "First spacecraft to reach another celestial body.",
+      "massKg": null,
+      "dimensions": null,
+      "image": null,
+      "sources": [
+        {"provider": "NASA History — Human Artifacts on the Moon", "url": "https://www.nasa.gov/wp-content/uploads/static/history/humanartifacts.html", "recordId": "luna-2", "retrievedAt": "2026-11-14"}
+      ],
+      "events": [
+        {"date": "1959-09-12", "type": "launch", "description": "Launched toward the Moon."},
+        {"date": "1959-09-14", "type": "impact", "description": "Impacted the Moon."}
+      ],
+      "tags": ["luna", "robotic", "impact"]
+    },
+    {
+      "id": "lunar:luna-9",
+      "slug": "luna-9",
+      "name": "Luna 9",
+      "category": "lunar_surface",
+      "type": "lander",
+      "mission": "Luna 9",
+      "agency": "Soviet Union",
+      "country": "Soviet Union",
+      "launchDate": "1966-01-31",
+      "status": "mission_completed",
+      "confidence": "verified",
+      "location": {
+        "body": "moon",
+        "latitude": 7.08,
+        "longitude": -64.37,
+        "elevationM": null,
+        "accuracy": "verified",
+        "status": "verified_located",
+        "description": "Oceanus Procellarum",
+        "sourceCoordinates": "7.08° N, 64.37° W",
+        "longitudeConvention": "east_positive",
+        "coordinateSystem": "planetocentric"
+      },
+      "description": "Luna 9 made the first successful soft landing on the Moon and returned the first images from the lunar surface.",
+      "history": "Launched 31 January 1966 and landed 3 February 1966.",
+      "significance": "First controlled landing on another celestial body.",
+      "massKg": null,
+      "dimensions": null,
+      "image": null,
+      "sources": [
+        {"provider": "NASA History — Human Artifacts on the Moon", "url": "https://www.nasa.gov/wp-content/uploads/static/history/humanartifacts.html", "recordId": "luna-9", "retrievedAt": "2026-11-14"}
+      ],
+      "events": [
+        {"date": "1966-01-31", "type": "launch", "description": "Launched toward the Moon."},
+        {"date": "1966-02-03", "type": "landing", "description": "Soft-landed in Oceanus Procellarum."}
+      ],
+      "tags": ["luna", "robotic", "historical-site"]
+    },
+    {
+      "id": "lunar:luna-13",
+      "slug": "luna-13",
+      "name": "Luna 13",
+      "category": "lunar_surface",
+      "type": "lander",
+      "mission": "Luna 13",
+      "agency": "Soviet Union",
+      "country": "Soviet Union",
+      "launchDate": "1966-12-21",
+      "status": "mission_completed",
+      "confidence": "verified",
+      "location": {
+        "body": "moon",
+        "latitude": 18.87,
+        "longitude": -62.05,
+        "elevationM": null,
+        "accuracy": "verified",
+        "status": "verified_located",
+        "description": "Oceanus Procellarum",
+        "sourceCoordinates": "18.87° N, 62.05° W",
+        "longitudeConvention": "east_positive",
+        "coordinateSystem": "planetocentric"
+      },
+      "description": "Luna 13 landed in Oceanus Procellarum and returned images and soil-mechanics data.",
+      "history": "Launched 21 December 1966 and landed 24 December 1966.",
+      "significance": "Continued Soviet soft-landing and surface-science operations.",
+      "massKg": null,
+      "dimensions": null,
+      "image": null,
+      "sources": [
+        {"provider": "NASA History — Human Artifacts on the Moon", "url": "https://www.nasa.gov/wp-content/uploads/static/history/humanartifacts.html", "recordId": "luna-13", "retrievedAt": "2026-11-14"}
+      ],
+      "events": [
+        {"date": "1966-12-21", "type": "launch", "description": "Launched toward the Moon."},
+        {"date": "1966-12-24", "type": "landing", "description": "Soft-landed in Oceanus Procellarum."}
+      ],
+      "tags": ["luna", "robotic"]
+    },
+    {
+      "id": "lunar:luna-16",
+      "slug": "luna-16",
+      "name": "Luna 16 — Descent Stage",
+      "category": "lunar_surface",
+      "type": "descent_stage",
+      "mission": "Luna 16",
+      "agency": "Soviet Union",
+      "country": "Soviet Union",
+      "launchDate": "1970-09-12",
+      "status": "mission_completed",
+      "confidence": "verified",
+      "location": {
+        "body": "moon",
+        "latitude": -0.513,
+        "longitude": 56.364,
+        "elevationM": null,
+        "accuracy": "verified",
+        "status": "verified_located",
+        "description": "Mare Fecunditatis",
+        "sourceCoordinates": "0.513° S, 56.364° E",
+        "longitudeConvention": "east_positive",
+        "coordinateSystem": "planetocentric"
+      },
+      "description": "Luna 16 was the first robotic mission to return a sample of lunar soil to Earth. Its descent stage remains in Mare Fecunditatis.",
+      "history": "Launched 12 September 1970, landed 20 September 1970, and returned samples to Earth on 24 September 1970.",
+      "significance": "First automated lunar sample return.",
+      "massKg": null,
+      "dimensions": null,
+      "image": null,
+      "sources": [
+        {"provider": "NASA History — Human Artifacts on the Moon", "url": "https://www.nasa.gov/wp-content/uploads/static/history/humanartifacts.html", "recordId": "luna-16", "retrievedAt": "2026-11-14"}
+      ],
+      "events": [
+        {"date": "1970-09-12", "type": "launch", "description": "Launched toward the Moon."},
+        {"date": "1970-09-20", "type": "landing", "description": "Landed in Mare Fecunditatis."}
+      ],
+      "tags": ["luna", "robotic", "sample-return"]
+    },
+    {
+      "id": "lunar:luna-17",
+      "slug": "luna-17",
+      "name": "Luna 17 — Lander",
+      "category": "lunar_surface",
+      "type": "lander",
+      "mission": "Luna 17",
+      "agency": "Soviet Union",
+      "country": "Soviet Union",
+      "launchDate": "1970-11-10",
+      "status": "mission_completed",
+      "confidence": "verified",
+      "location": {
+        "body": "moon",
+        "latitude": 38.238,
+        "longitude": -34.997,
+        "elevationM": null,
+        "accuracy": "verified",
+        "status": "verified_located",
+        "description": "Mare Imbrium, northwestern region",
+        "sourceCoordinates": "38.238° N, 34.997° W",
+        "longitudeConvention": "east_positive",
+        "coordinateSystem": "planetocentric"
+      },
+      "description": "Luna 17 delivered the Lunokhod 1 rover to the Moon in November 1970.",
+      "history": "Launched 10 November 1970 and landed 17 November 1970. The lander remained after deploying Lunokhod 1.",
+      "significance": "First robotic rover operated on another world.",
+      "massKg": null,
+      "dimensions": null,
+      "image": null,
+      "sources": [
+        {"provider": "NASA History — Human Artifacts on the Moon", "url": "https://www.nasa.gov/wp-content/uploads/static/history/humanartifacts.html", "recordId": "luna-17", "retrievedAt": "2026-11-14"}
+      ],
+      "events": [
+        {"date": "1970-11-10", "type": "launch", "description": "Launched toward the Moon."},
+        {"date": "1970-11-17", "type": "landing", "description": "Landed in Mare Imbrium."}
+      ],
+      "tags": ["luna", "robotic"]
+    },
+    {
+      "id": "lunar:lunokhod-1",
+      "slug": "lunokhod-1",
+      "name": "Lunokhod 1",
+      "category": "lunar_surface",
+      "type": "rover",
+      "mission": "Luna 17",
+      "agency": "Soviet Union",
+      "country": "Soviet Union",
+      "launchDate": "1970-11-10",
+      "status": "mission_completed",
+      "confidence": "verified",
+      "location": {
+        "body": "moon",
+        "latitude": 38.316,
+        "longitude": -35.004,
+        "elevationM": null,
+        "accuracy": "verified",
+        "status": "verified_located",
+        "description": "Mare Imbrium, near the Luna 17 lander",
+        "sourceCoordinates": "38.316° N, 35.004° W",
+        "longitudeConvention": "east_positive",
+        "coordinateSystem": "planetocentric"
+      },
+      "description": "Lunokhod 1 was the first robotic rover to operate on another celestial body. It traveled across Mare Imbrium for about ten months.",
+      "history": "Deployed from Luna 17 on 17 November 1970 and operated until September 1971.",
+      "significance": "First wheeled vehicle on another world; its retroreflector was later located by laser ranging.",
+      "massKg": null,
+      "dimensions": null,
+      "image": null,
+      "sources": [
+        {"provider": "NASA History — Human Artifacts on the Moon", "url": "https://www.nasa.gov/wp-content/uploads/static/history/humanartifacts.html", "recordId": "lunokhod-1", "retrievedAt": "2026-11-14"}
+      ],
+      "events": [
+        {"date": "1970-11-17", "type": "rover_deployment", "description": "Lunokhod 1 drove onto the lunar surface."}
+      ],
+      "tags": ["luna", "rover"]
+    },
+    {
+      "id": "lunar:luna-20",
+      "slug": "luna-20",
+      "name": "Luna 20 — Descent Stage",
+      "category": "lunar_surface",
+      "type": "descent_stage",
+      "mission": "Luna 20",
+      "agency": "Soviet Union",
+      "country": "Soviet Union",
+      "launchDate": "1972-02-14",
+      "status": "mission_completed",
+      "confidence": "verified",
+      "location": {
+        "body": "moon",
+        "latitude": 3.787,
+        "longitude": 56.625,
+        "elevationM": null,
+        "accuracy": "verified",
+        "status": "verified_located",
+        "description": "Apollonius highlands, Mare Fecunditatis region",
+        "sourceCoordinates": "3.787° N, 56.625° E",
+        "longitudeConvention": "east_positive",
+        "coordinateSystem": "planetocentric"
+      },
+      "description": "Luna 20 returned a small sample of highland material to Earth. Its descent stage remains at the landing site.",
+      "history": "Launched 14 February 1972, landed 21 February 1972, and returned samples on 25 February 1972.",
+      "significance": "Second successful robotic lunar sample return.",
+      "massKg": null,
+      "dimensions": null,
+      "image": null,
+      "sources": [
+        {"provider": "NASA History — Human Artifacts on the Moon", "url": "https://www.nasa.gov/wp-content/uploads/static/history/humanartifacts.html", "recordId": "luna-20", "retrievedAt": "2026-11-14"}
+      ],
+      "events": [
+        {"date": "1972-02-14", "type": "launch", "description": "Launched toward the Moon."},
+        {"date": "1972-02-21", "type": "landing", "description": "Landed in the Apollonius highlands."}
+      ],
+      "tags": ["luna", "robotic", "sample-return"]
+    },
+    {
+      "id": "lunar:luna-21",
+      "slug": "luna-21",
+      "name": "Luna 21 — Lander",
+      "category": "lunar_surface",
+      "type": "lander",
+      "mission": "Luna 21",
+      "agency": "Soviet Union",
+      "country": "Soviet Union",
+      "launchDate": "1973-01-08",
+      "status": "mission_completed",
+      "confidence": "verified",
+      "location": {
+        "body": "moon",
+        "latitude": 26.003,
+        "longitude": 30.408,
+        "elevationM": null,
+        "accuracy": "verified",
+        "status": "verified_located",
+        "description": "Le Monnier crater, Mare Serenitatis",
+        "sourceCoordinates": "26.003° N, 30.408° E",
+        "longitudeConvention": "east_positive",
+        "coordinateSystem": "planetocentric"
+      },
+      "description": "Luna 21 delivered the Lunokhod 2 rover to the Moon in January 1973.",
+      "history": "Launched 8 January 1973 and landed 16 January 1973. The lander remained after deploying Lunokhod 2.",
+      "significance": "Second successful Soviet lunar rover mission.",
+      "massKg": null,
+      "dimensions": null,
+      "image": null,
+      "sources": [
+        {"provider": "NASA History — Human Artifacts on the Moon", "url": "https://www.nasa.gov/wp-content/uploads/static/history/humanartifacts.html", "recordId": "luna-21", "retrievedAt": "2026-11-14"}
+      ],
+      "events": [
+        {"date": "1973-01-08", "type": "launch", "description": "Launched toward the Moon."},
+        {"date": "1973-01-16", "type": "landing", "description": "Landed in Le Monnier crater."}
+      ],
+      "tags": ["luna", "robotic"]
+    },
+    {
+      "id": "lunar:lunokhod-2",
+      "slug": "lunokhod-2",
+      "name": "Lunokhod 2",
+      "category": "lunar_surface",
+      "type": "rover",
+      "mission": "Luna 21",
+      "agency": "Soviet Union",
+      "country": "Soviet Union",
+      "launchDate": "1973-01-08",
+      "status": "mission_completed",
+      "confidence": "verified",
+      "location": {
+        "body": "moon",
+        "latitude": 25.827,
+        "longitude": 30.919,
+        "elevationM": null,
+        "accuracy": "verified",
+        "status": "verified_located",
+        "description": "Le Monnier crater, Mare Serenitatis",
+        "sourceCoordinates": "25.827° N, 30.919° E",
+        "longitudeConvention": "east_positive",
+        "coordinateSystem": "planetocentric"
+      },
+      "description": "Lunokhod 2 explored the Le Monnier crater region and set a long-distance driving record for its time.",
+      "history": "Deployed from Luna 21 on 16 January 1973 and operated until May 1973.",
+      "significance": "One of the most productive robotic lunar traverses of the 20th century.",
+      "massKg": null,
+      "dimensions": null,
+      "image": null,
+      "sources": [
+        {"provider": "NASA History — Human Artifacts on the Moon", "url": "https://www.nasa.gov/wp-content/uploads/static/history/humanartifacts.html", "recordId": "lunokhod-2", "retrievedAt": "2026-11-14"}
+      ],
+      "events": [
+        {"date": "1973-01-16", "type": "rover_deployment", "description": "Lunokhod 2 drove onto the lunar surface."}
+      ],
+      "tags": ["luna", "rover"]
+    },
+    {
+      "id": "lunar:luna-24",
+      "slug": "luna-24",
+      "name": "Luna 24 — Descent Stage",
+      "category": "lunar_surface",
+      "type": "descent_stage",
+      "mission": "Luna 24",
+      "agency": "Soviet Union",
+      "country": "Soviet Union",
+      "launchDate": "1976-08-09",
+      "status": "mission_completed",
+      "confidence": "verified",
+      "location": {
+        "body": "moon",
+        "latitude": 12.714,
+        "longitude": 62.213,
+        "elevationM": null,
+        "accuracy": "verified",
+        "status": "verified_located",
+        "description": "Mare Crisium",
+        "sourceCoordinates": "12.714° N, 62.213° E",
+        "longitudeConvention": "east_positive",
+        "coordinateSystem": "planetocentric"
+      },
+      "description": "Luna 24 returned the last lunar sample of the 20th century. Its descent stage remains in Mare Crisium.",
+      "history": "Launched 9 August 1976, landed 18 August 1976, and returned samples to Earth on 22 August 1976.",
+      "significance": "The final Soviet lunar sample-return mission.",
+      "massKg": null,
+      "dimensions": null,
+      "image": null,
+      "sources": [
+        {"provider": "NASA History — Human Artifacts on the Moon", "url": "https://www.nasa.gov/wp-content/uploads/static/history/humanartifacts.html", "recordId": "luna-24", "retrievedAt": "2026-11-14"}
+      ],
+      "events": [
+        {"date": "1976-08-09", "type": "launch", "description": "Launched toward the Moon."},
+        {"date": "1976-08-18", "type": "landing", "description": "Landed in Mare Crisium."}
+      ],
+      "tags": ["luna", "robotic", "sample-return"]
+    },
+    {
+      "id": "lunar:lcross-shepherding",
+      "slug": "lcross-shepherding",
+      "name": "LCROSS Shepherding Spacecraft — Impact Site",
+      "category": "lunar_surface",
+      "type": "impact_site",
+      "mission": "LCROSS",
+      "agency": "NASA",
+      "country": "United States",
+      "launchDate": "2009-06-18",
+      "status": "destroyed",
+      "confidence": "verified",
+      "location": {
+        "body": "moon",
+        "latitude": -84.72,
+        "longitude": -49.62,
+        "elevationM": null,
+        "accuracy": "verified",
+        "status": "verified_located",
+        "description": "Cabeus crater, south polar region",
+        "sourceCoordinates": "84.72° S, 49.62° W",
+        "longitudeConvention": "east_positive",
+        "coordinateSystem": "planetocentric"
+      },
+      "description": "The LCROSS shepherding spacecraft followed its Centaur upper stage into the Cabeus crater impact, observing the ejecta for signs of water ice.",
+      "history": "Launched 18 June 2009. The Centaur and shepherding spacecraft impacted the Moon on 9 October 2009.",
+      "significance": "Confirmed the presence of water ice in a permanently shadowed polar crater.",
+      "massKg": null,
+      "dimensions": null,
+      "image": null,
+      "sources": [
+        {"provider": "NASA History — Human Artifacts on the Moon", "url": "https://www.nasa.gov/wp-content/uploads/static/history/humanartifacts.html", "recordId": "lcross-shepherding", "retrievedAt": "2026-11-14"},
+        {"provider": "NASA — LCROSS", "url": "https://science.nasa.gov/mission/lcross/", "recordId": "lcross", "retrievedAt": "2026-11-14"}
+      ],
+      "events": [
+        {"date": "2009-06-18", "type": "launch", "description": "Launched with the Lunar Reconnaissance Orbiter."},
+        {"date": "2009-10-09", "type": "impact", "description": "Impacted Cabeus crater."}
+      ],
+      "tags": ["lcross", "impact", "polar"]
+    },
+    {
+      "id": "lunar:lcross-centaur",
+      "slug": "lcross-centaur",
+      "name": "LCROSS Centaur Upper Stage — Impact Site",
+      "category": "lunar_surface",
+      "type": "impact_site",
+      "mission": "LCROSS",
+      "agency": "NASA",
+      "country": "United States",
+      "launchDate": "2009-06-18",
+      "status": "destroyed",
+      "confidence": "verified",
+      "location": {
+        "body": "moon",
+        "latitude": -84.9,
+        "longitude": -35.5,
+        "elevationM": null,
+        "accuracy": "verified",
+        "status": "verified_located",
+        "description": "Cabeus crater, south polar region",
+        "sourceCoordinates": "84.9° S, 35.5° W",
+        "longitudeConvention": "east_positive",
+        "coordinateSystem": "planetocentric"
+      },
+      "description": "The Centaur upper stage used as the LCROSS impactor, deliberately crashed into Cabeus crater to excavate polar material.",
+      "history": "Impacted the Moon on 9 October 2009, followed by the shepherding spacecraft.",
+      "significance": "Created the plume observed for evidence of water ice.",
+      "massKg": null,
+      "dimensions": null,
+      "image": null,
+      "sources": [
+        {"provider": "NASA History — Human Artifacts on the Moon", "url": "https://www.nasa.gov/wp-content/uploads/static/history/humanartifacts.html", "recordId": "lcross-centaur", "retrievedAt": "2026-11-14"}
+      ],
+      "events": [
+        {"date": "2009-10-09", "type": "impact", "description": "Impacted Cabeus crater."}
+      ],
+      "tags": ["lcross", "impact", "polar"]
+    },
+    {
+      "id": "lunar:hiten",
+      "slug": "hiten",
+      "name": "Hiten — Impact Site",
+      "category": "lunar_surface",
+      "type": "impact_site",
+      "mission": "Hiten",
+      "agency": "ISAS / Japan",
+      "country": "Japan",
+      "launchDate": "1990-01-24",
+      "status": "destroyed",
+      "confidence": "approximate",
+      "location": {
+        "body": "moon",
+        "latitude": 55.3,
+        "longitude": -34,
+        "elevationM": null,
+        "accuracy": "approximate",
+        "status": "verified_located",
+        "description": "Lunar highlands; impact coordinate is approximate",
+        "sourceCoordinates": "55.3° N, 34.0° W",
+        "longitudeConvention": "east_positive",
+        "coordinateSystem": "planetocentric"
+      },
+      "description": "Hiten was Japan's first lunar spacecraft. It was intentionally impacted on the Moon after completing its mission.",
+      "history": "Launched 24 January 1990 and impacted the Moon on 10 April 1993.",
+      "significance": "Japan's first lunar mission and an early demonstration of lunar gravity-assist trajectories.",
+      "massKg": null,
+      "dimensions": null,
+      "image": null,
+      "sources": [
+        {"provider": "NASA History — Human Artifacts on the Moon", "url": "https://www.nasa.gov/wp-content/uploads/static/history/humanartifacts.html", "recordId": "hiten", "retrievedAt": "2026-11-14"}
+      ],
+      "events": [
+        {"date": "1990-01-24", "type": "launch", "description": "Launched toward the Moon."},
+        {"date": "1993-04-10", "type": "impact", "description": "Intentionally impacted the Moon."}
+      ],
+      "tags": ["japan", "impact"]
+    },
+    {
+      "id": "lunar:kaguya",
+      "slug": "kaguya",
+      "name": "Kaguya (SELENE) — Impact Site",
+      "category": "lunar_surface",
+      "type": "impact_site",
+      "mission": "Kaguya",
+      "agency": "JAXA",
+      "country": "Japan",
+      "launchDate": "2007-09-14",
+      "status": "destroyed",
+      "confidence": "approximate",
+      "location": {
+        "body": "moon",
+        "latitude": -65.5,
+        "longitude": 80.4,
+        "elevationM": null,
+        "accuracy": "approximate",
+        "status": "verified_located",
+        "description": "Southern highlands; impact coordinate is approximate",
+        "sourceCoordinates": "65.5° S, 80.4° E",
+        "longitudeConvention": "east_positive",
+        "coordinateSystem": "planetocentric"
+      },
+      "description": "Kaguya was a Japanese lunar orbiter that mapped the Moon with high-resolution cameras and topography instruments. It was intentionally impacted at the end of its mission.",
+      "history": "Launched 14 September 2007 and impacted the Moon on 10 June 2009.",
+      "significance": "Produced a global high-definition lunar topographic and imagery dataset.",
+      "massKg": null,
+      "dimensions": null,
+      "image": null,
+      "sources": [
+        {"provider": "NASA History — Human Artifacts on the Moon", "url": "https://www.nasa.gov/wp-content/uploads/static/history/humanartifacts.html", "recordId": "kaguya", "retrievedAt": "2026-11-14"}
+      ],
+      "events": [
+        {"date": "2007-09-14", "type": "launch", "description": "Launched toward the Moon."},
+        {"date": "2009-06-10", "type": "impact", "description": "Intentionally impacted the Moon."}
+      ],
+      "tags": ["japan", "orbiter", "impact"]
+    },
+    {
+      "id": "lunar:smart-1",
+      "slug": "smart-1",
+      "name": "SMART-1 — Impact Site",
+      "category": "lunar_surface",
+      "type": "impact_site",
+      "mission": "SMART-1",
+      "agency": "ESA",
+      "country": "Europe",
+      "launchDate": "2003-09-27",
+      "status": "destroyed",
+      "confidence": "approximate",
+      "location": {
+        "body": "moon",
+        "latitude": -34.4,
+        "longitude": -46.2,
+        "elevationM": null,
+        "accuracy": "approximate",
+        "status": "verified_located",
+        "description": "Lunar highlands; impact coordinate is approximate",
+        "sourceCoordinates": "34.4° S, 46.2° W",
+        "longitudeConvention": "east_positive",
+        "coordinateSystem": "planetocentric"
+      },
+      "description": "SMART-1 was ESA's first lunar mission and a technology demonstrator for solar-electric propulsion. It was intentionally impacted at the end of its mission.",
+      "history": "Launched 27 September 2003 and impacted the Moon on 3 September 2006.",
+      "significance": "Demonstrated ion propulsion for lunar transfer and mapped the lunar surface.",
+      "massKg": null,
+      "dimensions": null,
+      "image": null,
+      "sources": [
+        {"provider": "NASA History — Human Artifacts on the Moon", "url": "https://www.nasa.gov/wp-content/uploads/static/history/humanartifacts.html", "recordId": "smart-1", "retrievedAt": "2026-11-14"}
+      ],
+      "events": [
+        {"date": "2003-09-27", "type": "launch", "description": "Launched toward the Moon."},
+        {"date": "2006-09-03", "type": "impact", "description": "Intentionally impacted the Moon."}
+      ],
+      "tags": ["esa", "orbiter", "impact"]
+    }
+  ]
+}

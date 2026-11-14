@@ -1,0 +1,51 @@
+{
+  "provider": "CelesTrak",
+  "description": "Curated demonstration subset of the public CelesTrak GP catalogue, joined with CelesTrak SATCAT metadata.",
+  "retrievedAt": "2026-11-14T09:20:00Z",
+  "elementEpochRange": {
+    "min": "2026-11-05T14:01:31.004832Z",
+    "max": "2026-11-14T22:37:55.412544Z"
+  },
+  "objectCount": 1075,
+  "groupCounts": {
+    "stations": 18,
+    "gps-ops": 32,
+    "visual": 153,
+    "last-30-days": 80,
+    "cosmos-2251-debris": 120,
+    "iridium-33-debris": 50,
+    "fengyun-1c-debris": 200,
+    "active": 422
+  },
+  "typeCounts": {
+    "satellite": 612,
+    "rocket_body": 93,
+    "debris": 370
+  },
+  "statusCounts": {
+    "unknown": 488,
+    "active": 554,
+    "partially_operational": 11,
+    "inactive": 22
+  },
+  "regimeCounts": {
+    "LEO": 861,
+    "MEO": 111,
+    "HEO": 18,
+    "GEO": 85
+  },
+  "contentSha256": "0f28aff6aa4736b486f605fe2ac0969068fd374a3dda71eccc4fa7259181be75",
+  "sourceUrls": [
+    "https://celestrak.org/NORAD/elements/gp.php?GROUP=active&FORMAT=json",
+    "https://celestrak.org/NORAD/elements/gp.php?GROUP=cosmos-2251-debris&FORMAT=json",
+    "https://celestrak.org/NORAD/elements/gp.php?GROUP=fengyun-1c-debris&FORMAT=json",
+    "https://celestrak.org/NORAD/elements/gp.php?GROUP=gps-ops&FORMAT=json",
+    "https://celestrak.org/NORAD/elements/gp.php?GROUP=iridium-33-debris&FORMAT=json",
+    "https://celestrak.org/NORAD/elements/gp.php?GROUP=last-30-days&FORMAT=json",
+    "https://celestrak.org/NORAD/elements/gp.php?GROUP=stations&FORMAT=json",
+    "https://celestrak.org/NORAD/elements/gp.php?GROUP=visual&FORMAT=json",
+    "https://celestrak.org/pub/satcat.csv"
+  ],
+  "usagePolicy": "https://celestrak.org/usage-policy.php",
+  "note": "This is a snapshot, not a live feed. Positions are computed from the stored elements; element age is shown in the UI."
+}

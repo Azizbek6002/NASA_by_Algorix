@@ -1,0 +1,618 @@
+{
+  "provider": "NASA / ESA mission documentation",
+  "retrievedAt": "2026-11-14",
+  "coordinateConvention": "east_positive",
+  "coordinateSystem": "planetographic",
+  "note": "Landing-site coordinates are stored in east-positive longitude. Planetographic latitude is used for Mars where the mission documentation reports it. Rover traverse paths are not included unless a verified traverse dataset is available; no path is fabricated.",
+  "objects": [
+    {
+      "id": "mars:viking-1-lander",
+      "slug": "viking-1-lander",
+      "name": "Viking 1 Lander",
+      "category": "mars_surface",
+      "type": "lander",
+      "mission": "Viking 1",
+      "agency": "NASA",
+      "country": "United States",
+      "launchDate": "1975-08-20",
+      "status": "mission_completed",
+      "confidence": "verified",
+      "location": {
+        "body": "mars",
+        "latitude": 22.483,
+        "longitude": -47.94,
+        "elevationM": null,
+        "accuracy": "verified",
+        "status": "verified_located",
+        "description": "Chryse Planitia",
+        "sourceCoordinates": "22.483° N, 47.94° W",
+        "longitudeConvention": "east_positive",
+        "coordinateSystem": "planetographic"
+      },
+      "description": "Viking 1 was the first US spacecraft to land successfully on Mars. The lander returned images, weather data and biology experiments from Chryse Planitia.",
+      "history": "Launched 20 August 1975 and landed 20 July 1976. The lander operated until November 1982.",
+      "significance": "First successful long-duration Mars landing and the first biology experiments on another planet.",
+      "massKg": null,
+      "dimensions": null,
+      "image": null,
+      "roverPath": null,
+      "sources": [
+        {"provider": "NASA Science — Viking 1", "url": "https://science.nasa.gov/mission/viking-1/", "recordId": "viking-1", "retrievedAt": "2026-11-14"}
+      ],
+      "events": [
+        {"date": "1975-08-20", "type": "launch", "description": "Launched toward Mars."},
+        {"date": "1976-07-20", "type": "landing", "description": "Landed in Chryse Planitia."},
+        {"date": "1982-11-11", "type": "loss_of_communication", "description": "Final contact with the lander."}
+      ],
+      "tags": ["viking", "lander", "historical-site"]
+    },
+    {
+      "id": "mars:viking-2-lander",
+      "slug": "viking-2-lander",
+      "name": "Viking 2 Lander",
+      "category": "mars_surface",
+      "type": "lander",
+      "mission": "Viking 2",
+      "agency": "NASA",
+      "country": "United States",
+      "launchDate": "1975-09-09",
+      "status": "mission_completed",
+      "confidence": "verified",
+      "location": {
+        "body": "mars",
+        "latitude": 47.968,
+        "longitude": -225.71,
+        "elevationM": null,
+        "accuracy": "verified",
+        "status": "verified_located",
+        "description": "Utopia Planitia",
+        "sourceCoordinates": "47.968° N, 225.71° W",
+        "longitudeConvention": "east_positive",
+        "coordinateSystem": "planetographic"
+      },
+      "description": "Viking 2 landed in Utopia Planitia and operated alongside Viking 1 as part of the first long-term Mars surface network.",
+      "history": "Launched 9 September 1975 and landed 3 September 1976. The lander operated until April 1980.",
+      "significance": "Extended the Viking surface measurements to the northern plains.",
+      "massKg": null,
+      "dimensions": null,
+      "image": null,
+      "roverPath": null,
+      "sources": [
+        {"provider": "NASA Science — Viking 2", "url": "https://science.nasa.gov/mission/viking-2/", "recordId": "viking-2", "retrievedAt": "2026-11-14"}
+      ],
+      "events": [
+        {"date": "1975-09-09", "type": "launch", "description": "Launched toward Mars."},
+        {"date": "1976-09-03", "type": "landing", "description": "Landed in Utopia Planitia."},
+        {"date": "1980-04-11", "type": "loss_of_communication", "description": "Final contact with the lander."}
+      ],
+      "tags": ["viking", "lander", "historical-site"]
+    },
+    {
+      "id": "mars:mars-pathfinder-lander",
+      "slug": "mars-pathfinder-lander",
+      "name": "Mars Pathfinder Lander",
+      "category": "mars_surface",
+      "type": "lander",
+      "mission": "Mars Pathfinder",
+      "agency": "NASA",
+      "country": "United States",
+      "launchDate": "1996-12-04",
+      "status": "mission_completed",
+      "confidence": "verified",
+      "location": {
+        "body": "mars",
+        "latitude": 19.13,
+        "longitude": -33.22,
+        "elevationM": null,
+        "accuracy": "verified",
+        "status": "verified_located",
+        "description": "Ares Vallis",
+        "sourceCoordinates": "19.13° N, 33.22° W",
+        "longitudeConvention": "east_positive",
+        "coordinateSystem": "planetographic"
+      },
+      "description": "Mars Pathfinder demonstrated a low-cost landing system and deployed the Sojourner rover in Ares Vallis.",
+      "history": "Launched 4 December 1996 and landed 4 July 1997. The lander operated until 27 September 1997.",
+      "significance": "First successful Mars rover mission and a landmark in faster, better, cheaper exploration.",
+      "massKg": null,
+      "dimensions": null,
+      "image": null,
+      "roverPath": null,
+      "sources": [
+        {"provider": "NASA Science — Mars Pathfinder", "url": "https://science.nasa.gov/mission/mars-pathfinder/", "recordId": "mars-pathfinder", "retrievedAt": "2026-11-14"}
+      ],
+      "events": [
+        {"date": "1996-12-04", "type": "launch", "description": "Launched toward Mars."},
+        {"date": "1997-07-04", "type": "landing", "description": "Landed in Ares Vallis."},
+        {"date": "1997-09-27", "type": "mission_completion", "description": "Final contact with the lander."}
+      ],
+      "tags": ["pathfinder", "lander", "historical-site"]
+    },
+    {
+      "id": "mars:sojourner",
+      "slug": "sojourner",
+      "name": "Sojourner Rover",
+      "category": "mars_surface",
+      "type": "rover",
+      "mission": "Mars Pathfinder",
+      "agency": "NASA",
+      "country": "United States",
+      "launchDate": "1996-12-04",
+      "status": "mission_completed",
+      "confidence": "approximate",
+      "location": {
+        "body": "mars",
+        "latitude": 19.13,
+        "longitude": -33.22,
+        "elevationM": null,
+        "accuracy": "approximate",
+        "status": "verified_located",
+        "description": "Ares Vallis; rover operated in the immediate vicinity of the Pathfinder lander.",
+        "sourceCoordinates": "Landing site 19.13° N, 33.22° W",
+        "longitudeConvention": "east_positive",
+        "coordinateSystem": "planetographic"
+      },
+      "description": "Sojourner was the first wheeled rover to operate on Mars. It analyzed rocks and soil near the Pathfinder lander.",
+      "history": "Deployed on 5 July 1997 and operated for 83 sols, far exceeding its planned seven-sol mission.",
+      "significance": "First Mars rover and the first demonstration of mobile surface exploration on another planet.",
+      "massKg": 10.6,
+      "dimensions": null,
+      "image": null,
+      "roverPath": null,
+      "sources": [
+        {"provider": "NASA Science — Mars Pathfinder", "url": "https://science.nasa.gov/mission/mars-pathfinder/", "recordId": "sojourner", "retrievedAt": "2026-11-14"}
+      ],
+      "events": [
+        {"date": "1997-07-05", "type": "rover_deployment", "description": "Sojourner drove off the Pathfinder lander."}
+      ],
+      "tags": ["pathfinder", "rover", "historical-site"]
+    },
+    {
+      "id": "mars:spirit",
+      "slug": "spirit",
+      "name": "Spirit (MER-A)",
+      "category": "mars_surface",
+      "type": "rover",
+      "mission": "Mars Exploration Rover — Spirit",
+      "agency": "NASA",
+      "country": "United States",
+      "launchDate": "2003-06-10",
+      "status": "mission_completed",
+      "confidence": "verified",
+      "location": {
+        "body": "mars",
+        "latitude": -14.5692,
+        "longitude": 175.4729,
+        "elevationM": null,
+        "accuracy": "verified",
+        "status": "verified_located",
+        "description": "Gusev crater",
+        "sourceCoordinates": "14.5692° S, 175.4729° E",
+        "longitudeConvention": "east_positive",
+        "coordinateSystem": "planetographic"
+      },
+      "description": "Spirit explored Gusev crater and the Columbia Hills, finding evidence of past water-altered rocks.",
+      "history": "Launched 10 June 2003 and landed 4 January 2004. The rover became stuck in soft soil and last communicated in March 2010.",
+      "significance": "One of the twin Mars Exploration Rovers that greatly extended the operational lifetime of Mars surface missions.",
+      "massKg": 185,
+      "dimensions": null,
+      "image": null,
+      "roverPath": null,
+      "sources": [
+        {"provider": "NASA Science — Spirit", "url": "https://science.nasa.gov/mission/mer-spirit/", "recordId": "spirit", "retrievedAt": "2026-11-14"}
+      ],
+      "events": [
+        {"date": "2003-06-10", "type": "launch", "description": "Launched toward Mars."},
+        {"date": "2004-01-04", "type": "landing", "description": "Landed in Gusev crater."},
+        {"date": "2010-03-22", "type": "loss_of_communication", "description": "Final communication with Spirit."}
+      ],
+      "tags": ["mer", "rover", "historical-site"]
+    },
+    {
+      "id": "mars:opportunity",
+      "slug": "opportunity",
+      "name": "Opportunity (MER-B)",
+      "category": "mars_surface",
+      "type": "rover",
+      "mission": "Mars Exploration Rover — Opportunity",
+      "agency": "NASA",
+      "country": "United States",
+      "launchDate": "2003-07-07",
+      "status": "mission_completed",
+      "confidence": "verified",
+      "location": {
+        "body": "mars",
+        "latitude": -1.9483,
+        "longitude": 354.47417,
+        "elevationM": null,
+        "accuracy": "verified",
+        "status": "verified_located",
+        "description": "Meridiani Planum, Eagle crater",
+        "sourceCoordinates": "1.9483° S, 354.47417° E",
+        "longitudeConvention": "east_positive",
+        "coordinateSystem": "planetographic"
+      },
+      "description": "Opportunity explored Meridiani Planum and found mineral evidence of ancient liquid water. It operated for nearly 15 years.",
+      "history": "Launched 7 July 2003 and landed 25 January 2004. The rover last communicated in June 2018 after a global dust storm; the mission was declared complete in February 2019.",
+      "significance": "Set the record for the longest distance driven on another world at the time.",
+      "massKg": 185,
+      "dimensions": null,
+      "image": null,
+      "roverPath": null,
+      "sources": [
+        {"provider": "NASA Science — Opportunity", "url": "https://science.nasa.gov/mission/mer-opportunity/", "recordId": "opportunity", "retrievedAt": "2026-11-14"}
+      ],
+      "events": [
+        {"date": "2003-07-07", "type": "launch", "description": "Launched toward Mars."},
+        {"date": "2004-01-25", "type": "landing", "description": "Landed in Meridiani Planum."},
+        {"date": "2018-06-10", "type": "loss_of_communication", "description": "Final contact before the global dust storm."},
+        {"date": "2019-02-13", "type": "mission_completion", "description": "NASA declared the mission complete."}
+      ],
+      "tags": ["mer", "rover", "historical-site"]
+    },
+    {
+      "id": "mars:curiosity",
+      "slug": "curiosity",
+      "name": "Curiosity (Mars Science Laboratory)",
+      "category": "mars_surface",
+      "type": "rover",
+      "mission": "Mars Science Laboratory",
+      "agency": "NASA / JPL",
+      "country": "United States",
+      "launchDate": "2011-11-26",
+      "status": "active",
+      "confidence": "verified",
+      "location": {
+        "body": "mars",
+        "latitude": -4.5895,
+        "longitude": 137.4417,
+        "elevationM": null,
+        "accuracy": "verified",
+        "status": "verified_located",
+        "description": "Gale crater, Aeolis Palus",
+        "sourceCoordinates": "4.5895° S, 137.4417° E",
+        "longitudeConvention": "east_positive",
+        "coordinateSystem": "planetographic"
+      },
+      "description": "Curiosity is a car-sized rover studying the geology, climate and habitability of Gale crater, including Mount Sharp.",
+      "history": "Launched 26 November 2011 and landed 6 August 2012 using the sky-crane system. The rover remains active.",
+      "significance": "Confirmed that Gale crater once hosted a habitable lake-and-stream environment.",
+      "massKg": 899,
+      "dimensions": null,
+      "image": null,
+      "roverPath": null,
+      "sources": [
+        {"provider": "NASA Science — Curiosity", "url": "https://science.nasa.gov/mission/msl-curiosity/", "recordId": "curiosity", "retrievedAt": "2026-11-14"}
+      ],
+      "events": [
+        {"date": "2011-11-26", "type": "launch", "description": "Launched toward Mars."},
+        {"date": "2012-08-06", "type": "landing", "description": "Landed in Gale crater."}
+      ],
+      "tags": ["msl", "rover", "active"]
+    },
+    {
+      "id": "mars:perseverance",
+      "slug": "perseverance",
+      "name": "Perseverance (Mars 2020)",
+      "category": "mars_surface",
+      "type": "rover",
+      "mission": "Mars 2020",
+      "agency": "NASA / JPL",
+      "country": "United States",
+      "launchDate": "2020-07-30",
+      "status": "active",
+      "confidence": "verified",
+      "location": {
+        "body": "mars",
+        "latitude": 18.4446,
+        "longitude": 77.4509,
+        "elevationM": null,
+        "accuracy": "verified",
+        "status": "verified_located",
+        "description": "Jezero crater, Octavia E. Butler Landing site",
+        "sourceCoordinates": "18.4446° N, 77.4509° E",
+        "longitudeConvention": "east_positive",
+        "coordinateSystem": "planetographic"
+      },
+      "description": "Perseverance is searching for signs of ancient microbial life in Jezero crater, caching samples for possible return to Earth, and testing technologies for future human exploration.",
+      "history": "Launched 30 July 2020 and landed 18 February 2021. The rover remains active.",
+      "significance": "First mission to cache Mars samples for a potential sample-return campaign.",
+      "massKg": 1025,
+      "dimensions": null,
+      "image": null,
+      "roverPath": null,
+      "sources": [
+        {"provider": "NASA Science — Perseverance", "url": "https://science.nasa.gov/mission/mars-2020-perseverance/", "recordId": "perseverance", "retrievedAt": "2026-11-14"}
+      ],
+      "events": [
+        {"date": "2020-07-30", "type": "launch", "description": "Launched toward Mars."},
+        {"date": "2021-02-18", "type": "landing", "description": "Landed in Jezero crater."}
+      ],
+      "tags": ["mars2020", "rover", "active"]
+    },
+    {
+      "id": "mars:ingenuity",
+      "slug": "ingenuity",
+      "name": "Ingenuity Mars Helicopter",
+      "category": "mars_surface",
+      "type": "rover",
+      "mission": "Mars 2020",
+      "agency": "NASA / JPL",
+      "country": "United States",
+      "launchDate": "2020-07-30",
+      "status": "mission_completed",
+      "confidence": "approximate",
+      "location": {
+        "body": "mars",
+        "latitude": 18.4446,
+        "longitude": 77.4509,
+        "elevationM": null,
+        "accuracy": "approximate",
+        "status": "verified_located",
+        "description": "Jezero crater; the helicopter operated from airfields near the Perseverance landing site. Final resting position is not stored here.",
+        "sourceCoordinates": "Landing site 18.4446° N, 77.4509° E",
+        "longitudeConvention": "east_positive",
+        "coordinateSystem": "planetographic"
+      },
+      "description": "Ingenuity was the first aircraft to achieve powered, controlled flight on another planet. It flew as a technology demonstration attached to the Mars 2020 mission.",
+      "history": "First flight on 19 April 2021. It completed 72 flights before being retired in January 2024 after rotor damage.",
+      "significance": "First powered flight on another world and a pathfinder for aerial Mars exploration.",
+      "massKg": 1.8,
+      "dimensions": null,
+      "image": null,
+      "roverPath": null,
+      "sources": [
+        {"provider": "NASA Science — Ingenuity", "url": "https://science.nasa.gov/mission/mars-2020-perseverance/", "recordId": "ingenuity", "retrievedAt": "2026-11-14"}
+      ],
+      "events": [
+        {"date": "2021-04-19", "type": "other", "description": "First powered flight on Mars."},
+        {"date": "2024-01-25", "type": "mission_completion", "description": "Mission ended after rotor damage."}
+      ],
+      "tags": ["mars2020", "helicopter", "historical-site"]
+    },
+    {
+      "id": "mars:insight",
+      "slug": "insight",
+      "name": "InSight Lander",
+      "category": "mars_surface",
+      "type": "lander",
+      "mission": "InSight",
+      "agency": "NASA / JPL",
+      "country": "United States",
+      "launchDate": "2018-05-05",
+      "status": "mission_completed",
+      "confidence": "verified",
+      "location": {
+        "body": "mars",
+        "latitude": 4.5,
+        "longitude": 135.9,
+        "elevationM": null,
+        "accuracy": "verified",
+        "status": "verified_located",
+        "description": "Elysium Planitia",
+        "sourceCoordinates": "4.5° N, 135.9° E",
+        "longitudeConvention": "east_positive",
+        "coordinateSystem": "planetographic"
+      },
+      "description": "InSight studied the interior structure of Mars with a seismometer and heat-flow probe. It detected marsquakes and revealed the planet's layered interior.",
+      "history": "Launched 5 May 2018 and landed 26 November 2018. The mission ended in December 2022 when dust reduced power below operational levels.",
+      "significance": "First mission dedicated to the deep interior of Mars.",
+      "massKg": 358,
+      "dimensions": null,
+      "image": null,
+      "roverPath": null,
+      "sources": [
+        {"provider": "NASA Science — InSight", "url": "https://science.nasa.gov/mission/insight/", "recordId": "insight", "retrievedAt": "2026-11-14"}
+      ],
+      "events": [
+        {"date": "2018-05-05", "type": "launch", "description": "Launched toward Mars."},
+        {"date": "2018-11-26", "type": "landing", "description": "Landed in Elysium Planitia."},
+        {"date": "2022-12-21", "type": "mission_completion", "description": "Mission ended after dust reduced power."}
+      ],
+      "tags": ["insight", "lander", "historical-site"]
+    },
+    {
+      "id": "mars:phoenix",
+      "slug": "phoenix",
+      "name": "Phoenix Lander",
+      "category": "mars_surface",
+      "type": "lander",
+      "mission": "Phoenix",
+      "agency": "NASA",
+      "country": "United States",
+      "launchDate": "2007-08-04",
+      "status": "mission_completed",
+      "confidence": "verified",
+      "location": {
+        "body": "mars",
+        "latitude": 68.22,
+        "longitude": 234.25,
+        "elevationM": null,
+        "accuracy": "verified",
+        "status": "verified_located",
+        "description": "Green Valley, Vastitas Borealis",
+        "sourceCoordinates": "68.22° N, 234.25° E",
+        "longitudeConvention": "east_positive",
+        "coordinateSystem": "planetographic"
+      },
+      "description": "Phoenix landed in the Martian arctic and confirmed the presence of water ice beneath the surface. It also studied polar climate and soil chemistry.",
+      "history": "Launched 4 August 2007 and landed 25 May 2008. The lander operated until November 2008.",
+      "significance": "First mission to touch Martian water ice and the first successful landing in the polar region.",
+      "massKg": null,
+      "dimensions": null,
+      "image": null,
+      "roverPath": null,
+      "sources": [
+        {"provider": "NASA Science — Phoenix", "url": "https://science.nasa.gov/mission/phoenix/", "recordId": "phoenix", "retrievedAt": "2026-11-14"}
+      ],
+      "events": [
+        {"date": "2007-08-04", "type": "launch", "description": "Launched toward Mars."},
+        {"date": "2008-05-25", "type": "landing", "description": "Landed in the Vastitas Borealis region."},
+        {"date": "2008-11-02", "type": "loss_of_communication", "description": "Final contact as polar winter began."}
+      ],
+      "tags": ["phoenix", "lander", "polar", "historical-site"]
+    },
+    {
+      "id": "mars:beagle-2",
+      "slug": "beagle-2",
+      "name": "Beagle 2 Lander",
+      "category": "mars_surface",
+      "type": "lander",
+      "mission": "Beagle 2",
+      "agency": "ESA / UK",
+      "country": "United Kingdom",
+      "launchDate": "2003-06-02",
+      "status": "lost_contact",
+      "confidence": "estimated",
+      "location": {
+        "body": "mars",
+        "latitude": 11.53,
+        "longitude": 90.43,
+        "elevationM": null,
+        "accuracy": "estimated",
+        "status": "verified_located",
+        "description": "Isidis Planitia; location identified in 2015 from orbital imagery",
+        "sourceCoordinates": "11.53° N, 90.43° E",
+        "longitudeConvention": "east_positive",
+        "coordinateSystem": "planetographic"
+      },
+      "description": "Beagle 2 was a British-led ESA lander designed to search for signs of life. It separated from Mars Express but never returned a signal.",
+      "history": "Released from Mars Express on 19 December 2003 and was scheduled to land on 25 December 2003. Orbital imagery in 2015 showed the lander on the surface with its solar panels only partly deployed.",
+      "significance": "A milestone in European Mars exploration and a case study in landing-site identification from orbit.",
+      "massKg": 33.2,
+      "dimensions": null,
+      "image": null,
+      "roverPath": null,
+      "sources": [
+        {"provider": "ESA — Beagle 2", "url": "https://www.esa.int/Science_Exploration/Space_Science/Mars_Express/Beagle_2", "recordId": "beagle-2", "retrievedAt": "2026-11-14"}
+      ],
+      "events": [
+        {"date": "2003-06-02", "type": "launch", "description": "Launched with Mars Express."},
+        {"date": "2003-12-19", "type": "other", "description": "Released from Mars Express."},
+        {"date": "2003-12-25", "type": "loss_of_communication", "description": "No signal received after landing."}
+      ],
+      "tags": ["esa", "lander", "lost"]
+    },
+    {
+      "id": "mars:mars-3-lander",
+      "slug": "mars-3-lander",
+      "name": "Mars 3 Lander",
+      "category": "mars_surface",
+      "type": "lander",
+      "mission": "Mars 3",
+      "agency": "Soviet Union",
+      "country": "Soviet Union",
+      "launchDate": "1971-05-28",
+      "status": "lost_contact",
+      "confidence": "approximate",
+      "location": {
+        "body": "mars",
+        "latitude": -45,
+        "longitude": -158,
+        "elevationM": null,
+        "accuracy": "approximate",
+        "status": "verified_located",
+        "description": "Ptolemaeus crater region; the exact landing point is not precisely known",
+        "sourceCoordinates": "45° S, 158° W",
+        "longitudeConvention": "east_positive",
+        "coordinateSystem": "planetographic"
+      },
+      "description": "Mars 3 achieved the first soft landing on Mars but transmitted for only about 20 seconds before falling silent.",
+      "history": "Launched 28 May 1971 and landed 2 December 1971. The lander's signal was lost shortly after landing.",
+      "significance": "First soft landing on Mars, although the mission returned very little data.",
+      "massKg": null,
+      "dimensions": null,
+      "image": null,
+      "roverPath": null,
+      "sources": [
+        {"provider": "NASA NSSDC — Mars 3", "url": "https://nssdc.gsfc.nasa.gov/nmc/spacecraft/display.action?id=1971-049F", "recordId": "mars-3", "retrievedAt": "2026-11-14"}
+      ],
+      "events": [
+        {"date": "1971-05-28", "type": "launch", "description": "Launched toward Mars."},
+        {"date": "1971-12-02", "type": "landing", "description": "Soft-landed on Mars."},
+        {"date": "1971-12-02", "type": "loss_of_communication", "description": "Signal lost shortly after landing."}
+      ],
+      "tags": ["soviet", "lander", "historical-site"]
+    },
+    {
+      "id": "mars:schiaparelli",
+      "slug": "schiaparelli",
+      "name": "Schiaparelli EDM Lander",
+      "category": "mars_surface",
+      "type": "lander",
+      "mission": "ExoMars 2016",
+      "agency": "ESA / Roscosmos",
+      "country": "Europe",
+      "launchDate": "2016-03-14",
+      "status": "destroyed",
+      "confidence": "estimated",
+      "location": {
+        "body": "mars",
+        "latitude": -2.07,
+        "longitude": -6.21,
+        "elevationM": null,
+        "accuracy": "estimated",
+        "status": "verified_located",
+        "description": "Meridiani Planum; impact site estimated from orbital imagery",
+        "sourceCoordinates": "2.07° S, 6.21° W",
+        "longitudeConvention": "east_positive",
+        "coordinateSystem": "planetographic"
+      },
+      "description": "Schiaparelli was the ExoMars 2016 entry, descent and landing demonstrator. It reached the surface but crashed during landing.",
+      "history": "Launched 14 March 2016 with the ExoMars Trace Gas Orbiter and attempted landing on 19 October 2016. The parachute and retro-rockets did not perform as planned.",
+      "significance": "Provided engineering data for the ExoMars programme and highlighted the difficulty of Mars landing.",
+      "massKg": 577,
+      "dimensions": null,
+      "image": null,
+      "roverPath": null,
+      "sources": [
+        {"provider": "ESA — Schiaparelli", "url": "https://www.esa.int/Science_Exploration/Space_Science/ExoMars/Schiaparelli", "recordId": "schiaparelli", "retrievedAt": "2026-11-14"}
+      ],
+      "events": [
+        {"date": "2016-03-14", "type": "launch", "description": "Launched with the ExoMars Trace Gas Orbiter."},
+        {"date": "2016-10-19", "type": "impact", "description": "Impacted the surface during the landing attempt."}
+      ],
+      "tags": ["esa", "lander", "impact", "lost"]
+    },
+    {
+      "id": "mars:mars-polar-lander",
+      "slug": "mars-polar-lander",
+      "name": "Mars Polar Lander",
+      "category": "mars_surface",
+      "type": "lander",
+      "mission": "Mars Polar Lander",
+      "agency": "NASA",
+      "country": "United States",
+      "launchDate": "1999-01-03",
+      "status": "lost_contact",
+      "confidence": "unknown",
+      "location": {
+        "body": "mars",
+        "latitude": null,
+        "longitude": null,
+        "elevationM": null,
+        "accuracy": "unknown",
+        "status": "unknown_location",
+        "description": "The spacecraft was targeted for the south polar region near 76.6° S, 195.3° W, but its actual landing point has not been determined. No coordinate is stored.",
+        "sourceCoordinates": "UNKNOWN",
+        "longitudeConvention": "east_positive",
+        "coordinateSystem": "planetographic"
+      },
+      "description": "Mars Polar Lander was intended to study the south polar climate and soil. Contact was lost during entry, descent and landing.",
+      "history": "Launched 3 January 1999 and was scheduled to land on 3 December 1999. No signal was received after landing.",
+      "significance": "A documented mission loss; included in this archive to show an object whose location is genuinely unknown.",
+      "massKg": null,
+      "dimensions": null,
+      "image": null,
+      "roverPath": null,
+      "sources": [
+        {"provider": "NASA Science — Mars Polar Lander", "url": "https://science.nasa.gov/mission/mars-polar-lander/", "recordId": "mars-polar-lander", "retrievedAt": "2026-11-14"}
+      ],
+      "events": [
+        {"date": "1999-01-03", "type": "launch", "description": "Launched toward Mars."},
+        {"date": "1999-12-03", "type": "loss_of_communication", "description": "No signal received after the landing attempt."}
+      ],
+      "tags": ["lander", "lost", "unknown-location"]
+    }
+  ]
+}

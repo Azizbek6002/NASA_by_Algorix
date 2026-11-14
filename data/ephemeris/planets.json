@@ -1,0 +1,219 @@
+{
+  "epoch": "2026-11-14T00:00:00Z",
+  "frame": "ICRF",
+  "center": "Sun (500@10)",
+  "provider": "JPL Horizons",
+  "source": "https://ssd.jpl.nasa.gov/api/horizons.api",
+  "retrievedAt": "2026-11-14T09:20:00Z",
+  "note": "Barycentric ICRF state vectors sampled once for 2026-11-14. The 3D scene uses a compressed visual scale; scientific mode reports real distances.",
+  "planets": [
+    {
+      "id": 199,
+      "slug": "mercury",
+      "name": "Mercury",
+      "radiusKm": 2439.7,
+      "visualColor": "#9c8b7a",
+      "texture": "/textures/2k_mercury.jpg",
+      "meanDistanceAu": 0.387,
+      "epoch": "2026-11-14T00:00:00Z",
+      "frame": "ICRF",
+      "center": "Sun (500@10)",
+      "positionKm": [
+        -8237101.79498438,
+        40121602.79295823,
+        22286835.43316174
+      ],
+      "velocityKmS": [
+        -57.71378672664877,
+        -8.186609882107504,
+        1.607965642638616
+      ],
+      "distanceAu": 0.311698,
+      "lightTimeMin": 2.59,
+      "source": "https://ssd.jpl.nasa.gov/api/horizons.api",
+      "retrievedAt": "2026-11-14T09:20:00Z"
+    },
+    {
+      "id": 299,
+      "slug": "venus",
+      "name": "Venus",
+      "radiusKm": 6051.8,
+      "visualColor": "#d9b382",
+      "texture": "/textures/2k_venus_surface.jpg",
+      "meanDistanceAu": 0.723,
+      "epoch": "2026-11-14T00:00:00Z",
+      "frame": "ICRF",
+      "center": "Sun (500@10)",
+      "positionKm": [
+        47661365.83147267,
+        89400660.67967702,
+        37212877.16758109
+      ],
+      "velocityKmS": [
+        -31.53327960692336,
+        13.23725146715085,
+        7.951446566804393
+      ],
+      "distanceAu": 0.721467,
+      "lightTimeMin": 6.0,
+      "source": "https://ssd.jpl.nasa.gov/api/horizons.api",
+      "retrievedAt": "2026-11-14T09:20:00Z"
+    },
+    {
+      "id": 399,
+      "slug": "earth",
+      "name": "Earth",
+      "radiusKm": 6378.137,
+      "visualColor": "#4b8fd6",
+      "texture": "/textures/2k_earth_daymap.jpg",
+      "meanDistanceAu": 1.0,
+      "epoch": "2026-11-14T00:00:00Z",
+      "frame": "ICRF",
+      "center": "Sun (500@10)",
+      "positionKm": [
+        92655684.17210735,
+        105926641.9072388,
+        45916739.12419138
+      ],
+      "velocityKmS": [
+        -23.72704234550072,
+        17.00217348603889,
+        7.369375201540832
+      ],
+      "distanceAu": 0.989542,
+      "lightTimeMin": 8.23,
+      "source": "https://ssd.jpl.nasa.gov/api/horizons.api",
+      "retrievedAt": "2026-11-14T09:20:00Z"
+    },
+    {
+      "id": 499,
+      "slug": "mars",
+      "name": "Mars",
+      "radiusKm": 3396.19,
+      "visualColor": "#c1643f",
+      "texture": "/textures/2k_mars.jpg",
+      "meanDistanceAu": 1.524,
+      "epoch": "2026-11-14T00:00:00Z",
+      "frame": "ICRF",
+      "center": "Sun (500@10)",
+      "positionKm": [
+        -68547262.27038102,
+        208855492.5914643,
+        97645900.33890773
+      ],
+      "velocityKmS": [
+        -22.3067423634229,
+        -4.626166115976728,
+        -1.520304609326935
+      ],
+      "distanceAu": 1.607835,
+      "lightTimeMin": 13.37,
+      "source": "https://ssd.jpl.nasa.gov/api/horizons.api",
+      "retrievedAt": "2026-11-14T09:20:00Z"
+    },
+    {
+      "id": 599,
+      "slug": "jupiter",
+      "name": "Jupiter",
+      "radiusKm": 71492,
+      "visualColor": "#c9a882",
+      "texture": "/textures/2k_jupiter.jpg",
+      "meanDistanceAu": 5.203,
+      "epoch": "2026-11-14T00:00:00Z",
+      "frame": "ICRF",
+      "center": "Sun (500@10)",
+      "positionKm": [
+        -559163596.1748071,
+        515668809.611374,
+        234640852.2210471
+      ],
+      "velocityKmS": [
+        -9.456481378898085,
+        -7.968460437572477,
+        -3.185265093231101
+      ],
+      "distanceAu": 5.321009,
+      "lightTimeMin": 44.25,
+      "source": "https://ssd.jpl.nasa.gov/api/horizons.api",
+      "retrievedAt": "2026-11-14T09:20:00Z"
+    },
+    {
+      "id": 699,
+      "slug": "saturn",
+      "name": "Saturn",
+      "radiusKm": 60268,
+      "visualColor": "#d8bd8a",
+      "texture": "/textures/2k_saturn.jpg",
+      "meanDistanceAu": 9.537,
+      "epoch": "2026-11-14T00:00:00Z",
+      "frame": "ICRF",
+      "center": "Sun (500@10)",
+      "positionKm": [
+        1375758677.573431,
+        299270972.7141133,
+        64362686.93003788
+      ],
+      "velocityKmS": [
+        -2.595507667614654,
+        8.659388592339514,
+        3.68856512230451
+      ],
+      "distanceAu": 9.421279,
+      "lightTimeMin": 78.35,
+      "source": "https://ssd.jpl.nasa.gov/api/horizons.api",
+      "retrievedAt": "2026-11-14T09:20:00Z"
+    },
+    {
+      "id": 799,
+      "slug": "uranus",
+      "name": "Uranus",
+      "radiusKm": 25559,
+      "visualColor": "#9fd8de",
+      "texture": "/textures/2k_uranus.jpg",
+      "meanDistanceAu": 19.191,
+      "epoch": "2026-11-14T00:00:00Z",
+      "frame": "ICRF",
+      "center": "Sun (500@10)",
+      "positionKm": [
+        1312741669.500714,
+        2382800015.882004,
+        1025018274.177939
+      ],
+      "velocityKmS": [
+        -6.136297939437853,
+        2.490232539207079,
+        1.177312813908749
+      ],
+      "distanceAu": 19.433291,
+      "lightTimeMin": 161.62,
+      "source": "https://ssd.jpl.nasa.gov/api/horizons.api",
+      "retrievedAt": "2026-11-14T09:20:00Z"
+    },
+    {
+      "id": 899,
+      "slug": "neptune",
+      "name": "Neptune",
+      "radiusKm": 24764,
+      "visualColor": "#4f72d8",
+      "texture": "/textures/2k_neptune.jpg",
+      "meanDistanceAu": 30.069,
+      "epoch": "2026-11-14T00:00:00Z",
+      "frame": "ICRF",
+      "center": "Sun (500@10)",
+      "positionKm": [
+        4462462514.839292,
+        251229517.8607095,
+        -8264086.024022326
+      ],
+      "velocityKmS": [
+        -0.3213910096765842,
+        5.046765288562458,
+        2.072854035434066
+      ],
+      "distanceAu": 29.877006,
+      "lightTimeMin": 248.48,
+      "source": "https://ssd.jpl.nasa.gov/api/horizons.api",
+      "retrievedAt": "2026-11-14T09:20:00Z"
+    }
+  ]
+}
