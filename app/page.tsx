@@ -49,8 +49,13 @@ export default function HomePage() {
   return (
     <>
       {/* Hero */}
-      <section className="relative overflow-hidden border-b border-white/10">
-        <div className="pointer-events-none absolute inset-0 grid-lines opacity-40" />
+      <section className="relative overflow-hidden border-b border-white/10 bg-ink-950">
+        {/* Background image inspired by SpaceX concept (Rasm 1) at 70% opacity */}
+        <div
+          className="pointer-events-none absolute inset-0 bg-cover bg-center md:bg-[center_right] bg-no-repeat opacity-70"
+          style={{ backgroundImage: "url('/hero-bg.jpg')" }}
+        />
+        <div className="pointer-events-none absolute inset-0 grid-lines opacity-25" />
         <div className="shell relative grid items-center gap-12 py-14 lg:grid-cols-[1.02fr_0.98fr] lg:py-20">
           <div>
             <div className="flex flex-wrap items-center gap-3">
