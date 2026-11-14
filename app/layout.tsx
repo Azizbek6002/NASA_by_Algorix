@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 
 import "./globals.css";
+import { AppBackground } from "@/components/layout/app-background";
 import { SiteFooter } from "@/components/layout/site-footer";
 import { SiteHeader } from "@/components/layout/site-header";
 import { SITE } from "@/lib/constants";
@@ -52,7 +53,8 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en">
-      <body className="min-h-screen bg-ink-950 font-sans text-mist-50 antialiased">
+      <body className="relative min-h-screen bg-ink-950 font-sans text-mist-50 antialiased">
+        <AppBackground />
         <a
           href="#main"
           className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-[100] focus:bg-ink-900 focus:px-4 focus:py-2 focus:text-mist-50"
@@ -60,7 +62,7 @@ export default function RootLayout({
           Skip to content
         </a>
         <SiteHeader />
-        <main id="main" className="pt-16 md:pt-[104px]">
+        <main id="main" className="relative z-10 pt-16 md:pt-[104px]">
           {children}
         </main>
         <SiteFooter />
