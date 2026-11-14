@@ -7,7 +7,6 @@ import {
   Radio,
 } from "lucide-react";
 
-import { Orrery } from "@/components/home/orrery";
 import { SectionHeading, Stat } from "@/components/ui/section-heading";
 import {
   CATEGORIES,
@@ -113,12 +112,8 @@ export default function HomePage() {
             </dl>
           </div>
 
-          <div className="relative">
-            <Orrery />
-            <p className="mt-2 text-right font-mono text-[9px] uppercase tracking-[0.16em] text-mist-600">
-              Illustration — real positions live in the 3D views
-            </p>
-          </div>
+          {/* Right column left open so the astronaut background is clearly visible */}
+          <div className="hidden lg:block min-h-[440px]" aria-hidden="true" />
         </div>
       </section>
 
