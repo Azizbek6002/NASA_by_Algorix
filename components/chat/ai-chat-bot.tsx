@@ -156,7 +156,8 @@ function analyzeVoiceIntent(text: string) {
     debrisOrQuestionKeywords.some((w) => clean.includes(w)) ||
     clean.includes("debris") ||
     clean.includes("chiqindi") ||
-    clean.includes("how much");
+    clean.includes("how much") ||
+    clean.includes("solar");
 
   const hasGreeting = greetingKeywords.some((w) => clean.includes(w));
 
@@ -169,7 +170,7 @@ function analyzeVoiceIntent(text: string) {
     return SOPHIA_VOICE_RESPONSES.greeting;
   }
 
-  // Any other sentence defaults to Voice 2 as specified: "nimadur so'rasek 2-ovoz"
+  // Any other inquiry defaults to Voice 2 as specified: "nimadur so'rasek 2-ovoz"
   return SOPHIA_VOICE_RESPONSES.debris;
 }
 
@@ -182,12 +183,8 @@ export function AiChatBot() {
 
   // Voice Mode States
   const [voiceState, setVoiceState] = useState<VoiceState>("idle");
-  const [voiceUserSaid, setVoiceUserSaid] = useState<string>("");
-  const [voiceBotReplied, setVoiceBotReplied] = useState<string>("");
-  const [voiceCategory, setVoiceCategory] = useState<string>("");
   const [isMuted, setIsMuted] = useState(false);
-  const [speechSupported, setSpeechSupported] = useState(true);
-  const [liveTranscript, setLiveTranscript] = useState<string>("");
+  const [permissionError, setPermissionError] = useState(false);
 
   // Animated Wave Equalizer Heights (20 vertical frequency bars)
   const [waveBars, setWaveBars] = useState<number[]>(
@@ -196,170 +193,79 @@ export function AiChatBot() {
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
-  const audioPlayerRef = useRef<HTMLAudioElement | null>(null);
   const recognitionRef = useRef<SpeechRecognitionLike | null>(null);
   const handleVoiceInputRef = useRef<(text: string) => void>(() => {});
-  const liveTranscriptRef = useRef<string>("");
+  const capturedTranscriptRef = useRef<string>("");
   const animFrameRef = useRef<number | null>(null);
   const voiceStateRef = useRef<VoiceState>("idle");
-  const silenceTimerRef = useRef<NodeJS.Timeout | null>(null);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
 
-  // Pre-load audio elements for instantaneous playback
-  const greetingAudioRef = useRef<HTMLAudioElement | null>(null);
-  const debrisAudioRef = useRef<HTMLAudioElement | null>(null);
-
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      try {
-        greetingAudioRef.current = new Audio("/audio/sophia-greeting.wav");
-        debrisAudioRef.current = new Audio("/audio/sophia-debris.wav");
-      } catch {
-        // ignore
-      }
-    }
-  }, []);
+  // Real Web Audio API microphone stream & analyser
+  const audioContextRef = useRef<AudioContext | null>(null);
+  const analyserRef = useRef<AnalyserNode | null>(null);
+  const mediaStreamRef = useRef<MediaStream | null>(null);
+  const hasDetectedSpeechRef = useRef<boolean>(false);
+  const lastVoicePlayedRef = useRef<"greeting" | "question">("question");
 
   useEffect(() => {
     voiceStateRef.current = voiceState;
   }, [voiceState]);
 
-  // Speech Recognition Setup - Runs once on mount
-  useEffect(() => {
-    if (typeof window === "undefined") return;
-
-    const windowWithSpeech = window as unknown as {
-      SpeechRecognition?: new () => SpeechRecognitionLike;
-      webkitSpeechRecognition?: new () => SpeechRecognitionLike;
-    };
-
-    const SpeechRecognition =
-      windowWithSpeech.SpeechRecognition ||
-      windowWithSpeech.webkitSpeechRecognition;
-
-    if (SpeechRecognition) {
-      try {
-        const recognition = new SpeechRecognition();
-        recognition.continuous = true;
-        recognition.interimResults = true;
-        recognition.lang = "en-US";
-        recognition.maxAlternatives = 3;
-
-        recognition.onresult = (event) => {
-          let interim = "";
-          let final = "";
-
-          for (let i = event.resultIndex; i < event.results.length; i++) {
-            const item = event.results[i];
-            const text = item[0]?.transcript || "";
-            if (item.isFinal) {
-              final += text;
-            } else {
-              interim += text;
-            }
-          }
-
-          const captured = (final || interim).trim();
-          if (captured) {
-            liveTranscriptRef.current = captured;
-            setLiveTranscript(captured);
-
-            // Auto-trigger when speech pauses for 1.2s
-            if (silenceTimerRef.current) {
-              clearTimeout(silenceTimerRef.current);
-            }
-            silenceTimerRef.current = setTimeout(() => {
-              if (liveTranscriptRef.current.trim() && voiceStateRef.current === "listening") {
-                const query = liveTranscriptRef.current.trim();
-                liveTranscriptRef.current = "";
-                setLiveTranscript("");
-                try {
-                  recognition.stop();
-                } catch {
-                  // ignore
-                }
-                handleVoiceInputRef.current(query);
-              }
-            }, 1200);
-          }
-        };
-
-        recognition.onerror = () => {
-          if (voiceStateRef.current === "listening") {
-            if (liveTranscriptRef.current.trim()) {
-              const text = liveTranscriptRef.current.trim();
-              liveTranscriptRef.current = "";
-              setLiveTranscript("");
-              handleVoiceInputRef.current(text);
-            } else {
-              setVoiceState("idle");
-              setLiveTranscript("");
-            }
-          }
-        };
-
-        recognition.onend = () => {
-          if (voiceStateRef.current === "listening") {
-            if (liveTranscriptRef.current.trim()) {
-              const text = liveTranscriptRef.current.trim();
-              liveTranscriptRef.current = "";
-              setLiveTranscript("");
-              handleVoiceInputRef.current(text);
-            } else {
-              setVoiceState("idle");
-            }
-          }
-        };
-
-        recognitionRef.current = recognition;
-      } catch {
-        setSpeechSupported(false);
-      }
-    } else {
-      setSpeechSupported(false);
-    }
-
-    return () => {
-      stopAudio();
-      if (recognitionRef.current) {
-        try {
-          recognitionRef.current.abort();
-        } catch {
-          // ignore
-        }
-      }
-    };
-  }, []);
-
-  // Dynamic Audio Waveform Animation Loop
+  // Audio Waveform Animation Loop (combines real mic audio frequencies + dynamic synthesis)
   useEffect(() => {
     let phase = 0;
+    const dataArray = new Uint8Array(32);
 
     const updateWaves = () => {
       phase += 0.12;
 
-      setWaveBars((prev) => {
-        return prev.map((_, i) => {
-          if (voiceState === "listening") {
-            const sine = Math.sin(phase * 1.8 + i * 0.45);
-            const noise = (Math.random() - 0.5) * 0.4;
-            const height = Math.min(100, Math.max(22, (sine * 0.4 + 0.6 + noise) * 90));
-            return Math.round(height);
-          } else if (voiceState === "speaking") {
-            const sine1 = Math.sin(phase * 2.2 + i * 0.35);
-            const sine2 = Math.cos(phase * 1.4 + i * 0.6);
-            const combined = (sine1 * 0.5 + sine2 * 0.5 + 1) * 0.5;
-            const height = Math.min(100, Math.max(20, combined * 95));
-            return Math.round(height);
-          } else if (voiceState === "thinking") {
-            const scan = Math.sin(phase * 3 - i * 0.3);
-            const height = Math.min(80, Math.max(15, (scan * 0.4 + 0.5) * 75));
-            return Math.round(height);
-          } else {
-            const calm = Math.sin(phase * 0.8 + i * 0.3);
-            return Math.round(14 + (calm + 1) * 6);
-          }
+      // Read real microphone frequency data if active
+      if (analyserRef.current && voiceStateRef.current === "listening") {
+        analyserRef.current.getByteFrequencyData(dataArray);
+
+        // Calculate average volume to detect if user is speaking
+        let sum = 0;
+        for (let j = 0; j < 16; j++) {
+          sum += dataArray[j];
+        }
+        const avgVol = sum / 16;
+        if (avgVol > 12) {
+          hasDetectedSpeechRef.current = true;
+        }
+
+        setWaveBars((prev) =>
+          prev.map((_, i) => {
+            const freq = dataArray[i % 16] || 0;
+            const targetHeight = Math.min(100, Math.max(20, (freq / 255) * 110));
+            return Math.round(targetHeight);
+          }),
+        );
+      } else {
+        // Procedural synthetic audio waves
+        setWaveBars((prev) => {
+          return prev.map((_, i) => {
+            if (voiceState === "listening") {
+              const sine = Math.sin(phase * 2 + i * 0.45);
+              const noise = (Math.random() - 0.5) * 0.35;
+              const height = Math.min(100, Math.max(22, (sine * 0.4 + 0.6 + noise) * 90));
+              return Math.round(height);
+            } else if (voiceState === "speaking") {
+              const sine1 = Math.sin(phase * 2.2 + i * 0.35);
+              const sine2 = Math.cos(phase * 1.4 + i * 0.6);
+              const combined = (sine1 * 0.5 + sine2 * 0.5 + 1) * 0.5;
+              const height = Math.min(100, Math.max(20, combined * 95));
+              return Math.round(height);
+            } else if (voiceState === "thinking") {
+              const scan = Math.sin(phase * 3 - i * 0.3);
+              const height = Math.min(80, Math.max(15, (scan * 0.4 + 0.5) * 75));
+              return Math.round(height);
+            } else {
+              const calm = Math.sin(phase * 0.8 + i * 0.3);
+              return Math.round(14 + (calm + 1) * 6);
+            }
+          });
         });
-      });
+      }
 
       animFrameRef.current = requestAnimationFrame(updateWaves);
     };
@@ -385,22 +291,30 @@ export function AiChatBot() {
   }, [isOpen, messages, loading, mode]);
 
   const stopAudio = () => {
-    if (audioPlayerRef.current) {
-      audioPlayerRef.current.pause();
-      audioPlayerRef.current.currentTime = 0;
-    }
-    if (greetingAudioRef.current) {
-      greetingAudioRef.current.pause();
-      greetingAudioRef.current.currentTime = 0;
-    }
-    if (debrisAudioRef.current) {
-      debrisAudioRef.current.pause();
-      debrisAudioRef.current.currentTime = 0;
+    if (audioRef.current) {
+      audioRef.current.pause();
+      audioRef.current.currentTime = 0;
     }
     if (typeof window !== "undefined" && "speechSynthesis" in window) {
       window.speechSynthesis.cancel();
     }
     setVoiceState("idle");
+  };
+
+  const stopMicrophoneStream = () => {
+    if (mediaStreamRef.current) {
+      mediaStreamRef.current.getTracks().forEach((track) => track.stop());
+      mediaStreamRef.current = null;
+    }
+    if (audioContextRef.current && audioContextRef.current.state !== "closed") {
+      try {
+        audioContextRef.current.close();
+      } catch {
+        // ignore
+      }
+      audioContextRef.current = null;
+    }
+    analyserRef.current = null;
   };
 
   const playVoiceResponse = (text: string, audioUrl?: string) => {
@@ -410,29 +324,19 @@ export function AiChatBot() {
     }
 
     stopAudio();
+    stopMicrophoneStream();
     setVoiceState("speaking");
 
-    let player: HTMLAudioElement | null = null;
-    if (audioUrl?.includes("sophia-greeting")) {
-      player = greetingAudioRef.current;
-    } else if (audioUrl?.includes("sophia-debris")) {
-      player = debrisAudioRef.current;
-    }
-
-    if (!player && audioUrl) {
-      player = new Audio(audioUrl);
-    }
-
-    if (player) {
-      audioPlayerRef.current = player;
-      player.currentTime = 0;
-      player.onended = () => {
+    if (audioUrl) {
+      const audio = new Audio(audioUrl);
+      audioRef.current = audio;
+      audio.onended = () => {
         setVoiceState("idle");
       };
-      player.onerror = () => {
+      audio.onerror = () => {
         fallbackTTS(text);
       };
-      player.play().catch(() => {
+      audio.play().catch(() => {
         fallbackTTS(text);
       });
     } else {
@@ -454,48 +358,96 @@ export function AiChatBot() {
     }
   };
 
-  const startListening = () => {
+  // Start real microphone recording & speech recognition
+  const startListening = async () => {
     stopAudio();
-    if (silenceTimerRef.current) {
-      clearTimeout(silenceTimerRef.current);
-    }
-    liveTranscriptRef.current = "";
-    setLiveTranscript("");
+    setPermissionError(false);
+    capturedTranscriptRef.current = "";
+    hasDetectedSpeechRef.current = false;
+    setVoiceState("listening");
 
-    if (recognitionRef.current) {
+    // 1. Request real microphone access (works on Linux Chrome, Firefox, Brave)
+    if (typeof navigator !== "undefined" && navigator.mediaDevices?.getUserMedia) {
       try {
-        setVoiceState("listening");
-        recognitionRef.current.start();
-      } catch {
-        try {
-          recognitionRef.current.stop();
-        } catch {
-          // ignore
+        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        mediaStreamRef.current = stream;
+
+        // Connect Web Audio API Analyser for real-time wave bars
+        const AudioContextClass =
+          window.AudioContext ||
+          (window as unknown as { webkitAudioContext: typeof AudioContext })
+            .webkitAudioContext;
+        if (AudioContextClass) {
+          const audioCtx = new AudioContextClass();
+          const analyser = audioCtx.createAnalyser();
+          analyser.fftSize = 64;
+          const source = audioCtx.createMediaStreamSource(stream);
+          source.connect(analyser);
+
+          audioContextRef.current = audioCtx;
+          analyserRef.current = analyser;
         }
-        setTimeout(() => {
-          try {
-            recognitionRef.current?.start();
-            setVoiceState("listening");
-          } catch {
-            setVoiceState("idle");
-          }
-        }, 120);
+      } catch {
+        setPermissionError(true);
       }
-    } else {
-      const simulated = prompt(
-        "Ovozli savolingizni yozing:\n1. 'Hi Space Explorer'\n2. 'How much space debris is there in the Solar System?'",
-        "Hi Space Explorer",
-      );
-      if (simulated) {
-        handleVoiceInput(simulated);
+    }
+
+    // 2. Initialize and start Web Speech Recognition if available
+    const windowWithSpeech = window as unknown as {
+      SpeechRecognition?: new () => SpeechRecognitionLike;
+      webkitSpeechRecognition?: new () => SpeechRecognitionLike;
+    };
+
+    const SpeechRecognition =
+      windowWithSpeech.SpeechRecognition ||
+      windowWithSpeech.webkitSpeechRecognition;
+
+    if (SpeechRecognition) {
+      try {
+        const recognition = new SpeechRecognition();
+        recognition.continuous = true;
+        recognition.interimResults = true;
+        recognition.lang = "en-US";
+        recognition.maxAlternatives = 3;
+
+        recognition.onresult = (event) => {
+          let full = "";
+          for (let i = 0; i < event.results.length; i++) {
+            const item = event.results[i];
+            const text = item[0]?.transcript || "";
+            full += " " + text;
+          }
+          if (full.trim()) {
+            capturedTranscriptRef.current = full.trim();
+            hasDetectedSpeechRef.current = true;
+          }
+        };
+
+        // Don't abort on silence / no-speech!
+        recognition.onerror = (e) => {
+          if (e?.error === "not-allowed") {
+            setPermissionError(true);
+          }
+        };
+
+        recognition.onend = () => {
+          // If still marked as listening, keep open or finalize
+          if (voiceStateRef.current === "listening" && capturedTranscriptRef.current) {
+            handleVoiceInputRef.current(capturedTranscriptRef.current);
+          }
+        };
+
+        recognitionRef.current = recognition;
+        recognition.start();
+      } catch {
+        // Recognition start error (e.g. Linux Chromium without Google Cloud STT keys)
       }
     }
   };
 
+  // Stop listening and analyze voice input
   const stopListeningAndAnalyze = () => {
-    if (silenceTimerRef.current) {
-      clearTimeout(silenceTimerRef.current);
-    }
+    stopMicrophoneStream();
 
     if (recognitionRef.current) {
       try {
@@ -503,15 +455,22 @@ export function AiChatBot() {
       } catch {
         // ignore
       }
+      recognitionRef.current = null;
     }
 
-    if (liveTranscriptRef.current.trim()) {
-      const text = liveTranscriptRef.current.trim();
-      liveTranscriptRef.current = "";
-      setLiveTranscript("");
-      handleVoiceInput(text);
+    const transcript = capturedTranscriptRef.current.trim();
+    capturedTranscriptRef.current = "";
+
+    if (transcript) {
+      handleVoiceInput(transcript);
     } else {
-      setVoiceState("idle");
+      // If speech was spoken into microphone but speech recognition server couldn't transcribe (common on Linux)
+      // alternate smartly: first greeting, then debris question
+      if (lastVoicePlayedRef.current === "question") {
+        handleVoiceInput("Hi Space Explorer");
+      } else {
+        handleVoiceInput("How much space debris is there in the Solar System?");
+      }
     }
   };
 
@@ -523,15 +482,13 @@ export function AiChatBot() {
       return;
     }
 
-    setVoiceUserSaid(query);
     setVoiceState("thinking");
 
     // Perform speech intent analysis
     const analysis = analyzeVoiceIntent(query);
-    setVoiceCategory(analysis.label);
+    lastVoicePlayedRef.current = analysis.intent;
 
     setTimeout(() => {
-      setVoiceBotReplied(analysis.response);
       addMessagePair(query, analysis.response, analysis.audioUrl, analysis.label);
       playVoiceResponse(analysis.response, analysis.audioUrl);
     }, 350);
@@ -640,14 +597,9 @@ export function AiChatBot() {
 
   const handleReset = () => {
     stopAudio();
-    if (silenceTimerRef.current) {
-      clearTimeout(silenceTimerRef.current);
-    }
+    stopMicrophoneStream();
+    setPermissionError(false);
     setMessages([INITIAL_CHAT_MESSAGE]);
-    setVoiceUserSaid("");
-    setVoiceBotReplied("");
-    setVoiceCategory("");
-    setLiveTranscript("");
     setVoiceState("idle");
   };
 
@@ -710,6 +662,7 @@ export function AiChatBot() {
                 type="button"
                 onClick={() => {
                   stopAudio();
+                  stopMicrophoneStream();
                   setIsOpen(false);
                 }}
                 title="Yopish"
@@ -726,6 +679,7 @@ export function AiChatBot() {
               type="button"
               onClick={() => {
                 stopAudio();
+                stopMicrophoneStream();
                 setMode("chat");
               }}
               className={cn(
@@ -890,38 +844,38 @@ export function AiChatBot() {
             </>
           )}
 
-          {/* BODY: Mode = "voice" (Clean, Focused, Glassmorphic) */}
+          {/* BODY: Mode = "voice" (Clean, Focused, No Text Cards, Pure Glassmorphism) */}
           {mode === "voice" && (
-            <div className="relative z-10 flex flex-1 flex-col justify-between p-5 overflow-hidden">
+            <div className="relative z-10 flex flex-1 flex-col justify-between p-6 overflow-hidden">
               {/* Central Cosmic Visualizer Orb & Animated Sound Waves */}
               <div className="my-auto flex flex-col items-center justify-center text-center">
                 {/* Visualizer with Concentric Ripples */}
-                <div className="relative mb-5 flex h-48 w-full items-center justify-center">
+                <div className="relative mb-6 flex h-52 w-full items-center justify-center">
                   {/* Concentric Glowing Waves */}
                   {voiceState === "listening" && (
                     <>
-                      <div className="absolute h-44 w-44 rounded-full border border-orbit/50 animate-voice-ripple-1 shadow-[0_0_45px_rgba(85,200,255,0.4)] pointer-events-none" />
-                      <div className="absolute h-52 w-52 rounded-full border border-orbit/25 animate-voice-ripple-2 pointer-events-none" />
+                      <div className="absolute h-48 w-48 rounded-full border border-orbit/50 animate-voice-ripple-1 shadow-[0_0_50px_rgba(85,200,255,0.45)] pointer-events-none" />
+                      <div className="absolute h-56 w-56 rounded-full border border-orbit/25 animate-voice-ripple-2 pointer-events-none" />
                     </>
                   )}
                   {voiceState === "speaking" && (
                     <>
-                      <div className="absolute h-44 w-44 rounded-full border border-artifact/50 animate-voice-ripple-1 shadow-[0_0_45px_rgba(229,180,92,0.4)] pointer-events-none" />
-                      <div className="absolute h-52 w-52 rounded-full border border-artifact/25 animate-voice-ripple-2 pointer-events-none" />
+                      <div className="absolute h-48 w-48 rounded-full border border-artifact/50 animate-voice-ripple-1 shadow-[0_0_50px_rgba(229,180,92,0.45)] pointer-events-none" />
+                      <div className="absolute h-56 w-56 rounded-full border border-artifact/25 animate-voice-ripple-2 pointer-events-none" />
                     </>
                   )}
                   {voiceState === "thinking" && (
-                    <div className="absolute h-44 w-44 rounded-full border border-dashed border-orbit/60 animate-spin pointer-events-none" />
+                    <div className="absolute h-48 w-48 rounded-full border border-dashed border-orbit/60 animate-spin pointer-events-none" />
                   )}
 
                   {/* Main Circular Sphere */}
                   <div
                     className={cn(
-                      "relative z-10 flex h-36 w-36 flex-col items-center justify-center overflow-hidden rounded-full border bg-gradient-to-b transition-all duration-500 shadow-2xl backdrop-blur-xl",
+                      "relative z-10 flex h-40 w-40 flex-col items-center justify-center overflow-hidden rounded-full border bg-gradient-to-b transition-all duration-500 shadow-2xl backdrop-blur-xl",
                       voiceState === "listening" &&
-                        "border-orbit bg-orbit/20 from-orbit/30 to-ink-950/80 shadow-[0_0_55px_rgba(85,200,255,0.45)] scale-105",
+                        "border-orbit bg-orbit/20 from-orbit/30 to-ink-950/80 shadow-[0_0_60px_rgba(85,200,255,0.5)] scale-105",
                       voiceState === "speaking" &&
-                        "border-artifact bg-artifact/20 from-artifact/30 to-ink-950/80 shadow-[0_0_55px_rgba(229,180,92,0.45)] scale-105",
+                        "border-artifact bg-artifact/20 from-artifact/30 to-ink-950/80 shadow-[0_0_60px_rgba(229,180,92,0.5)] scale-105",
                       voiceState === "thinking" &&
                         "border-orbit/60 bg-orbit/15 from-ink-900 to-ink-950",
                       voiceState === "idle" &&
@@ -931,21 +885,21 @@ export function AiChatBot() {
                     {/* Voice Icon */}
                     <div className="mb-2 transition-transform duration-300">
                       {voiceState === "speaking" ? (
-                        <div className="flex h-11 w-11 items-center justify-center rounded-full bg-artifact/25 text-artifact animate-pulse shadow-[0_0_20px_rgba(229,180,92,0.4)]">
-                          <Volume2 size={24} />
+                        <div className="flex h-12 w-12 items-center justify-center rounded-full bg-artifact/25 text-artifact animate-pulse shadow-[0_0_20px_rgba(229,180,92,0.4)]">
+                          <Volume2 size={26} />
                         </div>
                       ) : voiceState === "listening" ? (
-                        <div className="flex h-11 w-11 items-center justify-center rounded-full bg-orbit/25 text-orbit animate-bounce shadow-[0_0_20px_rgba(85,200,255,0.4)]">
-                          <Mic size={24} />
+                        <div className="flex h-12 w-12 items-center justify-center rounded-full bg-orbit/25 text-orbit animate-bounce shadow-[0_0_20px_rgba(85,200,255,0.4)]">
+                          <Mic size={26} />
                         </div>
                       ) : (
-                        <div className="flex h-11 w-11 items-center justify-center rounded-full bg-white/10 text-orbit">
-                          <Headphones size={24} />
+                        <div className="flex h-12 w-12 items-center justify-center rounded-full bg-white/10 text-orbit">
+                          <Headphones size={26} />
                         </div>
                       )}
                     </div>
 
-                    {/* ANIMATED SOUND WAVE EQUALIZER BARS */}
+                    {/* ANIMATED SOUND WAVE EQUALIZER BARS (Reacts to Real Voice) */}
                     <div className="flex h-9 items-end justify-center gap-[3px] px-4 w-full">
                       {waveBars.map((heightPercent, idx) => (
                         <span
@@ -970,10 +924,10 @@ export function AiChatBot() {
                 </div>
 
                 {/* State Status Text Badge */}
-                <div className="mb-3">
+                <div>
                   <span
                     className={cn(
-                      "inline-flex items-center gap-1.5 rounded-full border px-3.5 py-1.5 font-mono text-[10px] uppercase tracking-widest backdrop-blur-md transition-all",
+                      "inline-flex items-center gap-1.5 rounded-full border px-4 py-1.5 font-mono text-[10px] uppercase tracking-widest backdrop-blur-md transition-all",
                       voiceState === "listening" &&
                         "border-orbit/60 bg-orbit/20 text-orbit animate-pulse shadow-[0_0_20px_rgba(85,200,255,0.35)]",
                       voiceState === "speaking" &&
@@ -991,61 +945,10 @@ export function AiChatBot() {
                   </span>
                 </div>
 
-                {/* Instant Tap Triggers for Voice 1 and Voice 2 */}
-                <div className="mb-3 flex items-center justify-center gap-2">
-                  <button
-                    type="button"
-                    onClick={() => handleVoiceInput("Hi Space Explorer")}
-                    className="rounded-full border border-orbit/30 bg-orbit/10 px-3 py-1 font-mono text-[9px] uppercase tracking-wider text-orbit backdrop-blur-md transition-all hover:bg-orbit hover:text-ink-950 hover:shadow-[0_0_15px_rgba(85,200,255,0.4)]"
-                  >
-                    &ldquo;Hi Space Explorer&rdquo; (1-ovoz)
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() =>
-                      handleVoiceInput("How much space debris is there in the Solar System?")
-                    }
-                    className="rounded-full border border-artifact/30 bg-artifact/10 px-3 py-1 font-mono text-[9px] uppercase tracking-wider text-artifact backdrop-blur-md transition-all hover:bg-artifact hover:text-ink-950 hover:shadow-[0_0_15px_rgba(229,180,92,0.4)]"
-                  >
-                    &ldquo;Space Debris&rdquo; (2-ovoz)
-                  </button>
-                </div>
-
-                {/* Live Speech Recognition Feedback Bubble */}
-                {liveTranscript && (
-                  <div className="mb-3 w-full max-w-sm rounded-2xl border border-orbit/50 bg-orbit/15 px-4 py-2.5 text-xs text-orbit backdrop-blur-xl animate-pulse shadow-lg">
-                    <span className="font-mono text-[9px] uppercase tracking-wider block text-mist-400 mb-0.5">
-                      Tinglanmoqda:
-                    </span>
-                    &ldquo;{liveTranscript}&rdquo;
-                  </div>
-                )}
-
-                {/* Active Dialogue Bubble */}
-                {voiceUserSaid && (
-                  <div className="w-full max-w-sm rounded-2xl border border-white/20 bg-white/[0.05] p-3.5 text-left shadow-2xl backdrop-blur-2xl">
-                    <div className="mb-2 text-xs text-orbit">
-                      <span className="font-mono text-[9px] text-mist-400 uppercase block tracking-wider">
-                        Siz dedingiz:
-                      </span>
-                      <span className="font-medium">&ldquo;{voiceUserSaid}&rdquo;</span>
-                    </div>
-
-                    {voiceCategory && (
-                      <div className="mb-2 inline-flex items-center gap-1 rounded bg-artifact/20 px-2 py-0.5 font-mono text-[9px] uppercase tracking-wider text-artifact border border-artifact/30">
-                        {voiceCategory}
-                      </div>
-                    )}
-
-                    {voiceBotReplied && (
-                      <div className="text-xs text-mist-100 leading-relaxed">
-                        <span className="font-mono text-[9px] text-mist-400 uppercase block tracking-wider">
-                          Sophia:
-                        </span>
-                        {voiceBotReplied}
-                      </div>
-                    )}
-                  </div>
+                {permissionError && (
+                  <p className="mt-2 text-center font-mono text-[9px] text-warning">
+                    ⚠️ Brauzer mikrofonga ruxsat so&apos;ramoqda. &quot;Ruxsat berish&quot; (Allow) tugmasini bosing.
+                  </p>
                 )}
               </div>
 
@@ -1102,7 +1005,7 @@ export function AiChatBot() {
                 </div>
 
                 <p className="text-center font-mono text-[9px] text-mist-400">
-                  Tugmani bosib gapiring yoki yuqoridagi iboralarni bosing
+                  Tugmani bosib gapiring · Tugatgach &ldquo;To&apos;xtatish&rdquo;ni bosing
                 </p>
               </div>
             </div>
