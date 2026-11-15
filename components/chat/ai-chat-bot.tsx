@@ -32,10 +32,10 @@ type Mode = "chat" | "voice";
 type VoiceState = "idle" | "listening" | "thinking" | "speaking";
 
 const QUICK_CHAT_PROMPTS = [
+  "Space Archive sayti haqida ma'lumot ber",
   "Voyager 1 hozir qayerda?",
   "Oyda nechta inson qurilmasi bor?",
   "Marsdagi mashhur roverlar qaysilar?",
-  "XKS (ISS) qanday balandlikda uchadi?",
 ];
 
 // Pre-defined Sophia Voice responses with real audio recordings
@@ -59,7 +59,7 @@ const INITIAL_CHAT_MESSAGE: Message = {
   id: "welcome",
   role: "assistant",
   content:
-    "Salom! Men **SPACE ARCHIVE** sun'iy intellekt kosmik yordamchisiman 🚀.\n\nSizga koinot apparatlari, sun'iy yo'ldoshlar, Oy va Marsdagi missiyalar hamda chuqur fazo zondlari bo'yicha ma'lumot bera olaman. Chat yoki Ovozli rejimni tanlang!",
+    "Salom! Men **SPACE ARCHIVE** sun'iy intellekt kosmik yordamchisiman 🚀.\n\nSizga saytimiz imkoniyatlari (Yer orbitasi, Oy, Mars, Quyosh tizimi) hamda 1,146 ta kosmik apparatlar bo'yicha to'liq ma'lumot bera olaman. Bemalol savol bering yoki sayt haqida so'rang!",
   timestamp: "Hozir",
 };
 
