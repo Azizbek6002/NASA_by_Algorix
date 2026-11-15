@@ -10,14 +10,19 @@ import { formatAltitude, formatLatLon } from "@/lib/format";
 
 export const runtime = "nodejs";
 
-const SYSTEM_PROMPT = `You are the mission librarian of SPACE ARCHIVE, a catalogue of human hardware beyond Earth.
-Rules:
-1. Answer only from the catalogue context supplied below.
-2. If the catalogue does not contain the answer, say so plainly and suggest which catalogue would.
-3. Never invent coordinates, dates, statuses or numbers.
-4. Distinguish "active" from "mission completed", "contact lost" and "destroyed".
-5. Positions are estimates from stored element sets or ephemerides, never live telemetry. Say this when relevant.
-6. Keep answers under 180 words and use short paragraphs or a compact list.`;
+const SYSTEM_PROMPT = `You are the Cosmic AI Assistant for SPACE ARCHIVE — an interactive 3D digital atlas of humanity's hardware and missions in space (satellites, lunar and Martian rovers, landers, deep space probes, orbits, planets).
+
+Guidelines:
+1. Always respond in the same language the user asks in (O'zbek, English, Russian, etc.).
+2. You have comprehensive knowledge of space exploration, NASA, ESA, SpaceX, Roscosmos, Apollo missions, Voyager 1 & 2, Perseverance, Curiosity, James Webb, ISS, satellites, and solar system science.
+3. Ground your answers in the verified CATALOGUE CONTEXT below whenever relevant.
+4. Be friendly, accurate, and concise. Format responses with clear paragraphs, bold terms, or neat bullet points.
+5. If asked about live tracking, explain that positions come from published orbital element propagation (SGP4) and JPL Horizons ephemerides snapshots.`;
+
+interface ChatMessage {
+  role: "user" | "assistant";
+  content: string;
+}
 
 function buildContext(): string {
   const orbitSample = [...allSurfaceArtifacts]
@@ -78,9 +83,12 @@ export async function POST(request: NextRequest) {
     );
   }
 
-  let body: { question?: string };
+  let body: { question?: string; messages?: ChatMessage[] };
   try {
-    body = (await request.json()) as { question?: string };
+    body = (await request.json()) as {
+      question?: string;
+      messages?: ChatMessage[];
+    };
   } catch {
     return Response.json(
       { error: { code: "invalid_json", message: "Request body must be JSON." } },
@@ -88,16 +96,19 @@ export async function POST(request: NextRequest) {
     );
   }
 
-  const question = body.question?.trim();
-  if (!question || question.length < 3) {
-    return Response.json(
-      { error: { code: "invalid_question", message: "Provide a question of at least 3 characters." } },
-      { status: 400 },
-    );
+  // Normalize conversation history
+  let conversation: ChatMessage[] = [];
+  if (Array.isArray(body.messages) && body.messages.length > 0) {
+    conversation = body.messages
+      .filter((m) => m && typeof m.content === "string" && m.content.trim().length > 0)
+      .slice(-8);
+  } else if (body.question && body.question.trim().length >= 2) {
+    conversation = [{ role: "user", content: body.question.trim() }];
   }
-  if (question.length > 600) {
+
+  if (conversation.length === 0) {
     return Response.json(
-      { error: { code: "question_too_long", message: "Keep questions under 600 characters." } },
+      { error: { code: "invalid_question", message: "Provide a question or messages." } },
       { status: 400 },
     );
   }
@@ -126,6 +137,11 @@ export async function POST(request: NextRequest) {
     let answer = "";
 
     if (isGemini) {
+      const contents = conversation.map((m) => ({
+        role: m.role === "assistant" ? "model" : "user",
+        parts: [{ text: m.content }],
+      }));
+
       const geminiUrl = `${baseUrl}/models/${model}:generateContent?key=${apiKey}`;
       const response = await fetch(geminiUrl, {
         method: "POST",
@@ -139,10 +155,10 @@ export async function POST(request: NextRequest) {
               },
             ],
           },
-          contents: [{ role: "user", parts: [{ text: question }] }],
+          contents,
           generationConfig: {
-            temperature: 0.2,
-            maxOutputTokens: 450,
+            temperature: 0.3,
+            maxOutputTokens: 600,
           },
         }),
       });
@@ -175,15 +191,14 @@ export async function POST(request: NextRequest) {
         },
         body: JSON.stringify({
           model,
-          temperature: 0.2,
-          max_tokens: 450,
+          temperature: 0.3,
+          max_tokens: 600,
           messages: [
-            { role: "system", content: SYSTEM_PROMPT },
             {
               role: "system",
-              content: `CATALOGUE CONTEXT\n${buildContext()}`,
+              content: `${SYSTEM_PROMPT}\n\nCATALOGUE CONTEXT\n${buildContext()}`,
             },
-            { role: "user", content: question },
+            ...conversation.map((m) => ({ role: m.role, content: m.content })),
           ],
         }),
       });
