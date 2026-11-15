@@ -102,59 +102,121 @@ export async function POST(request: NextRequest) {
     );
   }
 
-  const baseUrl = (process.env.LLM_BASE_URL ?? "https://api.openai.com/v1").replace(/\/$/, "");
-  const model = process.env.LLM_MODEL ?? "gpt-4o-mini";
+  const isGemini =
+    apiKey.startsWith("AQ.") ||
+    apiKey.startsWith("AIza") ||
+    process.env.LLM_PROVIDER === "gemini";
+  const baseUrl = (
+    process.env.LLM_BASE_URL ??
+    (isGemini
+      ? "https://generativelanguage.googleapis.com/v1beta"
+      : "https://api.openai.com/v1")
+  ).replace(/\/$/, "");
+  const model =
+    process.env.LLM_MODEL ?? (isGemini ? "gemini-flash-lite-latest" : "gpt-4o-mini");
   const timeoutMs = Number.parseInt(process.env.LLM_TIMEOUT_MS ?? "45000", 10);
 
   const controller = new AbortController();
-  const timeout = setTimeout(() => controller.abort(), Number.isFinite(timeoutMs) ? timeoutMs : 45_000);
+  const timeout = setTimeout(
+    () => controller.abort(),
+    Number.isFinite(timeoutMs) ? timeoutMs : 45_000,
+  );
 
   try {
-    const response = await fetch(`${baseUrl}/chat/completions`, {
-      method: "POST",
-      signal: controller.signal,
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${apiKey}`,
-      },
-      body: JSON.stringify({
-        model,
-        temperature: 0.2,
-        max_tokens: 450,
-        messages: [
-          { role: "system", content: SYSTEM_PROMPT },
+    let answer = "";
+
+    if (isGemini) {
+      const geminiUrl = `${baseUrl}/models/${model}:generateContent?key=${apiKey}`;
+      const response = await fetch(geminiUrl, {
+        method: "POST",
+        signal: controller.signal,
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          system_instruction: {
+            parts: [
+              {
+                text: `${SYSTEM_PROMPT}\n\nCATALOGUE CONTEXT\n${buildContext()}`,
+              },
+            ],
+          },
+          contents: [{ role: "user", parts: [{ text: question }] }],
+          generationConfig: {
+            temperature: 0.2,
+            maxOutputTokens: 450,
+          },
+        }),
+      });
+
+      if (!response.ok) {
+        const detail = await response.text();
+        return Response.json(
           {
-            role: "system",
-            content: `CATALOGUE CONTEXT\n${buildContext()}`,
+            error: {
+              code: "upstream_error",
+              message: `The language model provider returned ${response.status}.`,
+              detail: detail.slice(0, 400),
+            },
           },
-          { role: "user", content: question },
-        ],
-      }),
-    });
+          { status: 502 },
+        );
+      }
 
-    if (!response.ok) {
-      const detail = await response.text();
-      return Response.json(
-        {
-          error: {
-            code: "upstream_error",
-            message: `The language model provider returned ${response.status}.`,
-            detail: detail.slice(0, 400),
-          },
+      const payload = (await response.json()) as {
+        candidates?: { content?: { parts?: { text?: string }[] } }[];
+      };
+      answer = payload.candidates?.[0]?.content?.parts?.[0]?.text?.trim() ?? "";
+    } else {
+      const response = await fetch(`${baseUrl}/chat/completions`, {
+        method: "POST",
+        signal: controller.signal,
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${apiKey}`,
         },
-        { status: 502 },
-      );
-    }
+        body: JSON.stringify({
+          model,
+          temperature: 0.2,
+          max_tokens: 450,
+          messages: [
+            { role: "system", content: SYSTEM_PROMPT },
+            {
+              role: "system",
+              content: `CATALOGUE CONTEXT\n${buildContext()}`,
+            },
+            { role: "user", content: question },
+          ],
+        }),
+      });
 
-    const payload = (await response.json()) as {
-      choices?: { message?: { content?: string } }[];
-      usage?: unknown;
-    };
-    const answer = payload.choices?.[0]?.message?.content?.trim();
+      if (!response.ok) {
+        const detail = await response.text();
+        return Response.json(
+          {
+            error: {
+              code: "upstream_error",
+              message: `The language model provider returned ${response.status}.`,
+              detail: detail.slice(0, 400),
+            },
+          },
+          { status: 502 },
+        );
+      }
+
+      const payload = (await response.json()) as {
+        choices?: { message?: { content?: string } }[];
+        usage?: unknown;
+      };
+      answer = payload.choices?.[0]?.message?.content?.trim() ?? "";
+    }
 
     if (!answer) {
       return Response.json(
-        { error: { code: "empty_answer", message: "The provider returned an empty answer." } },
+        {
+          error: {
+            code: "empty_answer",
+            message: "The provider returned an empty answer.",
+          },
+        },
         { status: 502 },
       );
     }

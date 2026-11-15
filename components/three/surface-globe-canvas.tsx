@@ -8,7 +8,7 @@ import * as THREE from "three";
 import { clusterSurfacePoints, latLonToVector3 } from "@/lib/geo";
 import type { SurfacePointLite } from "@/lib/types";
 
-const NORMAL_SCALE = new THREE.Vector2(0.35, 0.35);
+const NORMAL_SCALE = new THREE.Vector2(0.5, 0.5);
 
 const TYPE_COLOR: Record<string, string> = {
   lander: "#E5B45C",
