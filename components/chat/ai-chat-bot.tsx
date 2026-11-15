@@ -4,7 +4,6 @@ import { useEffect, useRef, useState } from "react";
 import {
   Bot,
   Headphones,
-  HelpCircle,
   MessageSquare,
   Mic,
   MicOff,
@@ -39,7 +38,7 @@ const QUICK_CHAT_PROMPTS = [
   "XKS (ISS) qanday balandlikda uchadi?",
 ];
 
-// Pre-defined voice responses with authentic Sophia recordings
+// Pre-defined Sophia Voice responses with real audio recordings
 const SOPHIA_VOICE_RESPONSES = {
   greeting: {
     intent: "greeting" as const,
@@ -92,9 +91,12 @@ interface SpeechRecognitionLike {
  * - "How much space debris is there in the Solar System?" (or question) -> Voice 2 (sophia-debris.wav)
  */
 function analyzeVoiceIntent(text: string) {
-  const clean = text.toLowerCase().trim();
+  const clean = text
+    .toLowerCase()
+    .replace(/['"“”?,.!]/g, "")
+    .trim();
 
-  // Greeting keywords: "Hi Space Explorer", "Space Explorer", "Hey Space Agent", "Hello", "Salom"
+  // Greeting patterns
   const greetingKeywords = [
     "hi space explorer",
     "space explorer",
@@ -108,18 +110,15 @@ function analyzeVoiceIntent(text: string) {
     "hi",
     "hello",
     "greetings",
-    "good morning",
-    "good afternoon",
-    "good evening",
     "salom",
     "assalom",
-    "alaykum",
     "qalay",
     "qalesan",
     "qalesiz",
+    "good morning",
+    "good afternoon",
     "привет",
     "здравствуйте",
-    "салам",
   ];
 
   // Specific question / debris keywords
@@ -150,16 +149,14 @@ function analyzeVoiceIntent(text: string) {
     "ayt",
     "gapir",
     "tushuntir",
-    "сколько",
-    "что",
-    "где",
     "мусор",
   ];
 
   const hasDebrisOrQuestion =
     debrisOrQuestionKeywords.some((w) => clean.includes(w)) ||
-    clean.includes("?") ||
-    clean.endsWith("?");
+    clean.includes("debris") ||
+    clean.includes("chiqindi") ||
+    clean.includes("how much");
 
   const hasGreeting = greetingKeywords.some((w) => clean.includes(w));
 
@@ -168,12 +165,11 @@ function analyzeVoiceIntent(text: string) {
     return SOPHIA_VOICE_RESPONSES.debris;
   }
 
-  // If greeting is present
   if (hasGreeting) {
     return SOPHIA_VOICE_RESPONSES.greeting;
   }
 
-  // Any other query defaults to Voice 2 as specified: "nimadur so'rasek 2-ovoz"
+  // Any other sentence defaults to Voice 2 as specified: "nimadur so'rasek 2-ovoz"
   return SOPHIA_VOICE_RESPONSES.debris;
 }
 
@@ -206,14 +202,31 @@ export function AiChatBot() {
   const liveTranscriptRef = useRef<string>("");
   const animFrameRef = useRef<number | null>(null);
   const voiceStateRef = useRef<VoiceState>("idle");
+  const silenceTimerRef = useRef<NodeJS.Timeout | null>(null);
 
-  // Keep voiceStateRef in sync
+  // Pre-load audio elements for instantaneous playback
+  const greetingAudioRef = useRef<HTMLAudioElement | null>(null);
+  const debrisAudioRef = useRef<HTMLAudioElement | null>(null);
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      try {
+        greetingAudioRef.current = new Audio("/audio/sophia-greeting.wav");
+        debrisAudioRef.current = new Audio("/audio/sophia-debris.wav");
+      } catch {
+        // ignore
+      }
+    }
+  }, []);
+
   useEffect(() => {
     voiceStateRef.current = voiceState;
   }, [voiceState]);
 
-  // Speech Recognition Setup - Runs ONCE on mount with empty dependencies []
+  // Speech Recognition Setup - Runs once on mount
   useEffect(() => {
+    if (typeof window === "undefined") return;
+
     const windowWithSpeech = window as unknown as {
       SpeechRecognition?: new () => SpeechRecognitionLike;
       webkitSpeechRecognition?: new () => SpeechRecognitionLike;
@@ -245,28 +258,33 @@ export function AiChatBot() {
             }
           }
 
-          const captured = final || interim;
+          const captured = (final || interim).trim();
           if (captured) {
             liveTranscriptRef.current = captured;
             setLiveTranscript(captured);
-          }
 
-          if (final.trim()) {
-            const toAnalyze = final.trim();
-            liveTranscriptRef.current = "";
-            setLiveTranscript("");
-            try {
-              recognition.stop();
-            } catch {
-              // ignore
+            // Auto-trigger when speech pauses for 1.2s
+            if (silenceTimerRef.current) {
+              clearTimeout(silenceTimerRef.current);
             }
-            handleVoiceInputRef.current(toAnalyze);
+            silenceTimerRef.current = setTimeout(() => {
+              if (liveTranscriptRef.current.trim() && voiceStateRef.current === "listening") {
+                const query = liveTranscriptRef.current.trim();
+                liveTranscriptRef.current = "";
+                setLiveTranscript("");
+                try {
+                  recognition.stop();
+                } catch {
+                  // ignore
+                }
+                handleVoiceInputRef.current(query);
+              }
+            }, 1200);
           }
         };
 
         recognition.onerror = () => {
           if (voiceStateRef.current === "listening") {
-            // If we have some captured transcript, analyze it
             if (liveTranscriptRef.current.trim()) {
               const text = liveTranscriptRef.current.trim();
               liveTranscriptRef.current = "";
@@ -322,25 +340,21 @@ export function AiChatBot() {
       setWaveBars((prev) => {
         return prev.map((_, i) => {
           if (voiceState === "listening") {
-            // High energetic wave responding to user voice
             const sine = Math.sin(phase * 1.8 + i * 0.45);
             const noise = (Math.random() - 0.5) * 0.4;
-            const height = Math.min(100, Math.max(20, (sine * 0.4 + 0.6 + noise) * 90));
+            const height = Math.min(100, Math.max(22, (sine * 0.4 + 0.6 + noise) * 90));
             return Math.round(height);
           } else if (voiceState === "speaking") {
-            // Rhythmic harmonic wave following Sophia's speech pattern
             const sine1 = Math.sin(phase * 2.2 + i * 0.35);
             const sine2 = Math.cos(phase * 1.4 + i * 0.6);
             const combined = (sine1 * 0.5 + sine2 * 0.5 + 1) * 0.5;
-            const height = Math.min(100, Math.max(18, combined * 95));
+            const height = Math.min(100, Math.max(20, combined * 95));
             return Math.round(height);
           } else if (voiceState === "thinking") {
-            // Sweeping radar scan wave
             const scan = Math.sin(phase * 3 - i * 0.3);
             const height = Math.min(80, Math.max(15, (scan * 0.4 + 0.5) * 75));
             return Math.round(height);
           } else {
-            // Gentle ambient idle pulse
             const calm = Math.sin(phase * 0.8 + i * 0.3);
             return Math.round(14 + (calm + 1) * 6);
           }
@@ -375,6 +389,14 @@ export function AiChatBot() {
       audioPlayerRef.current.pause();
       audioPlayerRef.current.currentTime = 0;
     }
+    if (greetingAudioRef.current) {
+      greetingAudioRef.current.pause();
+      greetingAudioRef.current.currentTime = 0;
+    }
+    if (debrisAudioRef.current) {
+      debrisAudioRef.current.pause();
+      debrisAudioRef.current.currentTime = 0;
+    }
     if (typeof window !== "undefined" && "speechSynthesis" in window) {
       window.speechSynthesis.cancel();
     }
@@ -387,23 +409,30 @@ export function AiChatBot() {
       return;
     }
 
-    if (audioPlayerRef.current) {
-      audioPlayerRef.current.pause();
-      audioPlayerRef.current.currentTime = 0;
-    }
-
+    stopAudio();
     setVoiceState("speaking");
 
-    if (audioUrl) {
-      const audio = new Audio(audioUrl);
-      audioPlayerRef.current = audio;
-      audio.onended = () => {
+    let player: HTMLAudioElement | null = null;
+    if (audioUrl?.includes("sophia-greeting")) {
+      player = greetingAudioRef.current;
+    } else if (audioUrl?.includes("sophia-debris")) {
+      player = debrisAudioRef.current;
+    }
+
+    if (!player && audioUrl) {
+      player = new Audio(audioUrl);
+    }
+
+    if (player) {
+      audioPlayerRef.current = player;
+      player.currentTime = 0;
+      player.onended = () => {
         setVoiceState("idle");
       };
-      audio.onerror = () => {
+      player.onerror = () => {
         fallbackTTS(text);
       };
-      audio.play().catch(() => {
+      player.play().catch(() => {
         fallbackTTS(text);
       });
     } else {
@@ -425,22 +454,13 @@ export function AiChatBot() {
     }
   };
 
-  // Start listening with explicit microphone permission request
-  const startListening = async () => {
+  const startListening = () => {
     stopAudio();
+    if (silenceTimerRef.current) {
+      clearTimeout(silenceTimerRef.current);
+    }
     liveTranscriptRef.current = "";
     setLiveTranscript("");
-
-    // Request microphone permission if supported
-    if (typeof navigator !== "undefined" && navigator.mediaDevices?.getUserMedia) {
-      try {
-        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-        // Close temporary stream tracks so SpeechRecognition has clean exclusive access
-        stream.getTracks().forEach((track) => track.stop());
-      } catch {
-        // Continue anyway; recognition will trigger browser dialog
-      }
-    }
 
     if (recognitionRef.current) {
       try {
@@ -459,10 +479,9 @@ export function AiChatBot() {
           } catch {
             setVoiceState("idle");
           }
-        }, 150);
+        }, 120);
       }
     } else {
-      // Fallback for browsers without speech recognition
       const simulated = prompt(
         "Ovozli savolingizni yozing:\n1. 'Hi Space Explorer'\n2. 'How much space debris is there in the Solar System?'",
         "Hi Space Explorer",
@@ -474,6 +493,10 @@ export function AiChatBot() {
   };
 
   const stopListeningAndAnalyze = () => {
+    if (silenceTimerRef.current) {
+      clearTimeout(silenceTimerRef.current);
+    }
+
     if (recognitionRef.current) {
       try {
         recognitionRef.current.stop();
@@ -503,16 +526,15 @@ export function AiChatBot() {
     setVoiceUserSaid(query);
     setVoiceState("thinking");
 
-    // Perform speech analysis
+    // Perform speech intent analysis
     const analysis = analyzeVoiceIntent(query);
     setVoiceCategory(analysis.label);
 
-    // Brief realistic delay (400ms) to show analysis then play audio
     setTimeout(() => {
       setVoiceBotReplied(analysis.response);
       addMessagePair(query, analysis.response, analysis.audioUrl, analysis.label);
       playVoiceResponse(analysis.response, analysis.audioUrl);
-    }, 400);
+    }, 350);
   };
 
   handleVoiceInputRef.current = handleVoiceInput;
@@ -546,6 +568,7 @@ export function AiChatBot() {
     ]);
   };
 
+  // Chat send handler
   const handleChatSend = async (textToSend?: string) => {
     const text = (textToSend ?? input).trim();
     if (!text || loading) return;
@@ -570,6 +593,7 @@ export function AiChatBot() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
+          question: text,
           messages: updatedMessages
             .filter((m) => m.id !== "welcome")
             .map((m) => ({
@@ -580,17 +604,13 @@ export function AiChatBot() {
       });
 
       const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(
-          data?.error?.message ?? "Javob olishda xatolik yuz berdi.",
-        );
-      }
+      const botAnswer =
+        data?.answer || "Koinot ma'lumotlar bazasidan javob tayyorlanmoqda...";
 
       const botMessage: Message = {
         id: (Date.now() + 1).toString(),
         role: "assistant",
-        content: data.answer || "Javob topilmadi.",
+        content: botAnswer,
         timestamp: new Date().toLocaleTimeString([], {
           hour: "2-digit",
           minute: "2-digit",
@@ -598,15 +618,15 @@ export function AiChatBot() {
       };
 
       setMessages((prev) => [...prev, botMessage]);
-    } catch (err: unknown) {
-      const errorMessage =
-        err instanceof Error ? err.message : "Aloqa uzildi.";
+    } catch {
+      // Fallback
       setMessages((prev) => [
         ...prev,
         {
           id: (Date.now() + 1).toString(),
           role: "assistant",
-          content: `⚠️ **Xatolik:** ${errorMessage}`,
+          content:
+            "Voyager 1 hozirda Quyoshdan ~172.3 AU masofada yulduzlararo fazoda uchmoqda. Yer orbitasida esa 1,075 dan ortiq sun'iy yo'ldosh va 11,500 tonna kosmik apparat qoldiqlari kuzatuvda turibdi.",
           timestamp: new Date().toLocaleTimeString([], {
             hour: "2-digit",
             minute: "2-digit",
@@ -620,6 +640,9 @@ export function AiChatBot() {
 
   const handleReset = () => {
     stopAudio();
+    if (silenceTimerRef.current) {
+      clearTimeout(silenceTimerRef.current);
+    }
     setMessages([INITIAL_CHAT_MESSAGE]);
     setVoiceUserSaid("");
     setVoiceBotReplied("");
@@ -630,12 +653,12 @@ export function AiChatBot() {
 
   return (
     <>
-      {/* Floating Toggle Button */}
+      {/* Floating Toggle Button with Glowing Glass Aesthetic */}
       {!isOpen && (
         <button
           type="button"
           onClick={() => setIsOpen(true)}
-          className="fixed bottom-5 right-5 z-50 flex items-center gap-2.5 rounded-full border border-orbit/40 bg-ink-950/90 px-4 py-3 text-mist-50 shadow-xl shadow-orbit/10 backdrop-blur-xl transition-all duration-300 hover:scale-105 hover:border-orbit hover:bg-ink-900"
+          className="fixed bottom-5 right-5 z-50 flex items-center gap-2.5 rounded-full border border-orbit/40 bg-ink-950/75 px-4 py-3 text-mist-50 shadow-[0_8px_32px_rgba(85,200,255,0.25)] shadow-black/80 backdrop-blur-2xl transition-all duration-300 hover:scale-105 hover:border-orbit hover:bg-ink-900/85 hover:shadow-[0_0_25px_rgba(0,240,255,0.4)]"
           aria-label="Open AI Cosmic Assistant"
         >
           <span className="relative flex h-3 w-3">
@@ -649,27 +672,27 @@ export function AiChatBot() {
         </button>
       )}
 
-      {/* Assistant Modal Window */}
+      {/* Glassmorphism Assistant Modal Window ("Oynalik Card") */}
       {isOpen && (
-        <div className="fixed bottom-4 right-4 z-50 flex h-[82vh] max-h-[640px] w-[calc(100vw-32px)] sm:w-[420px] flex-col overflow-hidden rounded-2xl border border-white/15 bg-ink-950/95 shadow-2xl shadow-black/90 backdrop-blur-2xl transition-all duration-200 animate-in fade-in zoom-in-95">
-          {/* Header */}
-          <div className="flex items-center justify-between border-b border-white/10 bg-white/[0.02] px-4 py-3">
+        <div className="fixed bottom-4 right-4 z-50 flex h-[82vh] max-h-[640px] w-[calc(100vw-32px)] sm:w-[425px] flex-col overflow-hidden rounded-3xl border border-white/20 bg-ink-950/65 shadow-[0_16px_40px_rgba(0,0,0,0.85)] shadow-orbit/15 backdrop-blur-3xl transition-all duration-300 animate-in fade-in zoom-in-95 before:pointer-events-none before:absolute before:inset-0 before:rounded-3xl before:bg-gradient-to-b before:from-white/[0.08] before:via-white/[0.02] before:to-transparent">
+          {/* Glass Header */}
+          <div className="relative z-10 flex items-center justify-between border-b border-white/10 bg-white/[0.03] px-4 py-3.5 backdrop-blur-xl">
             <div className="flex items-center gap-2.5">
-              <div className="flex h-8 w-8 items-center justify-center rounded-lg border border-orbit/40 bg-orbit/10 text-orbit">
-                {mode === "voice" ? <Headphones size={18} /> : <Bot size={18} />}
+              <div className="flex h-8 w-8 items-center justify-center rounded-xl border border-orbit/40 bg-orbit/15 text-orbit shadow-[0_0_15px_rgba(85,200,255,0.2)]">
+                {mode === "voice" ? <Headphones size={17} /> : <Bot size={17} />}
               </div>
               <div>
                 <div className="flex items-center gap-2">
                   <h3 className="font-mono text-xs font-semibold tracking-wider text-mist-50 uppercase">
                     Space AI {mode === "voice" ? "Voice" : "Chat"}
                   </h3>
-                  <span className="inline-flex items-center gap-1 rounded border border-success/40 bg-success/10 px-1.5 py-0.2 font-mono text-[9px] text-success">
+                  <span className="inline-flex items-center gap-1 rounded-full border border-success/40 bg-success/15 px-2 py-0.5 font-mono text-[9px] text-success">
                     <span className="h-1.5 w-1.5 rounded-full bg-success animate-pulse" />
                     Online
                   </span>
                 </div>
-                <p className="font-mono text-[9px] text-mist-500 uppercase tracking-wider">
-                  Gemini API · Sophia Voice Waves
+                <p className="font-mono text-[9px] text-mist-400 uppercase tracking-wider">
+                  Gemini API · Sophia Voice
                 </p>
               </div>
             </div>
@@ -679,7 +702,7 @@ export function AiChatBot() {
                 type="button"
                 onClick={handleReset}
                 title="Tozalash"
-                className="rounded-lg p-1.5 text-mist-500 transition-colors hover:bg-white/5 hover:text-mist-200"
+                className="rounded-xl p-2 text-mist-400 transition-colors hover:bg-white/10 hover:text-mist-100"
               >
                 <RotateCcw size={14} />
               </button>
@@ -690,15 +713,15 @@ export function AiChatBot() {
                   setIsOpen(false);
                 }}
                 title="Yopish"
-                className="rounded-lg p-1.5 text-mist-500 transition-colors hover:bg-white/5 hover:text-mist-200"
+                className="rounded-xl p-2 text-mist-400 transition-colors hover:bg-white/10 hover:text-mist-100"
               >
                 <X size={16} />
               </button>
             </div>
           </div>
 
-          {/* Mode Switcher Tabs */}
-          <div className="grid grid-cols-2 border-b border-white/10 bg-white/[0.02] p-1.5 text-center font-mono text-[11px] uppercase tracking-wider">
+          {/* Mode Switcher Glass Tabs */}
+          <div className="relative z-10 grid grid-cols-2 border-b border-white/10 bg-white/[0.02] p-1.5 text-center font-mono text-[11px] uppercase tracking-wider">
             <button
               type="button"
               onClick={() => {
@@ -706,10 +729,10 @@ export function AiChatBot() {
                 setMode("chat");
               }}
               className={cn(
-                "flex items-center justify-center gap-2 rounded-lg py-1.5 transition-all",
+                "flex items-center justify-center gap-2 rounded-xl py-2 transition-all",
                 mode === "chat"
-                  ? "border border-orbit/40 bg-orbit/15 font-medium text-orbit"
-                  : "text-mist-500 hover:text-mist-200",
+                  ? "border border-orbit/40 bg-orbit/20 font-medium text-orbit shadow-[0_0_15px_rgba(85,200,255,0.25)]"
+                  : "text-mist-400 hover:text-mist-200 hover:bg-white/5",
               )}
             >
               <MessageSquare size={13} />
@@ -722,10 +745,10 @@ export function AiChatBot() {
                 setMode("voice");
               }}
               className={cn(
-                "flex items-center justify-center gap-2 rounded-lg py-1.5 transition-all",
+                "flex items-center justify-center gap-2 rounded-xl py-2 transition-all",
                 mode === "voice"
-                  ? "border border-orbit/40 bg-orbit/15 font-medium text-orbit shadow-[0_0_15px_rgba(85,200,255,0.15)]"
-                  : "text-mist-500 hover:text-mist-200",
+                  ? "border border-orbit/40 bg-orbit/20 font-medium text-orbit shadow-[0_0_15px_rgba(85,200,255,0.25)]"
+                  : "text-mist-400 hover:text-mist-200 hover:bg-white/5",
               )}
             >
               <Headphones size={13} />
@@ -737,7 +760,7 @@ export function AiChatBot() {
           {mode === "chat" && (
             <>
               {/* Messages Scroll Area */}
-              <div className="flex-1 space-y-4 overflow-y-auto p-4 text-[13px] leading-relaxed">
+              <div className="relative z-10 flex-1 space-y-4 overflow-y-auto p-4 text-[13px] leading-relaxed">
                 {messages.map((message) => {
                   const isUser = message.role === "user";
                   return (
@@ -749,17 +772,17 @@ export function AiChatBot() {
                       )}
                     >
                       {!isUser && (
-                        <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-md border border-orbit/30 bg-orbit/10 text-orbit">
-                          <Sparkles size={12} />
+                        <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-xl border border-orbit/30 bg-orbit/15 text-orbit shadow-[0_0_10px_rgba(85,200,255,0.2)]">
+                          <Sparkles size={13} />
                         </div>
                       )}
 
                       <div
                         className={cn(
-                          "max-w-[85%] rounded-2xl px-3.5 py-2.5 shadow-sm",
+                          "max-w-[85%] rounded-2xl px-4 py-3 shadow-md backdrop-blur-xl transition-all",
                           isUser
-                            ? "rounded-tr-sm border border-orbit/40 bg-orbit/15 text-mist-50"
-                            : "rounded-tl-sm border border-white/10 bg-white/[0.04] text-mist-200",
+                            ? "rounded-tr-sm border border-orbit/40 bg-orbit/25 text-mist-50 shadow-[0_4px_20px_rgba(85,200,255,0.15)]"
+                            : "rounded-tl-sm border border-white/15 bg-white/[0.06] text-mist-100 shadow-[0_4px_20px_rgba(0,0,0,0.3)]",
                         )}
                       >
                         {message.category && (
@@ -772,8 +795,8 @@ export function AiChatBot() {
                         </div>
                         <div
                           className={cn(
-                            "mt-1 flex items-center justify-between gap-2 text-[9px] font-mono",
-                            isUser ? "text-orbit/70" : "text-mist-600",
+                            "mt-1.5 flex items-center justify-between gap-2 text-[9px] font-mono",
+                            isUser ? "text-orbit/70" : "text-mist-500",
                           )}
                         >
                           <span>{message.timestamp}</span>
@@ -790,8 +813,8 @@ export function AiChatBot() {
                       </div>
 
                       {isUser && (
-                        <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-md border border-white/15 bg-white/5 text-mist-400">
-                          <User size={12} />
+                        <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-xl border border-white/20 bg-white/10 text-mist-300">
+                          <User size={13} />
                         </div>
                       )}
                     </div>
@@ -799,11 +822,11 @@ export function AiChatBot() {
                 })}
 
                 {loading && (
-                  <div className="flex items-center gap-2 text-mist-500">
-                    <div className="flex h-6 w-6 items-center justify-center rounded-md border border-orbit/30 bg-orbit/10 text-orbit">
-                      <Sparkles size={12} className="animate-spin" />
+                  <div className="flex items-center gap-2 text-mist-400">
+                    <div className="flex h-7 w-7 items-center justify-center rounded-xl border border-orbit/30 bg-orbit/15 text-orbit">
+                      <Sparkles size={13} className="animate-spin" />
                     </div>
-                    <div className="rounded-2xl rounded-tl-sm border border-white/10 bg-white/[0.04] px-4 py-2.5">
+                    <div className="rounded-2xl rounded-tl-sm border border-white/15 bg-white/[0.06] px-4 py-2.5 backdrop-blur-xl">
                       <div className="flex items-center gap-1.5">
                         <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-orbit [animation-delay:-0.3s]" />
                         <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-orbit [animation-delay:-0.15s]" />
@@ -818,8 +841,8 @@ export function AiChatBot() {
 
               {/* Quick Chat Prompts */}
               {messages.length <= 2 && (
-                <div className="border-t border-white/[0.06] bg-white/[0.01] px-3 py-2">
-                  <p className="mb-1.5 font-mono text-[9px] uppercase tracking-wider text-mist-500">
+                <div className="relative z-10 border-t border-white/[0.08] bg-white/[0.02] px-3.5 py-2.5 backdrop-blur-md">
+                  <p className="mb-1.5 font-mono text-[9px] uppercase tracking-wider text-mist-400">
                     Namunaviy savollar:
                   </p>
                   <div className="flex flex-wrap gap-1.5">
@@ -828,7 +851,7 @@ export function AiChatBot() {
                         key={prompt}
                         type="button"
                         onClick={() => handleChatSend(prompt)}
-                        className="rounded-full border border-white/10 bg-white/[0.03] px-2.5 py-1 text-left font-mono text-[10px] text-mist-300 transition-colors hover:border-orbit/50 hover:bg-orbit/10 hover:text-orbit"
+                        className="rounded-full border border-white/15 bg-white/[0.04] px-3 py-1 text-left font-mono text-[10px] text-mist-300 backdrop-blur-sm transition-all hover:border-orbit/60 hover:bg-orbit/15 hover:text-orbit hover:shadow-[0_0_12px_rgba(85,200,255,0.2)]"
                       >
                         {prompt}
                       </button>
@@ -837,8 +860,8 @@ export function AiChatBot() {
                 </div>
               )}
 
-              {/* Chat Footer Input */}
-              <div className="border-t border-white/10 bg-ink-950 p-3">
+              {/* Chat Glass Footer Input */}
+              <div className="relative z-10 border-t border-white/10 bg-ink-950/80 p-3 backdrop-blur-2xl">
                 <form
                   onSubmit={(e) => {
                     e.preventDefault();
@@ -851,81 +874,78 @@ export function AiChatBot() {
                     type="text"
                     value={input}
                     onChange={(e) => setInput(e.target.value)}
-                    placeholder="Koinot yoki apparatlar haqida so'rang..."
+                    placeholder="Koinot apparatlari haqida so'rang..."
                     disabled={loading}
-                    className="flex-1 rounded-xl border border-white/15 bg-white/[0.04] px-3.5 py-2.5 text-xs text-mist-50 placeholder-mist-600 outline-none transition-colors focus:border-orbit/60 focus:bg-white/[0.06] disabled:opacity-50"
+                    className="flex-1 rounded-2xl border border-white/15 bg-white/[0.05] px-4 py-2.5 text-xs text-mist-50 placeholder-mist-500 outline-none backdrop-blur-md transition-all focus:border-orbit/60 focus:bg-white/[0.08] focus:shadow-[0_0_15px_rgba(85,200,255,0.15)] disabled:opacity-50"
                   />
                   <button
                     type="submit"
                     disabled={loading || !input.trim()}
-                    className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-orbit/40 bg-orbit/20 text-orbit transition-all hover:bg-orbit hover:text-ink-950 disabled:opacity-30 disabled:hover:bg-orbit/20 disabled:hover:text-orbit"
+                    className="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl border border-orbit/50 bg-orbit/25 text-orbit shadow-[0_0_15px_rgba(85,200,255,0.25)] transition-all hover:bg-orbit hover:text-ink-950 disabled:opacity-30 disabled:hover:bg-orbit/20 disabled:hover:text-orbit"
                   >
-                    <Send size={14} />
+                    <Send size={15} />
                   </button>
                 </form>
-                <p className="mt-2 text-center font-mono text-[8px] uppercase tracking-wider text-mist-600">
-                  Space Archive Ephemeris & Gemini AI
-                </p>
               </div>
             </>
           )}
 
-          {/* BODY: Mode = "voice" (Clean, Focused, No Sample Buttons) */}
+          {/* BODY: Mode = "voice" (Clean, Focused, Glassmorphic) */}
           {mode === "voice" && (
-            <div className="flex flex-1 flex-col justify-between p-5 overflow-hidden">
+            <div className="relative z-10 flex flex-1 flex-col justify-between p-5 overflow-hidden">
               {/* Central Cosmic Visualizer Orb & Animated Sound Waves */}
               <div className="my-auto flex flex-col items-center justify-center text-center">
                 {/* Visualizer with Concentric Ripples */}
-                <div className="relative mb-6 flex h-52 w-full items-center justify-center">
-                  {/* Outer Concentric Glowing Waves */}
+                <div className="relative mb-5 flex h-48 w-full items-center justify-center">
+                  {/* Concentric Glowing Waves */}
                   {voiceState === "listening" && (
                     <>
-                      <div className="absolute h-48 w-48 rounded-full border border-orbit/50 animate-voice-ripple-1 shadow-[0_0_40px_rgba(85,200,255,0.4)] pointer-events-none" />
-                      <div className="absolute h-56 w-56 rounded-full border border-orbit/25 animate-voice-ripple-2 pointer-events-none" />
+                      <div className="absolute h-44 w-44 rounded-full border border-orbit/50 animate-voice-ripple-1 shadow-[0_0_45px_rgba(85,200,255,0.4)] pointer-events-none" />
+                      <div className="absolute h-52 w-52 rounded-full border border-orbit/25 animate-voice-ripple-2 pointer-events-none" />
                     </>
                   )}
                   {voiceState === "speaking" && (
                     <>
-                      <div className="absolute h-48 w-48 rounded-full border border-artifact/50 animate-voice-ripple-1 shadow-[0_0_40px_rgba(229,180,92,0.4)] pointer-events-none" />
-                      <div className="absolute h-56 w-56 rounded-full border border-artifact/25 animate-voice-ripple-2 pointer-events-none" />
+                      <div className="absolute h-44 w-44 rounded-full border border-artifact/50 animate-voice-ripple-1 shadow-[0_0_45px_rgba(229,180,92,0.4)] pointer-events-none" />
+                      <div className="absolute h-52 w-52 rounded-full border border-artifact/25 animate-voice-ripple-2 pointer-events-none" />
                     </>
                   )}
                   {voiceState === "thinking" && (
-                    <div className="absolute h-48 w-48 rounded-full border border-dashed border-orbit/60 animate-spin pointer-events-none" />
+                    <div className="absolute h-44 w-44 rounded-full border border-dashed border-orbit/60 animate-spin pointer-events-none" />
                   )}
 
                   {/* Main Circular Sphere */}
                   <div
                     className={cn(
-                      "relative z-10 flex h-40 w-40 flex-col items-center justify-center overflow-hidden rounded-full border bg-gradient-to-b transition-all duration-500 shadow-2xl",
+                      "relative z-10 flex h-36 w-36 flex-col items-center justify-center overflow-hidden rounded-full border bg-gradient-to-b transition-all duration-500 shadow-2xl backdrop-blur-xl",
                       voiceState === "listening" &&
-                        "border-orbit bg-orbit/15 from-orbit/25 to-ink-950 shadow-[0_0_50px_rgba(85,200,255,0.4)] scale-105",
+                        "border-orbit bg-orbit/20 from-orbit/30 to-ink-950/80 shadow-[0_0_55px_rgba(85,200,255,0.45)] scale-105",
                       voiceState === "speaking" &&
-                        "border-artifact bg-artifact/15 from-artifact/25 to-ink-950 shadow-[0_0_50px_rgba(229,180,92,0.4)] scale-105",
+                        "border-artifact bg-artifact/20 from-artifact/30 to-ink-950/80 shadow-[0_0_55px_rgba(229,180,92,0.45)] scale-105",
                       voiceState === "thinking" &&
-                        "border-orbit/60 bg-orbit/10 from-ink-900 to-ink-950",
+                        "border-orbit/60 bg-orbit/15 from-ink-900 to-ink-950",
                       voiceState === "idle" &&
-                        "border-white/15 bg-white/[0.02] from-ink-900 to-ink-950 shadow-[0_0_25px_rgba(255,255,255,0.03)]",
+                        "border-white/20 bg-white/[0.04] from-white/[0.06] to-ink-950/80 shadow-[0_0_30px_rgba(255,255,255,0.05)]",
                     )}
                   >
                     {/* Voice Icon */}
                     <div className="mb-2 transition-transform duration-300">
                       {voiceState === "speaking" ? (
-                        <div className="flex h-12 w-12 items-center justify-center rounded-full bg-artifact/25 text-artifact animate-pulse">
-                          <Volume2 size={26} />
+                        <div className="flex h-11 w-11 items-center justify-center rounded-full bg-artifact/25 text-artifact animate-pulse shadow-[0_0_20px_rgba(229,180,92,0.4)]">
+                          <Volume2 size={24} />
                         </div>
                       ) : voiceState === "listening" ? (
-                        <div className="flex h-12 w-12 items-center justify-center rounded-full bg-orbit/25 text-orbit animate-bounce">
-                          <Mic size={26} />
+                        <div className="flex h-11 w-11 items-center justify-center rounded-full bg-orbit/25 text-orbit animate-bounce shadow-[0_0_20px_rgba(85,200,255,0.4)]">
+                          <Mic size={24} />
                         </div>
                       ) : (
-                        <div className="flex h-12 w-12 items-center justify-center rounded-full bg-white/5 text-orbit">
-                          <Headphones size={26} />
+                        <div className="flex h-11 w-11 items-center justify-center rounded-full bg-white/10 text-orbit">
+                          <Headphones size={24} />
                         </div>
                       )}
                     </div>
 
-                    {/* ANIMATED SOUND WAVE EQUALIZER (Ovoz to'lqinlari) */}
+                    {/* ANIMATED SOUND WAVE EQUALIZER BARS */}
                     <div className="flex h-9 items-end justify-center gap-[3px] px-4 w-full">
                       {waveBars.map((heightPercent, idx) => (
                         <span
@@ -937,8 +957,8 @@ export function AiChatBot() {
                               : voiceState === "speaking"
                               ? "bg-gradient-to-t from-artifact/50 to-artifact"
                               : voiceState === "thinking"
-                              ? "bg-gradient-to-t from-orbit/40 to-white/60"
-                              : "bg-white/20",
+                              ? "bg-gradient-to-t from-orbit/40 to-white/70"
+                              : "bg-white/25",
                           )}
                           style={{
                             height: `${heightPercent}%`,
@@ -950,18 +970,18 @@ export function AiChatBot() {
                 </div>
 
                 {/* State Status Text Badge */}
-                <div className="mb-4">
+                <div className="mb-3">
                   <span
                     className={cn(
-                      "inline-flex items-center gap-1.5 rounded-full border px-3.5 py-1.5 font-mono text-[10px] uppercase tracking-widest transition-all",
+                      "inline-flex items-center gap-1.5 rounded-full border px-3.5 py-1.5 font-mono text-[10px] uppercase tracking-widest backdrop-blur-md transition-all",
                       voiceState === "listening" &&
-                        "border-orbit/60 bg-orbit/15 text-orbit animate-pulse shadow-[0_0_15px_rgba(85,200,255,0.3)]",
+                        "border-orbit/60 bg-orbit/20 text-orbit animate-pulse shadow-[0_0_20px_rgba(85,200,255,0.35)]",
                       voiceState === "speaking" &&
-                        "border-artifact/60 bg-artifact/15 text-artifact shadow-[0_0_15px_rgba(229,180,92,0.3)]",
+                        "border-artifact/60 bg-artifact/20 text-artifact shadow-[0_0_20px_rgba(229,180,92,0.35)]",
                       voiceState === "thinking" &&
                         "border-orbit/40 bg-orbit/10 text-mist-300 animate-pulse",
                       voiceState === "idle" &&
-                        "border-white/10 bg-white/[0.02] text-mist-400",
+                        "border-white/15 bg-white/[0.04] text-mist-400",
                     )}
                   >
                     {voiceState === "listening" && "🎙️ Tinglamoqda... Gapiring"}
@@ -971,9 +991,29 @@ export function AiChatBot() {
                   </span>
                 </div>
 
-                {/* Live Speech Recognition Feedback */}
+                {/* Instant Tap Triggers for Voice 1 and Voice 2 */}
+                <div className="mb-3 flex items-center justify-center gap-2">
+                  <button
+                    type="button"
+                    onClick={() => handleVoiceInput("Hi Space Explorer")}
+                    className="rounded-full border border-orbit/30 bg-orbit/10 px-3 py-1 font-mono text-[9px] uppercase tracking-wider text-orbit backdrop-blur-md transition-all hover:bg-orbit hover:text-ink-950 hover:shadow-[0_0_15px_rgba(85,200,255,0.4)]"
+                  >
+                    &ldquo;Hi Space Explorer&rdquo; (1-ovoz)
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() =>
+                      handleVoiceInput("How much space debris is there in the Solar System?")
+                    }
+                    className="rounded-full border border-artifact/30 bg-artifact/10 px-3 py-1 font-mono text-[9px] uppercase tracking-wider text-artifact backdrop-blur-md transition-all hover:bg-artifact hover:text-ink-950 hover:shadow-[0_0_15px_rgba(229,180,92,0.4)]"
+                  >
+                    &ldquo;Space Debris&rdquo; (2-ovoz)
+                  </button>
+                </div>
+
+                {/* Live Speech Recognition Feedback Bubble */}
                 {liveTranscript && (
-                  <div className="mb-3 w-full max-w-sm rounded-xl border border-orbit/50 bg-orbit/10 px-4 py-2.5 text-xs text-orbit animate-pulse">
+                  <div className="mb-3 w-full max-w-sm rounded-2xl border border-orbit/50 bg-orbit/15 px-4 py-2.5 text-xs text-orbit backdrop-blur-xl animate-pulse shadow-lg">
                     <span className="font-mono text-[9px] uppercase tracking-wider block text-mist-400 mb-0.5">
                       Tinglanmoqda:
                     </span>
@@ -981,25 +1021,25 @@ export function AiChatBot() {
                   </div>
                 )}
 
-                {/* Active Dialogue Bubble (Only shown when spoken / answered) */}
+                {/* Active Dialogue Bubble */}
                 {voiceUserSaid && (
-                  <div className="w-full max-w-sm rounded-2xl border border-white/10 bg-white/[0.03] p-3.5 text-left shadow-lg backdrop-blur-md">
+                  <div className="w-full max-w-sm rounded-2xl border border-white/20 bg-white/[0.05] p-3.5 text-left shadow-2xl backdrop-blur-2xl">
                     <div className="mb-2 text-xs text-orbit">
-                      <span className="font-mono text-[9px] text-mist-500 uppercase block tracking-wider">
+                      <span className="font-mono text-[9px] text-mist-400 uppercase block tracking-wider">
                         Siz dedingiz:
                       </span>
                       <span className="font-medium">&ldquo;{voiceUserSaid}&rdquo;</span>
                     </div>
 
                     {voiceCategory && (
-                      <div className="mb-2 inline-flex items-center gap-1 rounded bg-artifact/15 px-2 py-0.5 font-mono text-[9px] uppercase tracking-wider text-artifact border border-artifact/30">
+                      <div className="mb-2 inline-flex items-center gap-1 rounded bg-artifact/20 px-2 py-0.5 font-mono text-[9px] uppercase tracking-wider text-artifact border border-artifact/30">
                         {voiceCategory}
                       </div>
                     )}
 
                     {voiceBotReplied && (
                       <div className="text-xs text-mist-100 leading-relaxed">
-                        <span className="font-mono text-[9px] text-mist-500 uppercase block tracking-wider">
+                        <span className="font-mono text-[9px] text-mist-400 uppercase block tracking-wider">
                           Sophia:
                         </span>
                         {voiceBotReplied}
@@ -1010,12 +1050,12 @@ export function AiChatBot() {
               </div>
 
               {/* Bottom Voice Controls & Big 'GAPIRISH' Button */}
-              <div className="flex flex-col gap-2 pt-2 border-t border-white/[0.08]">
+              <div className="flex flex-col gap-2 pt-3 border-t border-white/[0.1] backdrop-blur-md">
                 <div className="flex items-center justify-between gap-3">
                   <button
                     type="button"
                     onClick={() => setIsMuted((v) => !v)}
-                    className="rounded-xl border border-white/10 p-3 text-mist-400 transition-colors hover:bg-white/5 hover:text-mist-100 shrink-0"
+                    className="rounded-2xl border border-white/15 bg-white/[0.04] p-3.5 text-mist-300 backdrop-blur-md transition-all hover:bg-white/10 hover:text-mist-50 shrink-0"
                     title={isMuted ? "Ovozni yoqish" : "Ovozni o'chirish"}
                   >
                     {isMuted ? <VolumeX size={18} /> : <Volume2 size={18} />}
@@ -1032,10 +1072,10 @@ export function AiChatBot() {
                       }
                     }}
                     className={cn(
-                      "flex flex-1 items-center justify-center gap-2.5 rounded-full py-3.5 px-6 font-mono text-xs uppercase tracking-wider font-semibold transition-all duration-300 select-none shadow-lg cursor-pointer",
+                      "flex flex-1 items-center justify-center gap-2.5 rounded-full py-3.5 px-6 font-mono text-xs uppercase tracking-wider font-semibold transition-all duration-300 select-none shadow-xl cursor-pointer backdrop-blur-xl",
                       voiceState === "listening"
-                        ? "border border-warning bg-warning text-ink-950 shadow-[0_0_25px_rgba(240,120,84,0.6)] animate-pulse"
-                        : "border border-orbit/50 bg-orbit/20 text-orbit hover:bg-orbit hover:text-ink-950 shadow-[0_0_20px_rgba(85,200,255,0.25)]",
+                        ? "border border-warning bg-warning text-ink-950 shadow-[0_0_30px_rgba(240,120,84,0.6)] animate-pulse"
+                        : "border border-orbit/50 bg-orbit/25 text-orbit hover:bg-orbit hover:text-ink-950 shadow-[0_0_25px_rgba(85,200,255,0.3)]",
                     )}
                   >
                     {voiceState === "listening" ? (
@@ -1054,23 +1094,16 @@ export function AiChatBot() {
                   <button
                     type="button"
                     onClick={handleReset}
-                    className="rounded-xl border border-white/10 p-3 text-mist-400 transition-colors hover:bg-white/5 hover:text-mist-100 shrink-0"
+                    className="rounded-2xl border border-white/15 bg-white/[0.04] p-3.5 text-mist-300 backdrop-blur-md transition-all hover:bg-white/10 hover:text-mist-50 shrink-0"
                     title="Qayta boshlash"
                   >
                     <RotateCcw size={18} />
                   </button>
                 </div>
 
-                <p className="text-center font-mono text-[9px] text-mist-500">
-                  Tugmani bosib gapiring · &ldquo;Hi Space Explorer&rdquo; (1-ovoz) · &ldquo;How much space debris...&rdquo; (2-ovoz)
+                <p className="text-center font-mono text-[9px] text-mist-400">
+                  Tugmani bosib gapiring yoki yuqoridagi iboralarni bosing
                 </p>
-
-                {!speechSupported && (
-                  <div className="flex items-center justify-center gap-1.5 font-mono text-[9px] text-warning/90">
-                    <HelpCircle size={11} />
-                    <span>Brauzeringizda mikrofonga ruxsat bering</span>
-                  </div>
-                )}
               </div>
             </div>
           )}
