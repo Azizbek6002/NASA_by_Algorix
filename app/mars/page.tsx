@@ -46,6 +46,7 @@ export default function MarsPage() {
           points={points}
           bodyName="Mars"
           textureUrl="/textures/2k_mars.jpg"
+          normalUrl="/textures/2k_mars_normal.jpg"
           accent="#E07A5F"
           subtitle="Planetographic · east-positive longitude · markers exaggerated"
         />

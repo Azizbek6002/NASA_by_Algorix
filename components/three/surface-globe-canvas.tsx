@@ -2,11 +2,13 @@
 
 import { Html, OrbitControls, Stars } from "@react-three/drei";
 import { Canvas } from "@react-three/fiber";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo } from "react";
 import * as THREE from "three";
 
 import { clusterSurfacePoints, latLonToVector3 } from "@/lib/geo";
 import type { SurfacePointLite } from "@/lib/types";
+
+const NORMAL_SCALE = new THREE.Vector2(0.35, 0.35);
 
 const TYPE_COLOR: Record<string, string> = {
   lander: "#E5B45C",
@@ -23,46 +25,49 @@ export interface SurfaceGlobeCanvasProps {
   selectedId: string | null;
   onSelect: (id: string) => void;
   textureUrl: string;
+  /** Optional tangent-space normal map derived from the surface height field. */
+  normalUrl?: string | null;
   accent: string;
   bodyName: string;
   autoRotate: boolean;
 }
 
-function Globe({ textureUrl }: { textureUrl: string }) {
-  const [texture, setTexture] = useState<THREE.Texture | null>(null);
+const textureCache = new Map<string, THREE.Texture>();
 
-  useEffect(() => {
-    let disposed = false;
-    const loader = new THREE.TextureLoader();
-    loader.load(textureUrl, (loaded) => {
-      if (disposed) {
-        loaded.dispose();
-        return;
-      }
-      loaded.colorSpace = THREE.SRGBColorSpace;
-      loaded.anisotropy = 8;
-      setTexture(loaded);
-    });
-    return () => {
-      disposed = true;
-    };
-  }, [textureUrl]);
+function loadTexture(url: string, colorSpace: THREE.ColorSpace) {
+  // The maps outlive individual mounts: a module-level cache keeps React
+  // StrictMode's double mount from disposing a texture that is still in use.
+  const cached = textureCache.get(url);
+  if (cached) return cached;
+  const texture = new THREE.TextureLoader().load(url);
+  texture.colorSpace = colorSpace;
+  texture.anisotropy = 8;
+  textureCache.set(url, texture);
+  return texture;
+}
+
+function Globe({ textureUrl, normalUrl }: { textureUrl: string; normalUrl?: string | null }) {
+  // Build the maps before the material exists so its shader is compiled with
+  // USE_MAP/USE_NORMALMAP from the very first frame. Assigning a map to an
+  // already-compiled material can leave it sampling the default white texture.
+  const texture = useMemo(() => loadTexture(textureUrl, THREE.SRGBColorSpace), [textureUrl]);
+  const normal = useMemo(
+    () => (normalUrl ? loadTexture(normalUrl, THREE.NoColorSpace) : null),
+    [normalUrl],
+  );
 
   return (
-    <group>
-      <mesh>
-        <sphereGeometry args={[1, 128, 96]} />
-        {texture ? (
-          <meshStandardMaterial map={texture} roughness={1} metalness={0} />
-        ) : (
-          <meshStandardMaterial color="#1a222c" roughness={1} />
-        )}
-      </mesh>
-      <mesh scale={1.004}>
-        <sphereGeometry args={[1, 64, 48]} />
-        <meshBasicMaterial color="#ffffff" transparent opacity={0.02} side={THREE.BackSide} />
-      </mesh>
-    </group>
+    <mesh>
+      <sphereGeometry args={[1, 192, 128]} />
+      <meshStandardMaterial
+        map={texture}
+        normalMap={normal ?? undefined}
+        normalScale={normal ? NORMAL_SCALE : undefined}
+        roughness={0.96}
+        metalness={0}
+        envMapIntensity={0}
+      />
+    </mesh>
   );
 }
 
@@ -156,6 +161,7 @@ export default function SurfaceGlobeCanvas({
   selectedId,
   onSelect,
   textureUrl,
+  normalUrl,
   accent,
   bodyName,
   autoRotate,
@@ -164,16 +170,25 @@ export default function SurfaceGlobeCanvas({
     <Canvas
       dpr={[1, 2]}
       camera={{ position: [0, 0.75, 2.9], fov: 42, near: 0.01, far: 100 }}
-      gl={{ antialias: true, powerPreference: "high-performance" }}
+      gl={{
+        antialias: true,
+        powerPreference: "high-performance",
+        toneMappingExposure: 1.45,
+      }}
       className="canvas-shell"
     >
       <color attach="background" args={["#04060a"]} />
-      <ambientLight intensity={0.55} />
-      <directionalLight position={[4, 2.5, 3]} intensity={2.0} color="#fff6e8" />
-      <directionalLight position={[-4, -1, -3]} intensity={0.35} color="#7f9dff" />
+      {/* One hard sun plus a faint fill, so the terminator and relief stay readable. */}
+      <ambientLight intensity={0.26} />
+      <directionalLight position={[3.8, 2.0, 4.6]} intensity={4.0} color="#fff4e2" />
+      <directionalLight position={[-4, -1, -3]} intensity={0.3} color="#8aa4ff" />
       <Stars radius={70} depth={40} count={1800} factor={2.6} saturation={0} fade speed={0.25} />
-      <Globe textureUrl={textureUrl} />
-      <Markers points={points} selectedId={selectedId} onSelect={onSelect} accent={accent} />
+      {/* Rotate body and markers together so longitude 0° faces the camera and
+          east stays to the right, matching the equirectangular texture layout. */}
+      <group rotation={[0, -Math.PI / 2, 0]}>
+        <Globe textureUrl={textureUrl} normalUrl={normalUrl} />
+        <Markers points={points} selectedId={selectedId} onSelect={onSelect} accent={accent} />
+      </group>
       <OrbitControls
         enablePan={false}
         minDistance={1.25}

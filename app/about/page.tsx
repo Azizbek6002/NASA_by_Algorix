@@ -260,8 +260,10 @@ export default function AboutPage() {
               <CheckCircle2 size={15} className="mt-0.5 shrink-0 text-success" />
               <span>
                 Planet textures are equirectangular maps from Solar System Scope, licensed
-                CC BY 4.0. Longitude 0° is mapped to +X with east towards −Z, matching the
-                catalogue&apos;s east-positive convention.
+                CC BY 4.0. The Moon and Mars relief maps are derived from those colour maps
+                for shading only — not measured topography. Longitude 0° is centred in the
+                view with east to the right, matching the catalogue&apos;s east-positive
+                convention.
               </span>
             </p>
           </div>

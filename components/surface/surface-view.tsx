@@ -36,12 +36,14 @@ export function SurfaceView({
   points,
   bodyName,
   textureUrl,
+  normalUrl,
   accent,
   subtitle,
 }: {
   points: SurfacePointLite[];
   bodyName: string;
   textureUrl: string;
+  normalUrl?: string | null;
   accent: string;
   subtitle: string;
 }) {
@@ -293,6 +295,7 @@ export function SurfaceView({
             selectedId={selectedId}
             onSelect={select}
             textureUrl={textureUrl}
+            normalUrl={normalUrl}
             accent={accent}
             bodyName={bodyName}
             autoRotate={autoRotate}

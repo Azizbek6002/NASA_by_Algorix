@@ -284,7 +284,9 @@ calls an external service at request time.
 | Planet and moon textures | Solar System Scope | CC BY 4.0 |
 
 Planet textures are equirectangular maps from
-<https://www.solarsystemscope.com/textures/> (CC BY 4.0).
+<https://www.solarsystemscope.com/textures/> (CC BY 4.0). The `*_normal.jpg` files are
+not measured topography: they are derived from those colour maps with a high-pass
+filter and are used only to add shading relief to the Moon and Mars globes.
 
 This project is not affiliated with NASA, ESA, JPL or CelesTrak.
 

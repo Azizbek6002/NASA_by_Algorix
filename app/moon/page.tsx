@@ -45,6 +45,7 @@ export default function MoonPage() {
           points={points}
           bodyName="Moon"
           textureUrl="/textures/2k_moon.jpg"
+          normalUrl="/textures/2k_moon_normal.jpg"
           accent="#E5B45C"
           subtitle="Planetocentric · east-positive longitude · markers exaggerated"
         />
