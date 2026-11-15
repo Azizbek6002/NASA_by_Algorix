@@ -35,7 +35,7 @@ export function SiteHeader() {
     href === "/" ? pathname === "/" : pathname.startsWith(href);
 
   return (
-    <header className="fixed inset-x-0 top-0 z-50 border-b border-white/10 bg-ink-950/85 backdrop-blur-xl">
+    <header className="fixed inset-x-0 top-0 z-50 border-b border-orbit/20 bg-ink-950/80 backdrop-blur-xl shadow-[0_4px_25px_rgba(0,240,255,0.07)]">
       <div className="shell flex h-16 items-center gap-6">
         <Link href="/" className="group flex items-center gap-3" aria-label="SPACE ARCHIVE home">
           <span className="relative flex h-8 w-8 items-center justify-center">

@@ -49,44 +49,58 @@ export default function HomePage() {
     <>
       {/* Hero */}
       <section className="relative overflow-hidden border-b border-white/10 bg-ink-950">
-        {/* Astronaut image positioned to the right with seamless gradient into site background */}
+        {/* Neon spaceship entering Earth orbit image positioned to the right */}
         <div
-          className="pointer-events-none absolute inset-0 bg-contain bg-right bg-no-repeat opacity-35 sm:opacity-50 lg:opacity-100 transition-opacity duration-300"
-          style={{ backgroundImage: "url('/astronaut.png')" }}
+          className="pointer-events-none absolute inset-0 bg-contain bg-right bg-no-repeat opacity-40 sm:opacity-65 lg:opacity-100 transition-opacity duration-300"
+          style={{ backgroundImage: "url('/hero-spaceship.png')" }}
         />
-        <div className="pointer-events-none absolute inset-0 grid-lines opacity-25" />
+        {/* Radiant Neon Glow behind the spaceship thrusters & reentry */}
+        <div className="pointer-events-none absolute right-0 top-1/4 h-[550px] w-[550px] rounded-full bg-[radial-gradient(circle,rgba(0,240,255,0.22)_0%,rgba(255,115,20,0.18)_50%,transparent_75%)] blur-2xl" />
+        {/* Left side soft gradient mask so text remains 100% crystal clear */}
+        <div className="pointer-events-none absolute inset-0 bg-gradient-to-r from-ink-950 via-ink-950/70 to-transparent lg:w-3/5" />
+        <div className="pointer-events-none absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-ink-950 to-transparent" />
+        <div className="pointer-events-none absolute inset-0 grid-lines opacity-20" />
         <div className="shell relative grid items-center gap-12 py-14 lg:grid-cols-[1.1fr_0.9fr] lg:py-20">
           <div>
             <div className="flex flex-wrap items-center gap-3">
-              <span className="chip border-success/40 bg-success/5 text-success">
-                <span className="h-1.5 w-1.5 rounded-full bg-success" />
+              <span className="chip border-success/40 bg-success/10 text-success shadow-[0_0_12px_rgba(112,201,155,0.25)]">
+                <span className="h-1.5 w-1.5 rounded-full bg-success animate-pulse" />
                 Snapshot dataset
               </span>
-              <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-mist-600">
+              <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-mist-500">
                 retrieved {formatDate(stats.snapshotRetrievedAt)}
               </span>
             </div>
 
             <h1 className="mt-7 max-w-2xl text-balance text-4xl font-medium leading-[1.05] tracking-tight text-mist-50 sm:text-5xl lg:text-6xl">
-              Everything we left behind, mapped.
+              Everything we left behind,{" "}
+              <span className="bg-gradient-to-r from-mist-50 via-orbit to-neon-cyan bg-clip-text text-transparent drop-shadow-[0_0_25px_rgba(85,200,255,0.3)]">
+                mapped.
+              </span>
             </h1>
 
-            <p className="mt-6 max-w-xl text-[15px] leading-relaxed text-mist-500">
+            <p className="mt-6 max-w-xl text-[15px] leading-relaxed text-mist-300">
               SPACE ARCHIVE locates the satellites, landers, rovers, probes and debris that
               humans have placed beyond Earth. Every coordinate comes from a published
               catalogue; every gap is shown as a gap, never filled with a guess.
             </p>
 
             <div className="mt-8 flex flex-wrap items-center gap-3">
-              <Link href="/explore" className="btn btn-primary">
+              <Link
+                href="/explore"
+                className="btn btn-primary shadow-[0_0_20px_rgba(85,200,255,0.3)] hover:shadow-[0_0_30px_rgba(0,240,255,0.5)] transition-all"
+              >
                 Explore the archive <ArrowRight size={14} />
               </Link>
-              <Link href="/earth-orbit" className="btn">
+              <Link
+                href="/earth-orbit"
+                className="btn hover:border-orbit/40 hover:text-orbit transition-all"
+              >
                 Open Earth orbit
               </Link>
               <Link
                 href="/about"
-                className="font-mono text-[10px] uppercase tracking-[0.16em] text-mist-500 underline decoration-white/20 underline-offset-4 transition-colors hover:text-mist-50"
+                className="font-mono text-[10px] uppercase tracking-[0.16em] text-mist-400 underline decoration-white/20 underline-offset-4 transition-colors hover:text-orbit"
               >
                 Method & limits
               </Link>
@@ -103,7 +117,7 @@ export default function HomePage() {
                   <dt className="label">{label}</dt>
                   <dd className="mt-1.5 flex items-baseline gap-1.5">
                     <span className="data-num text-2xl text-mist-50">{value}</span>
-                    <span className="font-mono text-[9px] uppercase tracking-[0.12em] text-mist-600">
+                    <span className="font-mono text-[9px] uppercase tracking-[0.12em] text-mist-500">
                       {unit}
                     </span>
                   </dd>
@@ -112,7 +126,7 @@ export default function HomePage() {
             </dl>
           </div>
 
-          {/* Right column left open so the astronaut background is clearly visible */}
+          {/* Right column left open so the spaceship re-entry background is clearly visible */}
           <div className="hidden lg:block min-h-[440px]" aria-hidden="true" />
         </div>
       </section>

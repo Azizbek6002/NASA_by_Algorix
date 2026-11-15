@@ -28,6 +28,18 @@ const config: Config = {
         warning: "#F07854",
         success: "#70C99B",
         debris: "#8B96A5",
+        neon: {
+          cyan: "#00F0FF",
+          blue: "#0099FF",
+          purple: "#B026FF",
+          violet: "#8B5CF6",
+          amber: "#FF9E00",
+        },
+      },
+      boxShadow: {
+        "neon-cyan": "0 0 25px rgba(0, 240, 255, 0.4)",
+        "neon-purple": "0 0 25px rgba(176, 38, 255, 0.4)",
+        "neon-amber": "0 0 25px rgba(255, 158, 0, 0.4)",
       },
       fontFamily: {
         sans: [
