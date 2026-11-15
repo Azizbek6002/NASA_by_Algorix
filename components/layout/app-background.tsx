@@ -18,7 +18,7 @@ export function AppBackground() {
       {/* Astronaut centered in background on all other dashboards/pages */}
       <div
         className="h-full w-full bg-contain bg-center bg-no-repeat opacity-30 md:opacity-40 transition-opacity duration-500"
-        style={{ backgroundImage: "url('/astronaut.jpg')" }}
+        style={{ backgroundImage: "url('/astronaut.png')" }}
       />
       {/* Soft radial fade so content remains readable */}
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_30%,rgba(5,7,10,0.8)_85%)]" />

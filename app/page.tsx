@@ -49,13 +49,11 @@ export default function HomePage() {
     <>
       {/* Hero */}
       <section className="relative overflow-hidden border-b border-white/10 bg-ink-950">
-        {/* Astronaut image positioned to the right, blending seamlessly with the black background */}
+        {/* Astronaut image positioned to the right with seamless gradient into site background */}
         <div
-          className="pointer-events-none absolute inset-0 bg-contain bg-right bg-no-repeat opacity-90 transition-opacity duration-300"
-          style={{ backgroundImage: "url('/astronaut.jpg')" }}
+          className="pointer-events-none absolute inset-0 bg-contain bg-right bg-no-repeat transition-opacity duration-300"
+          style={{ backgroundImage: "url('/astronaut.png')" }}
         />
-        {/* Subtle gradient to ensure left text area remains deep black and high-contrast */}
-        <div className="pointer-events-none absolute inset-0 bg-gradient-to-r from-ink-950 via-ink-950/70 to-transparent md:w-3/5" />
         <div className="pointer-events-none absolute inset-0 grid-lines opacity-25" />
         <div className="shell relative grid items-center gap-12 py-14 lg:grid-cols-[1.1fr_0.9fr] lg:py-20">
           <div>
