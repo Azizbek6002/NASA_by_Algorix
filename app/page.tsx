@@ -51,7 +51,7 @@ export default function HomePage() {
       <section className="relative overflow-hidden border-b border-white/10 bg-ink-950">
         {/* Astronaut image positioned to the right with seamless gradient into site background */}
         <div
-          className="pointer-events-none absolute inset-0 bg-contain bg-right bg-no-repeat transition-opacity duration-300"
+          className="pointer-events-none absolute inset-0 bg-contain bg-right bg-no-repeat opacity-35 sm:opacity-50 lg:opacity-100 transition-opacity duration-300"
           style={{ backgroundImage: "url('/astronaut.png')" }}
         />
         <div className="pointer-events-none absolute inset-0 grid-lines opacity-25" />
