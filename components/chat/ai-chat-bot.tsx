@@ -3,7 +3,9 @@
 import { useEffect, useRef, useState } from "react";
 import {
   Bot,
+  CheckCircle2,
   Headphones,
+  HelpCircle,
   MessageSquare,
   Mic,
   MicOff,
@@ -13,6 +15,7 @@ import {
   User,
   Volume2,
   VolumeX,
+  Waves,
   X,
 } from "lucide-react";
 
@@ -24,6 +27,7 @@ interface Message {
   content: string;
   timestamp: string;
   audioUrl?: string;
+  category?: string;
 }
 
 type Mode = "chat" | "voice";
@@ -36,27 +40,26 @@ const QUICK_CHAT_PROMPTS = [
   "XKS (ISS) qanday balandlikda uchadi?",
 ];
 
-const VOICE_SCENARIOS = [
-  {
-    triggerPhrase: "Hey Space agent!",
-    matchWords: ["hey space agent", "space agent", "hey agent", "hello agent"],
+// Pre-defined voice scenarios with authentic Sophia recordings
+const SOPHIA_VOICE_RESPONSES = {
+  greeting: {
+    intent: "greeting" as const,
+    category: "1-OVOZ: SALOMLASHISH",
+    categoryDescription: "Salomlashish aniqlandi",
     response: "Hi Space Explorer! How can I help you today!",
     audioUrl: "/audio/sophia-greeting.wav",
+    triggerExample: "Hey Space agent!",
   },
-  {
-    triggerPhrase: "How much space debris is there in the Solar System?",
-    matchWords: [
-      "how much space debris",
-      "space debris",
-      "debris in the solar system",
-      "debris in solar system",
-      "kosmik chiqindi",
-    ],
+  debris: {
+    intent: "question" as const,
+    category: "2-OVOZ: KOINOT SAVOLI / CHIQINDILAR",
+    categoryDescription: "Kosmik savol / ma'lumot so'rovi aniqlandi",
     response:
       "ohh...yeah .In Earth's orbit: There are over 11,500 tons of artificial space debris left from human activity.",
     audioUrl: "/audio/sophia-debris.wav",
+    triggerExample: "How much space debris is there in the Solar System?",
   },
-];
+};
 
 const INITIAL_CHAT_MESSAGE: Message = {
   id: "welcome",
@@ -73,14 +76,116 @@ interface SpeechRecognitionLike {
   start: () => void;
   stop: () => void;
   abort: () => void;
-  onresult: ((event: { results: { [key: number]: { [key: number]: { transcript: string } } } }) => void) | null;
-  onerror: (() => void) | null;
+  onresult: ((event: {
+    resultIndex: number;
+    results: {
+      length: number;
+      [key: number]: {
+        isFinal?: boolean;
+        [key: number]: { transcript: string };
+      };
+    };
+  }) => void) | null;
+  onerror: ((event: { error?: string }) => void) | null;
   onend: (() => void) | null;
+}
+
+/**
+ * Speech & Intent Analyzer:
+ * - "Salomlashsak" -> 1-ovoz (sophia-greeting.wav)
+ * - "Nimadir so'rasak" -> 2-ovoz (sophia-debris.wav)
+ */
+function analyzeVoiceIntent(text: string) {
+  const clean = text.toLowerCase().trim();
+
+  // Greeting patterns (Uzbek, English, Russian + speech phonetics)
+  const greetingKeywords = [
+    "hey space agent",
+    "space agent",
+    "agent",
+    "hey",
+    "hi",
+    "hello",
+    "greetings",
+    "good morning",
+    "good afternoon",
+    "good evening",
+    "how are you",
+    "salom",
+    "assalom",
+    "alaykum",
+    "qalay",
+    "qalesan",
+    "qalesiz",
+    "kimsan",
+    "tanishtir",
+    "привет",
+    "здравствуйте",
+    "салам",
+    "хай",
+    "хей",
+  ];
+
+  // Specific question / inquiry / debris triggers
+  const questionKeywords = [
+    "debris",
+    "space debris",
+    "chiqindi",
+    "qancha",
+    "how much",
+    "how many",
+    "solar system",
+    "tons",
+    "tonna",
+    "orbit",
+    "orbita",
+    "nechta",
+    "qayerda",
+    "nima",
+    "qanday",
+    "what",
+    "where",
+    "why",
+    "how",
+    "tell me",
+    "ayt",
+    "gapir",
+    "tushuntir",
+    "necha",
+    "qachon",
+    "sun'iy yo'ldosh",
+    "apparat",
+    "rover",
+    "koinot",
+    "сколько",
+    "что",
+    "где",
+    "мусор",
+  ];
+
+  const hasGreeting = greetingKeywords.some((w) => clean.includes(w));
+  const hasQuestion =
+    questionKeywords.some((w) => clean.includes(w)) ||
+    clean.includes("?") ||
+    clean.endsWith("?");
+
+  // If question words are clearly present and it's longer than just a greeting
+  if (hasQuestion && (!hasGreeting || clean.length > 25)) {
+    return SOPHIA_VOICE_RESPONSES.debris;
+  }
+
+  // If it's a greeting
+  if (hasGreeting) {
+    return SOPHIA_VOICE_RESPONSES.greeting;
+  }
+
+  // Any other inquiry or sentence ("nimadur so'rasek 2-ovoz")
+  return SOPHIA_VOICE_RESPONSES.debris;
 }
 
 export function AiChatBot() {
   const [isOpen, setIsOpen] = useState(false);
-  const [mode, setMode] = useState<Mode>("chat");
+  const [mode, setMode] = useState<Mode>("voice"); // Default to Voice mode when opened from prompt
   const [messages, setMessages] = useState<Message[]>([INITIAL_CHAT_MESSAGE]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
@@ -88,19 +193,28 @@ export function AiChatBot() {
   // Voice Mode States
   const [voiceState, setVoiceState] = useState<VoiceState>("idle");
   const [voiceUserSaid, setVoiceUserSaid] = useState<string>("");
+  const [voiceAnalysisCategory, setVoiceAnalysisCategory] = useState<string>("");
   const [voiceBotReplied, setVoiceBotReplied] = useState<string>(
-    "Salom Space Explorer! Gapirish uchun mikrofonni bosing yoki namunaviy iboralardan birini tanlang.",
+    "Salom Space Explorer! Gapirish uchun mikrofon tugmasini bosing yoki namuna savollardan birini tanlang.",
   );
   const [isMuted, setIsMuted] = useState(false);
   const [speechSupported, setSpeechSupported] = useState(true);
+  const [liveTranscript, setLiveTranscript] = useState<string>("");
+
+  // Animated Wave Equalizer Heights (20 vertical frequency bars)
+  const [waveBars, setWaveBars] = useState<number[]>(
+    () => new Array(20).fill(16),
+  );
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const audioPlayerRef = useRef<HTMLAudioElement | null>(null);
   const recognitionRef = useRef<SpeechRecognitionLike | null>(null);
   const handleVoiceInputRef = useRef<(text: string) => void>(() => {});
+  const animFrameRef = useRef<number | null>(null);
+  const liveTranscriptRef = useRef<string>("");
 
-  // Initialize SpeechRecognition on mount
+  // Speech Recognition Setup
   useEffect(() => {
     const windowWithSpeech = window as unknown as {
       SpeechRecognition?: new () => SpeechRecognitionLike;
@@ -114,24 +228,52 @@ export function AiChatBot() {
     if (SpeechRecognition) {
       const recognition = new SpeechRecognition();
       recognition.continuous = false;
-      recognition.interimResults = false;
+      recognition.interimResults = true;
       recognition.lang = "en-US";
 
       recognition.onresult = (event) => {
-        const transcript = event.results[0]?.[0]?.transcript;
-        if (transcript) {
-          handleVoiceInputRef.current(transcript);
+        let interim = "";
+        let final = "";
+
+        for (let i = event.resultIndex; i < event.results.length; i++) {
+          const item = event.results[i];
+          const text = item[0]?.transcript || "";
+          if (item.isFinal) {
+            final += text;
+          } else {
+            interim += text;
+          }
+        }
+
+        const currentText = final || interim;
+        if (currentText) {
+          liveTranscriptRef.current = currentText;
+          setLiveTranscript(currentText);
+        }
+
+        if (final) {
+          setLiveTranscript("");
+          handleVoiceInputRef.current(final);
         }
       };
 
       recognition.onerror = () => {
         setVoiceState("idle");
+        setLiveTranscript("");
       };
 
       recognition.onend = () => {
-        setVoiceState((current) =>
-          current === "listening" ? "idle" : current,
-        );
+        // If recognition ended but we had captured words that weren't finalized yet
+        if (liveTranscriptRef.current && voiceState === "listening") {
+          const text = liveTranscriptRef.current;
+          liveTranscriptRef.current = "";
+          setLiveTranscript("");
+          handleVoiceInputRef.current(text);
+        } else {
+          setVoiceState((current) =>
+            current === "listening" ? "idle" : current,
+          );
+        }
       };
 
       recognitionRef.current = recognition;
@@ -149,7 +291,54 @@ export function AiChatBot() {
         }
       }
     };
-  }, []);
+  }, [voiceState]);
+
+  // Dynamic Audio Waveform Animation Loop
+  useEffect(() => {
+    let phase = 0;
+
+    const updateWaves = () => {
+      phase += 0.12;
+
+      setWaveBars((prev) => {
+        return prev.map((_, i) => {
+          if (voiceState === "listening") {
+            // High energetic wave responding to user voice
+            const sine = Math.sin(phase * 1.8 + i * 0.45);
+            const noise = (Math.random() - 0.5) * 0.4;
+            const height = Math.min(100, Math.max(20, (sine * 0.4 + 0.6 + noise) * 90));
+            return Math.round(height);
+          } else if (voiceState === "speaking") {
+            // Rhythmic harmonic wave following Sophia's speech pattern
+            const sine1 = Math.sin(phase * 2.2 + i * 0.35);
+            const sine2 = Math.cos(phase * 1.4 + i * 0.6);
+            const combined = (sine1 * 0.5 + sine2 * 0.5 + 1) * 0.5;
+            const height = Math.min(100, Math.max(18, combined * 95));
+            return Math.round(height);
+          } else if (voiceState === "thinking") {
+            // Sweeping radar scan wave
+            const scan = Math.sin(phase * 3 - i * 0.3);
+            const height = Math.min(80, Math.max(15, (scan * 0.4 + 0.5) * 75));
+            return Math.round(height);
+          } else {
+            // Gentle ambient idle pulse
+            const calm = Math.sin(phase * 0.8 + i * 0.3);
+            return Math.round(14 + (calm + 1) * 6);
+          }
+        });
+      });
+
+      animFrameRef.current = requestAnimationFrame(updateWaves);
+    };
+
+    animFrameRef.current = requestAnimationFrame(updateWaves);
+
+    return () => {
+      if (animFrameRef.current) {
+        cancelAnimationFrame(animFrameRef.current);
+      }
+    };
+  }, [voiceState]);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -170,6 +359,7 @@ export function AiChatBot() {
     if (typeof window !== "undefined" && "speechSynthesis" in window) {
       window.speechSynthesis.cancel();
     }
+    setVoiceState("idle");
   };
 
   const playVoiceResponse = (text: string, audioUrl?: string) => {
@@ -178,7 +368,11 @@ export function AiChatBot() {
       return;
     }
 
-    stopAudio();
+    if (audioPlayerRef.current) {
+      audioPlayerRef.current.pause();
+      audioPlayerRef.current.currentTime = 0;
+    }
+
     setVoiceState("speaking");
 
     if (audioUrl) {
@@ -214,6 +408,9 @@ export function AiChatBot() {
 
   const startListening = () => {
     stopAudio();
+    liveTranscriptRef.current = "";
+    setLiveTranscript("");
+
     if (recognitionRef.current) {
       try {
         setVoiceState("listening");
@@ -226,18 +423,21 @@ export function AiChatBot() {
           } catch {
             setVoiceState("idle");
           }
-        }, 100);
+        }, 120);
       }
     } else {
-      // Fallback for browsers without Web Speech API
-      const simulated = prompt("Ovozli savolingizni kiriting:", "Hey Space agent!");
+      // Fallback modal for browsers without Web Speech API
+      const simulated = prompt(
+        "Mikrofon sozlanmagan. Ovozli savolingizni yozing:\n1. 'Hey Space agent!' (Salomlashish)\n2. 'How much space debris is there in the Solar System?' (Savol)",
+        "Hey Space agent!",
+      );
       if (simulated) {
         handleVoiceInput(simulated);
       }
     }
   };
 
-  const stopListening = () => {
+  const stopListeningAndAnalyze = () => {
     if (recognitionRef.current) {
       try {
         recognitionRef.current.stop();
@@ -245,10 +445,20 @@ export function AiChatBot() {
         // ignore
       }
     }
-    setVoiceState("idle");
+
+    // If we have live text, analyze immediately
+    if (liveTranscriptRef.current) {
+      const text = liveTranscriptRef.current;
+      liveTranscriptRef.current = "";
+      setLiveTranscript("");
+      handleVoiceInput(text);
+    } else {
+      setVoiceState("idle");
+    }
   };
 
-  const handleVoiceInput = async (spokenText: string) => {
+  // Main voice input handler & analyzer
+  const handleVoiceInput = (spokenText: string) => {
     const query = spokenText.trim();
     if (!query) {
       setVoiceState("idle");
@@ -258,50 +468,26 @@ export function AiChatBot() {
     setVoiceUserSaid(query);
     setVoiceState("thinking");
 
-    const lowerQuery = query.toLowerCase();
+    // Perform speech analysis
+    const analysis = analyzeVoiceIntent(query);
+    setVoiceAnalysisCategory(analysis.category);
 
-    // Check specific voice triggers (Sophia voice files)
-    for (const scenario of VOICE_SCENARIOS) {
-      const isMatch = scenario.matchWords.some((word) =>
-        lowerQuery.includes(word),
-      );
-      if (isMatch) {
-        setVoiceBotReplied(scenario.response);
-        // Also add to chat history
-        addMessagePair(query, scenario.response, scenario.audioUrl);
-        playVoiceResponse(scenario.response, scenario.audioUrl);
-        return;
-      }
-    }
-
-    // Otherwise, ask Gemini API
-    try {
-      const response = await fetch("/api/v1/ai/ask", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ question: query }),
-      });
-
-      const data = await response.json();
-      if (!response.ok) {
-        throw new Error(data?.error?.message ?? "Xatolik yuz berdi.");
-      }
-
-      const answer = data.answer || "Javob topilmadi.";
-      setVoiceBotReplied(answer);
-      addMessagePair(query, answer);
-      playVoiceResponse(answer);
-    } catch (err: unknown) {
-      const errMsg =
-        err instanceof Error ? err.message : "Aloqada xatolik yuz berdi.";
-      setVoiceBotReplied(`Xatolik: ${errMsg}`);
-      setVoiceState("idle");
-    }
+    // Realistic brief analysis delay (500ms) to show the user it is analyzing
+    setTimeout(() => {
+      setVoiceBotReplied(analysis.response);
+      addMessagePair(query, analysis.response, analysis.audioUrl, analysis.category);
+      playVoiceResponse(analysis.response, analysis.audioUrl);
+    }, 500);
   };
 
   handleVoiceInputRef.current = handleVoiceInput;
 
-  const addMessagePair = (userText: string, botText: string, audioUrl?: string) => {
+  const addMessagePair = (
+    userText: string,
+    botText: string,
+    audioUrl?: string,
+    category?: string,
+  ) => {
     const time = new Date().toLocaleTimeString([], {
       hour: "2-digit",
       minute: "2-digit",
@@ -320,6 +506,7 @@ export function AiChatBot() {
         content: botText,
         timestamp: time,
         audioUrl,
+        category,
       },
     ]);
   };
@@ -400,8 +587,10 @@ export function AiChatBot() {
     stopAudio();
     setMessages([INITIAL_CHAT_MESSAGE]);
     setVoiceUserSaid("");
+    setVoiceAnalysisCategory("");
+    setLiveTranscript("");
     setVoiceBotReplied(
-      "Salom Space Explorer! Gapirish uchun mikrofonni bosing yoki namunaviy iboralardan birini tanlang.",
+      "Salom Space Explorer! Gapirish uchun mikrofon tugmasini bosing yoki namuna savollardan birini tanlang.",
     );
     setVoiceState("idle");
   };
@@ -420,16 +609,16 @@ export function AiChatBot() {
             <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-success opacity-75" />
             <span className="relative inline-flex h-3 w-3 rounded-full bg-success" />
           </span>
-          <Sparkles size={16} className="text-orbit" />
+          <Waves size={16} className="text-orbit animate-pulse" />
           <span className="font-mono text-xs font-medium tracking-[0.14em] uppercase text-mist-100">
-            AI Assistant
+            Voice & AI Bot
           </span>
         </button>
       )}
 
       {/* Assistant Modal Window */}
       {isOpen && (
-        <div className="fixed bottom-4 right-4 z-50 flex h-[84vh] max-h-[660px] w-[calc(100vw-32px)] sm:w-[440px] flex-col overflow-hidden rounded-2xl border border-white/15 bg-ink-950/95 shadow-2xl shadow-black/90 backdrop-blur-2xl transition-all duration-200 animate-in fade-in zoom-in-95">
+        <div className="fixed bottom-4 right-4 z-50 flex h-[86vh] max-h-[680px] w-[calc(100vw-32px)] sm:w-[440px] flex-col overflow-hidden rounded-2xl border border-white/15 bg-ink-950/95 shadow-2xl shadow-black/90 backdrop-blur-2xl transition-all duration-200 animate-in fade-in zoom-in-95">
           {/* Header */}
           <div className="flex items-center justify-between border-b border-white/10 bg-white/[0.02] px-4 py-3">
             <div className="flex items-center gap-2.5">
@@ -447,7 +636,7 @@ export function AiChatBot() {
                   </span>
                 </div>
                 <p className="font-mono text-[9px] text-mist-500 uppercase tracking-wider">
-                  Gemini API · Sophia Voice
+                  Gemini API · Sophia Voice Waves
                 </p>
               </div>
             </div>
@@ -502,7 +691,7 @@ export function AiChatBot() {
               className={cn(
                 "flex items-center justify-center gap-2 rounded-lg py-1.5 transition-all",
                 mode === "voice"
-                  ? "border border-orbit/40 bg-orbit/15 font-medium text-orbit"
+                  ? "border border-orbit/40 bg-orbit/15 font-medium text-orbit shadow-[0_0_15px_rgba(85,200,255,0.15)]"
                   : "text-mist-500 hover:text-mist-200",
               )}
             >
@@ -540,6 +729,11 @@ export function AiChatBot() {
                             : "rounded-tl-sm border border-white/10 bg-white/[0.04] text-mist-200",
                         )}
                       >
+                        {message.category && (
+                          <div className="mb-1 font-mono text-[9px] text-artifact uppercase tracking-wider">
+                            {message.category}
+                          </div>
+                        )}
                         <div className="whitespace-pre-wrap break-words leading-relaxed">
                           {message.content}
                         </div>
@@ -645,84 +839,134 @@ export function AiChatBot() {
 
           {/* BODY: Mode = "voice" */}
           {mode === "voice" && (
-            <div className="flex flex-1 flex-col justify-between p-4">
-              {/* Voice Orb & Visualizer */}
+            <div className="flex flex-1 flex-col justify-between p-4 overflow-y-auto">
+              {/* Voice Orb & Animated Sound Waves Section */}
               <div className="my-auto flex flex-col items-center justify-center text-center">
-                {/* Glowing Cosmic Orb */}
-                <div className="relative mb-6 flex items-center justify-center">
-                  <div
-                    className={cn(
-                      "h-32 w-32 rounded-full border transition-all duration-500 flex items-center justify-center",
-                      voiceState === "listening" &&
-                        "border-orbit bg-orbit/20 shadow-[0_0_50px_rgba(85,200,255,0.4)] scale-110",
-                      voiceState === "speaking" &&
-                        "border-artifact bg-artifact/20 shadow-[0_0_50px_rgba(229,180,92,0.4)] scale-105",
-                      voiceState === "thinking" &&
-                        "border-orbit/60 bg-orbit/10 animate-spin",
-                      voiceState === "idle" &&
-                        "border-white/20 bg-white/[0.03] shadow-[0_0_30px_rgba(255,255,255,0.05)]",
-                    )}
-                  >
-                    {/* Inner Orb Core */}
-                    <div
-                      className={cn(
-                        "h-20 w-20 rounded-full transition-all duration-300 flex items-center justify-center",
-                        voiceState === "listening" && "bg-orbit/30 animate-pulse",
-                        voiceState === "speaking" && "bg-artifact/30 animate-pulse",
-                        voiceState === "idle" && "bg-white/5",
-                      )}
-                    >
-                      {voiceState === "speaking" ? (
-                        <Volume2 size={32} className="text-artifact animate-bounce" />
-                      ) : (
-                        <Headphones size={32} className="text-orbit" />
-                      )}
-                    </div>
-                  </div>
-
-                  {/* Pulsing Aura Rings */}
+                {/* Visualizer Container with Concentric Sound Wave Ripples */}
+                <div className="relative mb-5 flex h-48 w-full items-center justify-center">
+                  {/* Concentric Ripple Waves */}
                   {voiceState === "listening" && (
-                    <span className="absolute h-40 w-40 animate-ping rounded-full border border-orbit/40" />
+                    <>
+                      <div className="absolute h-44 w-44 rounded-full border border-orbit/40 animate-voice-ripple-1 shadow-[0_0_35px_rgba(85,200,255,0.3)] pointer-events-none" />
+                      <div className="absolute h-52 w-52 rounded-full border border-orbit/20 animate-voice-ripple-2 pointer-events-none" />
+                    </>
                   )}
                   {voiceState === "speaking" && (
-                    <span className="absolute h-40 w-40 animate-ping rounded-full border border-artifact/40" />
+                    <>
+                      <div className="absolute h-44 w-44 rounded-full border border-artifact/40 animate-voice-ripple-1 shadow-[0_0_35px_rgba(229,180,92,0.3)] pointer-events-none" />
+                      <div className="absolute h-52 w-52 rounded-full border border-artifact/20 animate-voice-ripple-2 pointer-events-none" />
+                    </>
                   )}
+                  {voiceState === "thinking" && (
+                    <div className="absolute h-44 w-44 rounded-full border border-dashed border-orbit/50 animate-spin pointer-events-none" />
+                  )}
+
+                  {/* Main Circular Sphere */}
+                  <div
+                    className={cn(
+                      "relative z-10 flex h-36 w-36 flex-col items-center justify-center overflow-hidden rounded-full border bg-gradient-to-b transition-all duration-500 shadow-2xl",
+                      voiceState === "listening" &&
+                        "border-orbit bg-orbit/15 from-orbit/25 to-ink-950 shadow-[0_0_45px_rgba(85,200,255,0.35)] scale-105",
+                      voiceState === "speaking" &&
+                        "border-artifact bg-artifact/15 from-artifact/25 to-ink-950 shadow-[0_0_45px_rgba(229,180,92,0.35)] scale-105",
+                      voiceState === "thinking" &&
+                        "border-orbit/60 bg-orbit/10 from-ink-900 to-ink-950",
+                      voiceState === "idle" &&
+                        "border-white/15 bg-white/[0.02] from-ink-900 to-ink-950 shadow-[0_0_20px_rgba(255,255,255,0.03)]",
+                    )}
+                  >
+                    {/* Sophia Avatar / Voice Icon */}
+                    <div className="mb-2 transition-transform duration-300">
+                      {voiceState === "speaking" ? (
+                        <div className="flex h-11 w-11 items-center justify-center rounded-full bg-artifact/20 text-artifact animate-pulse">
+                          <Volume2 size={24} />
+                        </div>
+                      ) : voiceState === "listening" ? (
+                        <div className="flex h-11 w-11 items-center justify-center rounded-full bg-orbit/20 text-orbit animate-bounce">
+                          <Mic size={24} />
+                        </div>
+                      ) : (
+                        <div className="flex h-11 w-11 items-center justify-center rounded-full bg-white/5 text-orbit">
+                          <Headphones size={24} />
+                        </div>
+                      )}
+                    </div>
+
+                    {/* ANIMATED SOUND WAVE BARS (Ovoz to'lqinlari) */}
+                    <div className="flex h-9 items-end justify-center gap-[3px] px-4 w-full">
+                      {waveBars.map((heightPercent, idx) => (
+                        <span
+                          key={idx}
+                          className={cn(
+                            "w-[3px] rounded-full transition-all duration-75",
+                            voiceState === "listening"
+                              ? "bg-gradient-to-t from-orbit/50 to-orbit"
+                              : voiceState === "speaking"
+                              ? "bg-gradient-to-t from-artifact/50 to-artifact"
+                              : voiceState === "thinking"
+                              ? "bg-gradient-to-t from-orbit/40 to-white/60"
+                              : "bg-white/20",
+                          )}
+                          style={{
+                            height: `${heightPercent}%`,
+                          }}
+                        />
+                      ))}
+                    </div>
+                  </div>
                 </div>
 
-                {/* State Status Text */}
-                <div className="mb-2">
+                {/* State Status Text Badge */}
+                <div className="mb-3">
                   <span
                     className={cn(
-                      "rounded-full border px-3 py-1 font-mono text-[10px] uppercase tracking-widest",
+                      "inline-flex items-center gap-1.5 rounded-full border px-3 py-1 font-mono text-[10px] uppercase tracking-widest transition-all",
                       voiceState === "listening" &&
-                        "border-orbit/50 bg-orbit/10 text-orbit animate-pulse",
+                        "border-orbit/60 bg-orbit/15 text-orbit animate-pulse shadow-[0_0_15px_rgba(85,200,255,0.3)]",
                       voiceState === "speaking" &&
-                        "border-artifact/50 bg-artifact/10 text-artifact",
+                        "border-artifact/60 bg-artifact/15 text-artifact shadow-[0_0_15px_rgba(229,180,92,0.3)]",
                       voiceState === "thinking" &&
-                        "border-white/30 bg-white/5 text-mist-300",
+                        "border-orbit/40 bg-orbit/10 text-mist-300 animate-pulse",
                       voiceState === "idle" &&
                         "border-white/10 bg-white/[0.02] text-mist-500",
                     )}
                   >
-                    {voiceState === "listening" && "🎙️ Sizni tinglamoqda..."}
-                    {voiceState === "speaking" && "🔊 Sophia gapirmoqda..."}
-                    {voiceState === "thinking" && "⏳ O'ylanmoqda..."}
+                    {voiceState === "listening" && "🎙️ Tinglamoqda... Gapiring"}
+                    {voiceState === "speaking" && "🔊 Sophia javob bermoqda..."}
+                    {voiceState === "thinking" && "🧠 Gap tahlil qilinmoqda..."}
                     {voiceState === "idle" && "Tayyor (Kutmoqda)"}
                   </span>
                 </div>
 
-                {/* Dialogue Display Box */}
-                <div className="w-full max-h-40 overflow-y-auto rounded-xl border border-white/10 bg-white/[0.02] p-3 text-left">
+                {/* Live Speech Recognition Transcript Indicator */}
+                {liveTranscript && (
+                  <div className="mb-2 w-full rounded-lg border border-orbit/40 bg-orbit/10 px-3 py-1.5 text-xs text-orbit animate-pulse">
+                    <span className="font-mono text-[9px] uppercase tracking-wider block text-mist-400">
+                      Tinglanmoqda:
+                    </span>
+                    &ldquo;{liveTranscript}&rdquo;
+                  </div>
+                )}
+
+                {/* Dialogue & Analysis Result Card */}
+                <div className="w-full max-h-44 overflow-y-auto rounded-xl border border-white/10 bg-white/[0.02] p-3 text-left shadow-inner">
                   {voiceUserSaid && (
-                    <div className="mb-2 text-xs text-orbit">
-                      <span className="font-mono text-[9px] text-mist-500 uppercase block">
+                    <div className="mb-2.5 text-xs text-orbit">
+                      <span className="font-mono text-[9px] text-mist-500 uppercase block tracking-wider">
                         Siz dedingiz:
                       </span>
-                      &ldquo;{voiceUserSaid}&rdquo;
+                      <span className="font-medium">&ldquo;{voiceUserSaid}&rdquo;</span>
                     </div>
                   )}
+
+                  {voiceAnalysisCategory && (
+                    <div className="mb-2 inline-flex items-center gap-1 rounded bg-artifact/15 px-2 py-0.5 font-mono text-[9px] uppercase tracking-wider text-artifact border border-artifact/30">
+                      <CheckCircle2 size={11} /> {voiceAnalysisCategory}
+                    </div>
+                  )}
+
                   <div className="text-xs text-mist-100 leading-relaxed">
-                    <span className="font-mono text-[9px] text-mist-500 uppercase block">
+                    <span className="font-mono text-[9px] text-mist-500 uppercase block tracking-wider">
                       Sophia javobi:
                     </span>
                     {voiceBotReplied}
@@ -731,63 +975,82 @@ export function AiChatBot() {
               </div>
 
               {/* Voice Scenarios (Exact Audio Triggers) */}
-              <div className="my-2 border-t border-b border-white/[0.08] py-2.5">
-                <p className="mb-1.5 font-mono text-[9px] uppercase tracking-wider text-mist-500 text-center">
-                  Ovozli namuna iboralar (bosing yoki ayting):
-                </p>
+              <div className="my-2.5 border-t border-b border-white/[0.08] py-2.5">
+                <div className="flex items-center justify-between mb-1.5 px-0.5">
+                  <p className="font-mono text-[9px] uppercase tracking-wider text-mist-500">
+                    Ovozli namuna iboralar (bosing yoki ayting):
+                  </p>
+                  <span className="font-mono text-[9px] text-orbit/80">2 ta tayyor ovoz</span>
+                </div>
+
                 <div className="flex flex-col gap-1.5">
-                  {VOICE_SCENARIOS.map((scen) => (
-                    <button
-                      key={scen.triggerPhrase}
-                      type="button"
-                      onClick={() => handleVoiceInput(scen.triggerPhrase)}
-                      className="group flex items-center justify-between rounded-lg border border-white/10 bg-white/[0.03] px-3 py-1.5 text-left font-mono text-[10px] text-mist-300 transition-colors hover:border-orbit/50 hover:bg-orbit/10 hover:text-orbit"
-                    >
-                      <span className="truncate">&ldquo;{scen.triggerPhrase}&rdquo;</span>
-                      <Volume2
-                        size={12}
-                        className="text-mist-500 transition-colors group-hover:text-orbit shrink-0 ml-2"
-                      />
-                    </button>
-                  ))}
+                  <button
+                    type="button"
+                    onClick={() => handleVoiceInput(SOPHIA_VOICE_RESPONSES.greeting.triggerExample)}
+                    className="group flex items-center justify-between rounded-lg border border-white/10 bg-white/[0.03] px-3 py-2 text-left font-mono text-[11px] text-mist-300 transition-colors hover:border-orbit/50 hover:bg-orbit/10 hover:text-orbit"
+                  >
+                    <div className="flex items-center gap-2 truncate">
+                      <span className="h-1.5 w-1.5 rounded-full bg-orbit shrink-0" />
+                      <span className="truncate">&ldquo;{SOPHIA_VOICE_RESPONSES.greeting.triggerExample}&rdquo;</span>
+                    </div>
+                    <span className="ml-2 inline-flex items-center gap-1 font-mono text-[9px] text-orbit group-hover:underline shrink-0">
+                      1-ovoz <Volume2 size={12} />
+                    </span>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => handleVoiceInput(SOPHIA_VOICE_RESPONSES.debris.triggerExample)}
+                    className="group flex items-center justify-between rounded-lg border border-white/10 bg-white/[0.03] px-3 py-2 text-left font-mono text-[11px] text-mist-300 transition-colors hover:border-artifact/50 hover:bg-artifact/10 hover:text-artifact"
+                  >
+                    <div className="flex items-center gap-2 truncate">
+                      <span className="h-1.5 w-1.5 rounded-full bg-artifact shrink-0" />
+                      <span className="truncate">&ldquo;{SOPHIA_VOICE_RESPONSES.debris.triggerExample}&rdquo;</span>
+                    </div>
+                    <span className="ml-2 inline-flex items-center gap-1 font-mono text-[9px] text-artifact group-hover:underline shrink-0">
+                      2-ovoz <Volume2 size={12} />
+                    </span>
+                  </button>
                 </div>
               </div>
 
-              {/* Bottom Voice Controls */}
-              <div className="flex items-center justify-between pt-2">
+              {/* Bottom Voice Controls & Big 'GAPIRISH' Button */}
+              <div className="flex items-center justify-between gap-2 pt-1">
                 <button
                   type="button"
                   onClick={() => setIsMuted((v) => !v)}
-                  className="rounded-xl border border-white/10 p-2.5 text-mist-400 transition-colors hover:bg-white/5 hover:text-mist-100"
+                  className="rounded-xl border border-white/10 p-3 text-mist-400 transition-colors hover:bg-white/5 hover:text-mist-100 shrink-0"
                   title={isMuted ? "Ovozni yoqish" : "Ovozni o'chirish"}
                 >
-                  {isMuted ? <VolumeX size={16} /> : <Volume2 size={16} />}
+                  {isMuted ? <VolumeX size={17} /> : <Volume2 size={17} />}
                 </button>
 
-                {/* Big Mic Button */}
+                {/* Big Interactive 'GAPIRISH' Button */}
                 <button
                   type="button"
                   onClick={() => {
                     if (voiceState === "listening") {
-                      stopListening();
+                      stopListeningAndAnalyze();
                     } else {
                       startListening();
                     }
                   }}
                   className={cn(
-                    "flex items-center gap-2 rounded-full px-6 py-3 font-mono text-xs uppercase tracking-wider transition-all duration-300",
+                    "flex flex-1 items-center justify-center gap-2.5 rounded-full py-3.5 px-6 font-mono text-xs uppercase tracking-wider font-semibold transition-all duration-300 select-none shadow-lg",
                     voiceState === "listening"
-                      ? "border border-warning bg-warning text-ink-950 shadow-[0_0_20px_rgba(240,120,84,0.5)] animate-pulse"
-                      : "border border-orbit/50 bg-orbit/20 text-orbit hover:bg-orbit hover:text-ink-950 shadow-[0_0_15px_rgba(85,200,255,0.2)]",
+                      ? "border border-warning bg-warning text-ink-950 shadow-[0_0_25px_rgba(240,120,84,0.6)] animate-pulse"
+                      : "border border-orbit/50 bg-orbit/20 text-orbit hover:bg-orbit hover:text-ink-950 shadow-[0_0_20px_rgba(85,200,255,0.25)]",
                   )}
                 >
                   {voiceState === "listening" ? (
                     <>
-                      <MicOff size={16} /> To&apos;xtatish
+                      <MicOff size={17} className="animate-spin" />
+                      <span>To&apos;xtatish va Tahlil</span>
                     </>
                   ) : (
                     <>
-                      <Mic size={16} /> Gapirish
+                      <Mic size={17} />
+                      <span>Gapirish</span>
                     </>
                   )}
                 </button>
@@ -795,17 +1058,23 @@ export function AiChatBot() {
                 <button
                   type="button"
                   onClick={stopAudio}
-                  className="rounded-xl border border-white/10 p-2.5 text-mist-400 transition-colors hover:bg-white/5 hover:text-mist-100"
+                  className="rounded-xl border border-white/10 p-3 text-mist-400 transition-colors hover:bg-white/5 hover:text-mist-100 shrink-0"
                   title="Ovozni to'xtatish"
                 >
-                  <RotateCcw size={16} />
+                  <RotateCcw size={17} />
                 </button>
               </div>
 
+              {/* Status Hint */}
+              <p className="mt-2 text-center font-mono text-[9px] text-mist-500">
+                Tugmani bosib gapiring · Tizim gapni tahlil qilib 1- yoki 2-ovozni ijro etadi
+              </p>
+
               {!speechSupported && (
-                <p className="mt-2 text-center font-mono text-[8px] text-warning/80">
-                  Brauzeringizda ovozli mikrofondan foydalanish cheklangan. Yuqoridagi iboralarni bosib ovozli javobni tinglashingiz mumkin.
-                </p>
+                <div className="mt-1 flex items-center justify-center gap-1.5 font-mono text-[9px] text-warning/90">
+                  <HelpCircle size={11} />
+                  <span>Mikrofon cheklangan bo&apos;lsa, yuqoridagi 2 ta namunani bosing</span>
+                </div>
               )}
             </div>
           )}

@@ -150,6 +150,61 @@ body {
   animation: ping-soft 2.2s cubic-bezier(0, 0, 0.2, 1) infinite;
 }
 
+/* Cosmic Voice Wave Animations */
+@keyframes sound-wave-bar {
+  0%, 100% {
+    transform: scaleY(0.25);
+    opacity: 0.5;
+  }
+  50% {
+    transform: scaleY(1);
+    opacity: 1;
+  }
+}
+
+@keyframes voice-ripple-1 {
+  0% {
+    transform: scale(0.95);
+    opacity: 0.8;
+  }
+  50% {
+    transform: scale(1.22);
+    opacity: 0.3;
+  }
+  100% {
+    transform: scale(1.45);
+    opacity: 0;
+  }
+}
+
+@keyframes voice-ripple-2 {
+  0% {
+    transform: scale(0.9);
+    opacity: 0.6;
+  }
+  50% {
+    transform: scale(1.35);
+    opacity: 0.2;
+  }
+  100% {
+    transform: scale(1.7);
+    opacity: 0;
+  }
+}
+
+.animate-sound-wave {
+  animation: sound-wave-bar 1.2s ease-in-out infinite;
+  transform-origin: bottom;
+}
+
+.animate-voice-ripple-1 {
+  animation: voice-ripple-1 2s cubic-bezier(0.1, 0.7, 0.3, 1) infinite;
+}
+
+.animate-voice-ripple-2 {
+  animation: voice-ripple-2 2s cubic-bezier(0.1, 0.7, 0.3, 1) 0.5s infinite;
+}
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
