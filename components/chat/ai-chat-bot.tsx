@@ -290,6 +290,17 @@ export function AiChatBot() {
     }
   }, [isOpen, messages, loading, mode]);
 
+  // Coordinate with Page Audio Guide to prevent overlapping voices
+  useEffect(() => {
+    const handleGuideAudio = () => {
+      stopAudio();
+    };
+    window.addEventListener("space:guide-audio-play", handleGuideAudio);
+    return () => {
+      window.removeEventListener("space:guide-audio-play", handleGuideAudio);
+    };
+  }, []);
+
   const stopAudio = () => {
     if (audioRef.current) {
       audioRef.current.pause();
@@ -326,6 +337,7 @@ export function AiChatBot() {
     stopAudio();
     stopMicrophoneStream();
     setVoiceState("speaking");
+    window.dispatchEvent(new CustomEvent("space:chat-audio-play"));
 
     if (audioUrl) {
       const audio = new Audio(audioUrl);
@@ -361,6 +373,7 @@ export function AiChatBot() {
   // Start real microphone recording & speech recognition
   const startListening = async () => {
     stopAudio();
+    window.dispatchEvent(new CustomEvent("space:chat-audio-play"));
     setPermissionError(false);
     capturedTranscriptRef.current = "";
     hasDetectedSpeechRef.current = false;

@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 
 import "./globals.css";
+import { PageAudioGuide } from "@/components/audio/page-audio-guide";
 import { AiChatBot } from "@/components/chat/ai-chat-bot";
 import { AppBackground } from "@/components/layout/app-background";
 import { SiteFooter } from "@/components/layout/site-footer";
@@ -67,6 +68,7 @@ export default function RootLayout({
           {children}
         </main>
         <SiteFooter />
+        <PageAudioGuide />
         <AiChatBot />
       </body>
     </html>
